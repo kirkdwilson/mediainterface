@@ -31,7 +31,8 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.4",
+    "appversion": "^1.7.1",
     "typescript": "2.6.2"
   },
-  "description": "An Ionic project"
+  "description": "A multimedia interface for offline media boxes."
 }
