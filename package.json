@@ -55,5 +55,8 @@
     "typescript": "2.6.2",
     "webpack": "^3.11.0"
   },
-  "description": "A multimedia interface for offline media boxes."
+  "description": "A multimedia interface for offline media boxes.",
+  "config": {
+    "ionic_webpack": "./config/webpack.config.js"
+  }
 }

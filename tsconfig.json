@@ -10,6 +10,10 @@
     ],
     "module": "es2015",
     "moduleResolution": "node",
+    "baseUrl": "./src",
+    "paths": {
+      "@env": ["environments/environment"]
+    },
     "sourceMap": true,
     "target": "es5",
     "types": ["jasmine"]
