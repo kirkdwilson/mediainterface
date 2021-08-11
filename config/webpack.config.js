@@ -11,8 +11,16 @@ const path = require('path');
 const webpackConfig = require('../node_modules/@ionic/app-scripts/config/webpack.config');
 
 webpackConfig['dev'].resolve.alias = {
-  "@env": path.resolve(`./src/environments/environment.ts`)
+  "@app": path.resolve('./src/app/'),
+  "@models": path.resolve('./src/models/'),
+  "@pages": path.resolve('./src/pages/'),
+  "@providers": path.resolve('./src/providers/'),
+  "@env": path.resolve('./src/environments/environment.ts')
 }
 webpackConfig['prod'].resolve.alias = {
-  "@env": path.resolve(`./src/environments/environment.prod.ts`)
+  "@app": path.resolve('./src/app/'),
+  "@models": path.resolve('./src/models/'),
+  "@pages": path.resolve('./src/pages/'),
+  "@providers": path.resolve('./src/providers/'),
+  "@env": path.resolve('./src/environments/environment.prod.ts')
 }

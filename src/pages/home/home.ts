@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { MediaProvider } from '../../providers/media/media';
-import { Media } from '../../models/media';
+import { MediaProvider } from '@providers/media/media';
+import { Media } from '@models/media';
 import { take } from 'rxjs/operators/take';
 
 @Component({

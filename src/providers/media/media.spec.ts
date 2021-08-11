@@ -3,7 +3,7 @@ import {} from 'jasmine';
 import { take } from 'rxjs/operators/take';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { MediaProvider } from './media';
-import { Media } from '../../models/media';
+import { Media } from '@models/media';
 
 describe('MediaProvider', () => {
   let app: AppTestingModule;

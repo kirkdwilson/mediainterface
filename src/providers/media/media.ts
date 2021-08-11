@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { of } from 'rxjs/observable/of';
-import { Media } from '../../models/media';
+import { Media } from '@models/media';
 import { environment } from '@env';
 
 /**

@@ -12,7 +12,21 @@
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {
-      "@env": ["environments/environment"]
+      "@app/*": [
+        "app/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@providers/*":[
+        "providers/*"
+      ],
+      "@env": [
+        "environments/environment"
+      ]
     },
     "sourceMap": true,
     "target": "es5",

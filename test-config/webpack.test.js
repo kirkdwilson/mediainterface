@@ -15,6 +15,13 @@ module.exports = {
   devtool: 'inline-source-map',
 
   resolve: {
+    alias: {
+      "@app": path.resolve('./src/app/'),
+      "@models": path.resolve('./src/models/'),
+      "@pages": path.resolve('./src/pages/'),
+      "@providers": path.resolve('./src/providers/'),
+      "@env": path.resolve('./src/environments/environment.ts')
+    },
     extensions: ['.ts', '.js']
   },
 
