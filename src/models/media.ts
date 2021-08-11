@@ -37,6 +37,23 @@ export class Media {
   ) {}
 
   /**
+   * Get a list of categories separated by a ,
+   *
+   * @return The list
+   * @link https://stackoverflow.com/a/196991/4638563
+   */
+  get categoryList(): string {
+    return this.categories
+      .map((category: Category) => {
+        return category.name.replace(
+          /\w\S*/g,
+          (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
+      })
+      .sort()
+      .join(', ');
+  }
+
+  /**
    * Get the path for the image
    *
    * @return The image path

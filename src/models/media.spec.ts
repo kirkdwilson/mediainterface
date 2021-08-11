@@ -24,4 +24,20 @@ describe('Media', () => {
 
   });
 
+  describe('categoryList', () => {
+
+    it('should return the list', () => {
+      const media = new Media(
+        [new Category('Unique'), new Category('specials'), new Category('original')],
+        'A unique experience',
+        'unique-experience.jpg',
+        'video',
+        'unique-experience',
+        'Unique Experience'
+      );
+      expect(media.categoryList).toEqual('Original, Specials, Unique');
+    });
+
+  });
+
 });
