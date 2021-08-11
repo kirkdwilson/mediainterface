@@ -3,6 +3,7 @@ import {} from 'jasmine';
 import { take } from 'rxjs/operators/take';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { MediaProvider } from './media';
+import { GroupedMedia } from './grouped-media.interface';
 import { Category } from '@models/category';
 import { Media } from '@models/media';
 
@@ -66,6 +67,90 @@ describe('MediaProvider', () => {
           expect(glenn.tags).toEqual(['locations', 'unique', 'travel']);
           expect(glenn.language).toEqual('en');
           expect(cream.recommended).toBe(false);
+        });
+
+        const request = app.httpMock.expectOne('assets/content/en/data/main.json');
+        request.flush(response);
+      })));
+
+    });
+
+    describe('groupedByCategory()', () => {
+
+      beforeEach(() => {
+          app = new AppTestingModule();
+          app.configure([], [MediaProvider], true);
+      });
+
+      it('should return the correct grouping', async(inject([MediaProvider], (mediaProvider) => {
+        const response = {
+          content: [
+            {
+              itemName: 'test response',
+              content: [
+                {
+                  categories: ['New', 'Originals'],
+                  recommended: true,
+                  slug: 'newbies-welcome',
+                  title: 'Newbies Welcome',
+                  desc: 'A story about a Newbie finding belonging',
+                  image: 'newby.jpg',
+                  mediaType: 'video',
+                  tags: ['newby', 'friends', 'connections'],
+                },
+                {
+                  categories: ['originals'],
+                  recommended: true,
+                  slug: 'attack-of-the-shoe',
+                  title: 'Attack of the Shoe',
+                  desc: 'A story about a show that wants freedom',
+                  image: 'shoe.jpg',
+                  mediaType: 'video',
+                  tags: ['fashion', 'shoes', 'freedom'],
+                },
+                {
+                  categories: ['comedy'],
+                  recommended: true,
+                  slug: 'a-sneeze-is-a-breeze',
+                  title: 'A Sneeze is a Breeze',
+                  desc: 'A story about how to sneeze',
+                  image: 'sneeze.jpg',
+                  mediaType: 'pdf',
+                  tags: ['sneezing', 'release'],
+                },
+                {
+                  categories: [],
+                  slug: 'not-that-important',
+                  title: 'Not That Important',
+                  desc: 'A story about nothing important',
+                  image: 'nothing.jpg',
+                  mediaType: 'audio',
+                  tags: ['nothing', 'really'],
+                }
+              ]
+            }
+          ]
+        };
+
+        mediaProvider.groupedByCategory().pipe(take(1)).subscribe((media: Array<GroupedMedia>) => {
+          expect(media).not.toBeNull();
+          expect(Object.keys(media).length).toEqual(4);
+          const originals = media['originals'];
+          expect(originals.media.length).toEqual(2);
+          const originalTitles = originals.media.map((orig) => orig.title);
+          expect(originalTitles).toEqual(['Newbies Welcome', 'Attack of the Shoe']);
+          const newMedia = media['new'];
+          expect(newMedia.media.length).toEqual(1);
+          const newTitles = newMedia.media.map((nm) => nm.title);
+          expect(newTitles).toEqual(['Newbies Welcome']);
+          const comedy = media['comedy'];
+          expect(comedy.media.length).toEqual(1);
+          const comedyTitles = comedy.media.map((com) => com.title);
+          expect(comedyTitles).toEqual(['A Sneeze is a Breeze']);
+          const other = media['other'];
+          expect(other.media.length).toEqual(1);
+          const otherTitles = other.media.map((oth) => oth.title);
+          expect(otherTitles).toEqual(['Not That Important']);
         });
 
         const request = app.httpMock.expectOne('assets/content/en/data/main.json');

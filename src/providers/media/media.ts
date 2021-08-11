@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { of } from 'rxjs/observable/of';
+import { GroupedMedia } from './grouped-media.interface';
 import { Category } from '@models/category';
 import { Media } from '@models/media';
 import { environment } from '@env';
@@ -35,7 +36,47 @@ export class MediaProvider {
   }
 
   /**
-   * Get a list of all recommended media
+   * Get all the media grouped by it's category.
+   *
+   * @param sorted  Do you want to sort the keys?
+   *
+   * @return The media grouped
+   */
+  groupedByCategory(sorted = false): Observable<GroupedMedia> {
+    return this.loadMedia().pipe(
+      map((media: Array<Media>) => {
+        const groups: GroupedMedia = media.reduce(
+          (groups, item) => {
+            if (item.categories.length === 0) {
+              const group = (groups['other'] || {label: 'Other', media: []});
+              group.media.push(item);
+              groups['other'] = group;
+              return groups;
+            }
+            item.categories.forEach((category: Category) => {
+              const group = (groups[category.slug] || {label: category.name, media: []});
+              group.media.push(item);
+              groups[category.slug] = group;
+            });
+            return groups;
+          },
+          {}
+        );
+        // Sort by the key
+        if (!sorted) {
+          return groups;
+        }
+        return Object.keys(groups).sort().reduce((result, key) => {
+          result[key] = groups[key];
+          return result;
+        }, {});
+      })
+    );
+  }
+
+  /**
+   * Get a list of all recommended media. The keys of the array are the
+   * category slugs.
    *
    * @return The recommended media
    */

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { MediaProvider } from '@providers/media/media';
+import { GroupedMedia } from '@providers/media/grouped-media.interface';
+import { Category } from '@models/category';
 import { Media } from '@models/media';
+import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
 
 @Component({
@@ -11,12 +14,23 @@ export class HomePage {
   /**
    * Our media to display
    */
-  media: Array<Media> = [];
+  groups: GroupedMedia = {};
+
+  /**
+   * The keys for groups (Remove Other)
+   *
+   */
+  groupKeys: Array<string> = [];
 
   /**
    * A list of recommended media
    */
   recommended: Array<Media> = [];
+
+  /**
+   * A list of uncategorized media
+   */
+  others: Array<Media> = [];
 
   constructor(
     private mediaProvider: MediaProvider
@@ -28,9 +42,17 @@ export class HomePage {
    * @return void
    */
   ionViewWillEnter() {
-    this.mediaProvider.all().pipe(take(1)).subscribe((media: Array<Media>) => {
-      this.media = media;
-      this.recommended = media.filter((resource) => resource.recommended);
+    this.mediaProvider.recommended().pipe(
+      mergeMap((recommended: Array<Media>) => {
+        this.recommended = recommended;
+        return this.mediaProvider.groupedByCategory(true);
+      })
+    ).pipe(
+      take(1)
+    ).subscribe((media: GroupedMedia) => {
+      this.groups = media;
+      this.others = this.groups['other'].media;
+      this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
     });
   }
 }

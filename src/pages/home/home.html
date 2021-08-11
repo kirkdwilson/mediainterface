@@ -7,13 +7,37 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>For You</h2>
-  <ion-scroll scrollX="true" direction="x" class="category-list">
-    <ion-card *ngFor="let resource of recommended">
-      <div class="feature-photo">
-        <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
-      </div>
-      <ion-card-header>{{ resource.title }}</ion-card-header>
-    </ion-card>
-  </ion-scroll>
+  <div class="category-list-wrapper">
+    <h2>For You</h2>
+    <ion-scroll scrollX="true" direction="x" class="category-list">
+      <ion-card *ngFor="let resource of recommended">
+        <div class="feature-photo">
+          <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+        </div>
+        <ion-card-header>{{ resource.title }}</ion-card-header>
+      </ion-card>
+    </ion-scroll>
+  </div>
+  <div *ngFor="let slug of groupKeys" class="category-list-wrapper">
+    <h2>{{ groups[slug].label }}</h2>
+    <ion-scroll scrollX="true" direction="x" class="category-list">
+      <ion-card *ngFor="let resource of groups[slug].media">
+        <div class="feature-photo">
+          <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+        </div>
+        <ion-card-header>{{ resource.title }}</ion-card-header>
+      </ion-card>
+    </ion-scroll>
+  </div>
+  <div class="category-list-wrapper">
+    <h2>Other Media</h2>
+    <ion-scroll scrollX="true" direction="x" class="category-list">
+      <ion-card *ngFor="let resource of others">
+        <div class="feature-photo">
+          <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+        </div>
+        <ion-card-header>{{ resource.title }}</ion-card-header>
+      </ion-card>
+    </ion-scroll>
+  </div>
 </ion-content>
