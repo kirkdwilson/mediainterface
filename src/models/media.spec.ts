@@ -1,4 +1,5 @@
 import {} from 'jasmine';
+import { Category } from './category';
 import { Media } from './media';
 
 describe('Media', () => {
@@ -7,7 +8,7 @@ describe('Media', () => {
 
     it('should contain the correct values', () => {
       const media = new Media(
-        ['Originals', 'Special'],
+        [new Category('Originals'), new Category('Special')],
         'A new original series',
         'special-episode.jpg',
         'video',

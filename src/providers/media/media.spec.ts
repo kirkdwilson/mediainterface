@@ -3,6 +3,7 @@ import {} from 'jasmine';
 import { take } from 'rxjs/operators/take';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { MediaProvider } from './media';
+import { Category } from '@models/category';
 import { Media } from '@models/media';
 
 describe('MediaProvider', () => {
@@ -55,7 +56,8 @@ describe('MediaProvider', () => {
           const cream = data.find((media) => media.slug === 'ice-cream-special');
           expect(slugs.indexOf('glenn-ivy')).not.toEqual(-1);
           expect(slugs.indexOf('ice-cream-special')).not.toEqual(-1);
-          expect(glenn.categories).toEqual(['New', 'Originals']);
+          const categorySlugs = glenn.categories.map((cat: Category) => cat.slug);
+          expect(categorySlugs).toEqual(['new', 'originals']);
           expect(glenn.recommended).toBe(true);
           expect(glenn.title).toEqual('Glenn Ivy');
           expect(glenn.desc).toEqual('A story about Glenn Ivy');

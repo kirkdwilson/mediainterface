@@ -1,11 +1,12 @@
 import { environment } from '@env';
+import { Category } from './category';
 
 /**
  * A model for a piece of Media
  */
 export class Media {
   constructor(
-    public categories: string[],
+    public categories: Array<Category>,
     public desc: string,
     public image: string,
     public mediaType: string,
