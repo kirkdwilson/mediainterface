@@ -74,6 +74,63 @@ describe('MediaProvider', () => {
 
     });
 
+    describe('recommended()', () => {
+      beforeEach(() => {
+          app = new AppTestingModule();
+          app.configure([], [MediaProvider], true);
+      });
+
+      it('should return the recommended shows', async(inject([MediaProvider], (mediaProvider) => {
+        const response = {
+          content: [
+            {
+              itemName: 'test response',
+              content: [
+                {
+                  categories: ['New', 'Originals'],
+                  recommended: true,
+                  slug: 'the-perfect-beard',
+                  title: 'The Perfect Beard',
+                  desc: 'Learn how to develop the perfect beard.',
+                  image: 'bearded-man.jpg',
+                  mediaType: 'video',
+                  tags: ['beards', 'how-to', 'specials'],
+                },
+                {
+                  categories: ['Specials'],
+                  slug: 'grow-fabulous-hair',
+                  title: 'Grow Fabulous Hair',
+                  desc: 'A story about Hair Growth',
+                  image: 'Hair.jpg',
+                  mediaType: 'video',
+                  tags: ['long', 'vibrant'],
+                },
+                {
+                  categories: ['Unique'],
+                  recommended: true,
+                  slug: 'unique-fashion',
+                  title: 'Unique Fashion',
+                  desc: 'Learn about fashion around the world',
+                  image: 'fashion.jpg',
+                  mediaType: 'video',
+                  tags: ['fashion', 'colors'],
+                }
+              ]
+            }
+          ]
+        };
+
+        mediaProvider.recommended().pipe(take(1)).subscribe((recommended) => {
+          expect(recommended).not.toBeNull();
+          expect(recommended.length).toEqual(2);
+          const titles = recommended.map((item) => item.title);
+          expect(titles).toEqual(['The Perfect Beard', 'Unique Fashion']);
+        });
+        const request = app.httpMock.expectOne('assets/content/en/data/main.json');
+        request.flush(response);
+      })));
+    });
+
   });
 
 });

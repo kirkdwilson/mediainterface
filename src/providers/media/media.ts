@@ -26,6 +26,27 @@ export class MediaProvider {
   constructor(private http: HttpClient) {}
 
   /**
+   * Retrieve all the media from the main json file.
+   *
+   * @return The Media files
+   */
+  all(): Observable<Array<Media>> {
+    return this.loadMedia();
+  }
+
+  /**
+   * Get a list of all recommended media
+   *
+   * @return The recommended media
+   */
+  recommended(): Observable<Array<Media>> {
+    return this.loadMedia()
+    .pipe(
+      map((media: Array<Media>) => media.filter((resource) => resource.recommended))
+    );
+  }
+
+  /**
    * Set the language
    *
    * @param  language The two letter iso code
@@ -38,11 +59,11 @@ export class MediaProvider {
   }
 
   /**
-   * Retrieve all the media from the main json file.
+   * load the intial media data.
    *
-   * @return The Media files
+   * @return The media data
    */
-  all(): Observable<Array<Media>> {
+  private loadMedia(): Observable<Array<Media>> {
     if (this.media.length > 0) {
       return of(this.media);
     }
@@ -60,7 +81,10 @@ export class MediaProvider {
         }
         this.media = response.content[0].content.map((media) => {
           const recommended = (media.hasOwnProperty('recommended')) ? media.recommended : false;
-          const categories = media.categories.map((category) => new Category(category));
+          let categories = [];
+          if (media.categories.length > 0) {
+            categories = media.categories.map((category) => new Category(category));;
+          }
           return new Media(
             categories,
             media.desc,
