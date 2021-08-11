@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import { MediaDetailPage } from '@pages/media-detail/media-detail';
 import { MediaProvider } from '@providers/media/media';
 import { GroupedMedia } from '@providers/media/grouped-media.interface';
 import { Category } from '@models/category';
@@ -33,7 +35,8 @@ export class HomePage {
   others: Array<Media> = [];
 
   constructor(
-    private mediaProvider: MediaProvider
+    private mediaProvider: MediaProvider,
+    private navController: NavController
   ) {}
 
   /**
@@ -54,5 +57,15 @@ export class HomePage {
       this.others = this.groups['other'].media;
       this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
     });
+  }
+
+  /**
+   * Go to the media details page.
+   *
+   * @param  slug The slug of the media
+   * @return      void
+   */
+  goToDetails(slug: string) {
+    this.navController.push(MediaDetailPage, { slug: slug });
   }
 }

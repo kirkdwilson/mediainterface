@@ -12,9 +12,9 @@
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of recommended">
         <div class="feature-photo">
-          <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+          <a (click)="goToDetails(resource.slug)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
         </div>
-        <ion-card-header>{{ resource.title }}</ion-card-header>
+        <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
       </ion-card>
     </ion-scroll>
   </div>
@@ -23,9 +23,9 @@
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of groups[slug].media">
         <div class="feature-photo">
-          <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+          <a (click)="goToDetails(resource.slug)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
         </div>
-        <ion-card-header>{{ resource.title }}</ion-card-header>
+        <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
       </ion-card>
     </ion-scroll>
   </div>
@@ -34,9 +34,9 @@
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of others">
         <div class="feature-photo">
-          <img src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+          <a (click)="goToDetails(resource.slug)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
         </div>
-        <ion-card-header>{{ resource.title }}</ion-card-header>
+        <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
       </ion-card>
     </ion-scroll>
   </div>
