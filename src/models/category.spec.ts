@@ -16,4 +16,18 @@ describe('Category', () => {
 
   });
 
+  describe('sameAs()', () => {
+
+    it('should return true', () => {
+      const category = new Category('Favorite Movies');
+      expect(category.sameAs('favorite movies')).toBe(true);
+    });
+
+    it('should return false', () => {
+      const category = new Category('My Place of Joy');
+      expect(category.sameAs('freedom')).toBe(false);
+    });
+
+  });
+
 });
