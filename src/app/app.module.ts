@@ -9,6 +9,7 @@ import { MyApp } from '@app/app.component';
 import { HomePage } from '@pages/home/home';
 import { MediaDetailPage } from '@pages/media-detail/media-detail';
 import { MediaProvider } from '@providers/media/media';
+import { MediaDetailProvider } from '../providers/media-detail/media-detail';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { MediaProvider } from '@providers/media/media';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    MediaProvider
+    MediaProvider,
+    MediaDetailProvider
   ]
 })
 export class AppModule {}
