@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators/catchError';
+import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operators/map';
 import { Category } from '@models/category';
 import { Episode } from '@models/episode';
@@ -31,7 +32,7 @@ export class MediaDetailProvider {
   get(slug: string): Observable<Media> {
     const path = `${environment.assetPath.replace('{LANG}', this.language)}data/${slug}.json`;
     return this.http.get(path).pipe(
-      catchError(() => null),
+      catchError(() => of(null)),
       map((response: any) => {
         if (!response) {
           return null;

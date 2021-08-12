@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
+import { take } from 'rxjs/operators/take';
+import { MediaDetailProvider } from '@providers/media-detail/media-detail';
+import { Media } from '@models/media';
 
 /**
  * The detail page for a specific piece of media.
@@ -10,17 +13,23 @@ import { NavParams } from 'ionic-angular';
 })
 export class MediaDetailPage {
   /**
-   * The slug for the given media
+   * The current media
    */
-  private slug = '';
-  constructor(
-    navParams: NavParams
-  ) {
-    this.slug = navParams.get('slug');
-  }
+  media: Media = null;
 
-  ionViewDidLoad() {
-    console.log('slug', this.slug);
+  constructor(
+    private mediaDetailProvider: MediaDetailProvider,
+    private navParams: NavParams
+  ) {}
+
+  /**
+   * Life cycle for Ionic
+   *
+   * @return void
+   */
+  ionViewWillEnter() {
+    const slug = this.navParams.get('slug');
+    this.mediaDetailProvider.get(slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
   }
 
 }
