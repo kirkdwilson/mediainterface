@@ -1,0 +1,24 @@
+<ion-content>
+  <video [src]="this.current?.url" autoplay controls fullscreen poster="this.current?.posterUrl" *ngIf="this.current !== null" #videoPlayer>
+    Sorry, your browser does not support videos.
+  </video>
+  <div id="secondary-controls">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-3 text-center>
+          <button icon-only ion-button clear color="primary" (click)="previousEpisode()" [disabled]="this.isFirstItem()"><ion-icon name="skip-backward"></ion-icon></button>
+        </ion-col>
+        <ion-col col-3 text-center>
+          <button icon-only ion-button clear color="primary" (click)="play()" *ngIf="!isPlaying"><ion-icon name="play"></ion-icon></button>
+          <button icon-only ion-button clear color="primary" (click)="pause()" *ngIf="isPlaying"><ion-icon name="pause"></ion-icon></button>
+        </ion-col>
+        <ion-col col-3 text-center>
+          <button icon-only ion-button clear color="primary" (click)="nextEpisode()" [disabled]="this.isLastItem()"><ion-icon name="skip-forward"></ion-icon></button>
+        </ion-col>
+        <ion-col col-3 text-center>
+          <button icon-only ion-button clear color="primary" (click)="goBack()"><ion-icon name="close"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

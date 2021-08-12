@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { MyApp } from '@app/app.component';
 import { HomePage } from '@pages/home/home';
 import { MediaDetailPage } from '@pages/media-detail/media-detail';
+import { VideoPlayerPage } from '@pages/video-player/video-player';
 import { MediaProvider } from '@providers/media/media';
 import { MediaDetailProvider } from '../providers/media-detail/media-detail';
 
@@ -15,7 +16,8 @@ import { MediaDetailProvider } from '../providers/media-detail/media-detail';
   declarations: [
     MyApp,
     HomePage,
-    MediaDetailPage
+    MediaDetailPage,
+    VideoPlayerPage
   ],
   imports: [
     BrowserModule,
@@ -26,7 +28,8 @@ import { MediaDetailProvider } from '../providers/media-detail/media-detail';
   entryComponents: [
     MyApp,
     HomePage,
-    MediaDetailPage
+    MediaDetailPage,
+    VideoPlayerPage
   ],
   providers: [
     StatusBar,
