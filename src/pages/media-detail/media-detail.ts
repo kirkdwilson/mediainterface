@@ -43,14 +43,14 @@ export class MediaDetailPage {
    * @return         void
    */
   playEpisode(current: Episode) {
-    if (current.mediaType === 'video') {
+    if ((current.mediaType === 'video') || (current.mediaType === 'audio')) {
       const items = this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
         return {
           url: episode.filePath,
           playFirst: playFirst,
           posterUrl: episode.imagePath,
-          type: 'video',
+          type: episode.mediaType,
         };
       });
       this.navController.push(AvPlayerPage, { items: items });
@@ -66,12 +66,12 @@ export class MediaDetailPage {
     if (!this.media) {
       return;
     }
-    if (this.media.mediaType === 'video') {
+    if ((this.media.mediaType === 'video') || (this.media.mediaType === 'audio')) {
       const item: AvPlayerItem = {
         url: this.media.filePath,
         playFirst: true,
         posterUrl: this.media.imagePath,
-        type: 'video',
+        type: this.media.mediaType,
       };
       this.navController.push(AvPlayerPage, { items: [item] });
     }

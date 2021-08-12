@@ -1,9 +1,22 @@
 page-av-player {
+    audio {
+        width: 100%;
+    }
     video {
         width: 100%;
         height: 93%;
     }
     #secondary-controls {
         height: 7%;
+    }
+    #audio-player-wrapper {
+        height: 93%;
+    }
+    #audio-poster {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 93%;
+        width: 100%;
     }
 }

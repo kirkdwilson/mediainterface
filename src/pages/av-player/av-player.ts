@@ -14,6 +14,11 @@ export class AvPlayerPage {
     /**
      * The video player element
      */
+    @ViewChild('audioPlayer') audioPlayer: ElementRef;
+
+    /**
+     * The video player element
+     */
     @ViewChild('videoPlayer') videoPlayer: ElementRef;
 
     /**
@@ -37,9 +42,19 @@ export class AvPlayerPage {
     items: Array<AvPlayerItem> = [];
 
     /**
-     * The callback triggered when the video ended.
+     * The callback triggered when the audio/video ended.
      */
-    private videoEndedCallback: any = null;
+    private mediaEndedCallback: any = null;
+
+    /**
+     * The callback triggered when the audio/video is paused.
+     */
+    private mediaPauseCallback: any = null;
+
+    /**
+     * The callback triggered when the audio/video is started.
+     */
+    private mediaPlayCallback: any = null;
 
     constructor(
       private navController: NavController,
@@ -64,8 +79,15 @@ export class AvPlayerPage {
      * @return void
      */
     ionViewDidEnter() {
-      this.videoEndedCallback = () => this.videoDidEnd();
-      this.videoPlayer.nativeElement.addEventListener('ended', this.videoEndedCallback, false);
+      this.mediaEndedCallback = () => this.videoDidEnd();
+      this.mediaPauseCallback = () => this.isPlaying = false;
+      this.mediaPlayCallback = () => this.isPlaying = true;
+      this.videoPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
+      this.audioPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
+      this.videoPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
+      this.audioPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
+      this.videoPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
+      this.audioPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
     }
 
     /**
@@ -74,9 +96,20 @@ export class AvPlayerPage {
      * @return void
      */
     ionViewWillLeave() {
-      if (this.videoEndedCallback) {
-        this.videoPlayer.nativeElement.removeEventListener('ended', this.videoEndedCallback);
-        this.videoEndedCallback = null;
+      if (this.mediaEndedCallback) {
+        this.videoPlayer.nativeElement.removeEventListener('ended', this.mediaEndedCallback);
+        this.audioPlayer.nativeElement.removeEventListener('ended', this.mediaEndedCallback);
+        this.mediaEndedCallback = null;
+      }
+      if (this.mediaPauseCallback) {
+        this.videoPlayer.nativeElement.removeEventListener('pause', this.mediaPauseCallback);
+        this.audioPlayer.nativeElement.removeEventListener('pause', this.mediaPauseCallback);
+        this.mediaPauseCallback = null;
+      }
+      if (this.mediaPlayCallback) {
+        this.videoPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
+        this.audioPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
+        this.mediaPlayCallback = null;
       }
     }
 
@@ -116,7 +149,6 @@ export class AvPlayerPage {
       if (this.isLastItem()) {
         return;
       }
-      this.isPlaying = true;
       this.currentIndex = (this.currentIndex + 1);
       this.current = this.items[this.currentIndex];
     }
@@ -128,7 +160,11 @@ export class AvPlayerPage {
      */
     pause() {
       this.isPlaying = false;
-      this.videoPlayer.nativeElement.pause();
+      if (this.current.type === 'video') {
+        this.videoPlayer.nativeElement.pause();
+      } else {
+        this.audioPlayer.nativeElement.pause();
+      }
     }
 
     /**
@@ -138,7 +174,11 @@ export class AvPlayerPage {
      */
     play() {
       this.isPlaying = true;
-      this.videoPlayer.nativeElement.play();
+      if (this.current.type === 'video') {
+        this.videoPlayer.nativeElement.play();
+      } else {
+        this.audioPlayer.nativeElement.play();
+      }
     }
 
     /**
@@ -150,7 +190,6 @@ export class AvPlayerPage {
       if (this.isFirstItem()) {
         return;
       }
-      this.isPlaying = true;
       this.currentIndex = (this.currentIndex - 1);
       this.current = this.items[this.currentIndex];
     }
