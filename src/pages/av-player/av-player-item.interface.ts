@@ -1,7 +1,7 @@
 /**
- * An interface for items to be played by the video player
+ * An interface for items to be played by the audio/video player
  */
-export interface VideoPlayerItem {
+export interface AvPlayerItem {
   /**
    * Is this the video to play first?
    */
@@ -14,4 +14,8 @@ export interface VideoPlayerItem {
    * The url for the poster image
    */
   posterUrl: string;
+  /**
+   * The type of item
+   */
+  type: 'audio' | 'video';
 }

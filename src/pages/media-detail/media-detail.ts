@@ -4,8 +4,8 @@ import { take } from 'rxjs/operators/take';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
 import { Media } from '@models/media';
-import { VideoPlayerPage } from '@pages/video-player/video-player';
-import { VideoPlayerItem } from '@pages/video-player/video-player-item.interface';
+import { AvPlayerPage } from '@pages/av-player/av-player';
+import { AvPlayerItem } from '@pages/av-player/av-player-item.interface';
 
 /**
  * The detail page for a specific piece of media.
@@ -50,9 +50,10 @@ export class MediaDetailPage {
           url: episode.filePath,
           playFirst: playFirst,
           posterUrl: episode.imagePath,
+          type: 'video',
         };
       });
-      this.navController.push(VideoPlayerPage, { items: items });
+      this.navController.push(AvPlayerPage, { items: items });
     }
   }
 
@@ -66,12 +67,13 @@ export class MediaDetailPage {
       return;
     }
     if (this.media.mediaType === 'video') {
-      const item: VideoPlayerItem = {
+      const item: AvPlayerItem = {
         url: this.media.filePath,
         playFirst: true,
         posterUrl: this.media.imagePath,
+        type: 'video',
       };
-      this.navController.push(VideoPlayerPage, { items: [item] });
+      this.navController.push(AvPlayerPage, { items: [item] });
     }
   }
 
