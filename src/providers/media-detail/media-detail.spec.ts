@@ -33,21 +33,24 @@ describe('MediaDetailProvider', () => {
               desc: 'The sweetest dessert!',
               filename: 'sweet-cream.mp4',
               image: 'sweet-cream.jpg',
-              mediaType: 'video'
+              mediaType: 'video',
+              order: 1
             },
             {
               title: 'Velvet Chocolate',
               desc: 'The tastiest chocolate creme.',
               filename: 'chocolate.mp4',
               image: 'chocolate.jpg',
-              mediaType: 'video'
+              mediaType: 'video',
+              order: 2
             },
             {
               title: 'Vivacious Vanilla',
               desc: 'The tastiest vanilla creme.',
               filename: 'vanilla.mp4',
               image: 'vanilla.jpg',
-              mediaType: 'video'
+              mediaType: 'video',
+              order: 3
             }
           ]
         };

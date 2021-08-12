@@ -20,6 +20,7 @@ export class Episode {
     public fileName: string,
     public image: string,
     public mediaType: string,
+    public order: number,
     public title: string,
     public language = 'en'
   ) {}

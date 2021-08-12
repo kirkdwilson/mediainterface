@@ -61,6 +61,7 @@ export class MediaDetailProvider {
               data.filename,
               data.image,
               data.mediaType,
+              data.order,
               data.title,
               this.language
             );
