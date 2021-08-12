@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
 import { Media } from '@models/media';
-import { AvPlayerPage } from '@pages/av-player/av-player';
 import { AvPlayerItem } from '@pages/av-player/av-player-item.interface';
 
 /**
  * The detail page for a specific piece of media.
  */
+@IonicPage()
 @Component({
   selector: 'page-media-detail',
   templateUrl: 'media-detail.html',
@@ -53,7 +53,7 @@ export class MediaDetailPage {
           type: episode.mediaType,
         };
       });
-      this.navController.push(AvPlayerPage, { items: items });
+      this.navController.push('AvPlayerPage', { items: items });
     }
   }
 
@@ -73,7 +73,7 @@ export class MediaDetailPage {
         posterUrl: this.media.imagePath,
         type: this.media.mediaType,
       };
-      this.navController.push(AvPlayerPage, { items: [item] });
+      this.navController.push('AvPlayerPage', { items: [item] });
     }
   }
 

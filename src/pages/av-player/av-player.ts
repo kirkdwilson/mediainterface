@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AvPlayerItem } from './av-player-item.interface';
 
 /**
  * An audio and video player.
  */
+@IonicPage()
 @Component({
   selector: 'page-av-player',
   templateUrl: 'av-player.html',

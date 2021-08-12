@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { MediaDetailPage } from '@pages/media-detail/media-detail';
+import { IonicPage, NavController } from 'ionic-angular';
 import { MediaProvider } from '@providers/media/media';
 import { GroupedMedia } from '@providers/media/grouped-media.interface';
 import { Category } from '@models/category';
@@ -8,6 +7,7 @@ import { Media } from '@models/media';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
 
+@IonicPage()
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -66,6 +66,6 @@ export class HomePage {
    * @return      void
    */
   goToDetails(slug: string) {
-    this.navController.push(MediaDetailPage, { slug: slug });
+    this.navController.push('MediaDetailPage', { slug: slug });
   }
 }
