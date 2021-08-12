@@ -1,7 +1,18 @@
 page-media-detail {
-    .media-detail-info {
-        border-top: 1px solid map-get($colors, secondary);
-        margin-bottom: 6px;
+    #media-photo {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 100%;
+    }
+
+    #media-details {
+        margin-bottom: .5em;
+    }
+
+    #media-detail-info {
+        border-bottom: 1px solid map-get($colors, secondary);
+        margin-bottom: .5em;
 
         p {
             color: map-get($colors, secondary);
@@ -9,5 +20,27 @@ page-media-detail {
             margin: 0px;
             padding: 0px;
         }
+    }
+}
+@media (max-height:499px) {
+    #media-photo {
+        height: 250px;
+    }
+}
+
+@media (min-height:500px) and (max-height:799px) {
+    #media-photo {
+        height: 350px;
+    }
+}
+@media (min-height:800px) and (max-height:1099px) {
+    #media-photo {
+        height: 450px;
+    }
+}
+
+@media (min-height:1100px) {
+    #media-photo {
+        height: 550px;
     }
 }

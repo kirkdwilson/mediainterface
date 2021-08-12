@@ -7,11 +7,9 @@
 <ion-content padding>
   <p *ngIf="media === null">Something went wrong! The media is missing!</p>
   <div *ngIf="media">
-    <div class="media-player"></div>
-    <div class="media-details">
-      <h2>{{ media?.title }}</h2>
-      <p>{{ media?.desc }}</p>
-      <ion-grid class="media-detail-info">
+    <div id="media-photo" [ngStyle]="{ 'background-image': 'url(' + media?.imagePath + ')'}"></div>
+    <div id="media-details">
+      <ion-grid id="media-detail-info">
         <ion-row>
           <ion-col col-4>
             <p>
@@ -41,8 +39,10 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <h1>{{ media?.title }}</h1>
+      <p>{{ media?.desc }}</p>
     </div>
-    <div class="episodes" *ngIf="media?.episodes.length > 0">
+    <div id="media-episodes" *ngIf="media?.episodes.length > 0">
       <ion-list>
         <ion-list-header>Episodes</ion-list-header>
         <ion-item *ngFor="let episode of media?.episodes">
