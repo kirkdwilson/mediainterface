@@ -122,6 +122,7 @@ export class MediaProvider {
         }
         this.media = response.content[0].content.map((media) => {
           const recommended = (media.hasOwnProperty('recommended')) ? media.recommended : false;
+          const fileName = (media.hasOwnProperty('filename')) ? media.filename : '';
           let categories = [];
           if (media.categories.length > 0) {
             categories = media.categories.map((category) => new Category(category));;
@@ -135,6 +136,7 @@ export class MediaProvider {
             media.title,
             this.language,
             recommended,
+            fileName,
             media.tags
           );
         })
