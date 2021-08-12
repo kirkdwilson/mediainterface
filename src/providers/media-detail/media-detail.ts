@@ -38,6 +38,7 @@ export class MediaDetailProvider {
           return null;
         }
         const recommended = (response.hasOwnProperty('recommended')) ? response.recommended : false;
+        const fileName = (response.hasOwnProperty('filename')) ? response.filename : '';
         let categories = [];
         if (response.categories.length > 0) {
           categories = response.categories.map((category) => new Category(category));;
@@ -51,6 +52,7 @@ export class MediaDetailProvider {
           response.title,
           this.language,
           recommended,
+          fileName,
           response.tags
         );
 

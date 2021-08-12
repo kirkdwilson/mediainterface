@@ -33,6 +33,7 @@ export class Media {
     public title: string,
     public language = 'en',
     public recommended = false,
+    public fileName = '',
     public tags: Array<string> = []
   ) {}
 
@@ -51,6 +52,18 @@ export class Media {
       })
       .sort()
       .join(', ');
+  }
+
+  /**
+   * Get the path for the file
+   *
+   * @return The file path
+   */
+  get filePath(): string {
+    if (this.fileName === '') {
+      return '';
+    }
+    return `${environment.assetPath.replace('{LANG}', this.language)}media/${this.fileName}`;
   }
 
   /**
