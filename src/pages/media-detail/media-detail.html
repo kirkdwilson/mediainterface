@@ -45,15 +45,18 @@
     <div id="media-episodes" *ngIf="media?.episodes.length > 0">
       <ion-list>
         <ion-list-header>Episodes</ion-list-header>
-        <ion-item *ngFor="let episode of media?.episodes">
+        <button ion-item *ngFor="let episode of media?.episodes">
           <ion-thumbnail item-start>
             <img src="{{ episode.imagePath }}" alt="{{ episode.title }}">
           </ion-thumbnail>
           <h2>{{ episode.title }}</h2>
           <p>{{ episode.desc }}</p>
-          <button ion-button clear item-end>View</button>
-        </ion-item>
+          <ion-icon name="play" color="primary" item-end></ion-icon>
+        </button>
       </ion-list>
     </div>
   </div>
+  <ion-fab right bottom *ngIf="media?.episodes.length === 0">
+    <button ion-fab color="primary"><ion-icon name="play"></ion-icon></button>
+  </ion-fab>
 </ion-content>
