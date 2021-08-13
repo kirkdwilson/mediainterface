@@ -21,6 +21,16 @@ page-media-detail {
             padding: 0px;
         }
     }
+
+    .episode-media-type-wrap {
+        position: relative;
+
+        p {
+            position: absolute;
+            bottom: 0px;
+        }
+    }
+
 }
 @media (max-height:499px) {
     #media-photo {

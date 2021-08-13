@@ -1,5 +1,5 @@
-.text-capitalize {
-    text-transform: capitalize;
+.hidden {
+    display: none;
 }
 .media-type {
     color: map-get($colors, secondary) !important;
