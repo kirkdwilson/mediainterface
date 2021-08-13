@@ -1,5 +1,10 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar hideBackButton>
+    <ion-buttons left>
+  		<button ion-button icon-only (click)="goHome()">
+  			<ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon>
+  		</button>
+  	</ion-buttons>
     <ion-title>{{ media?.title }}<span *ngIf="media === null">Media is missing!</span></ion-title>
   </ion-navbar>
 </ion-header>

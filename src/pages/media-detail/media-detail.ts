@@ -68,6 +68,18 @@ export class MediaDetailPage {
   }
 
   /**
+   * Go to the home page.
+   *
+   * @return void
+   */
+  goHome() {
+    this.navController.goToRoot({
+      animate: true,
+      animation: 'ios-transition',
+    });
+  }
+
+  /**
    * Play the provided episode
    *
    * @param  episode The episode to play
