@@ -1,6 +1,7 @@
 import { environment } from '@env';
 import { Category } from './category';
 import { Episode } from './episode';
+import { MEDIA_TYPE_ICONS } from '@constants/icons';
 
 /**
  * A model for a piece of Media
@@ -64,6 +65,18 @@ export class Media {
       return '';
     }
     return `${environment.assetPath.replace('{LANG}', this.language)}media/${this.fileName}`;
+  }
+
+  /**
+   * Get the icon that represents this media type.
+   *
+   * @return The HTML for the icon
+   */
+  get icon(): string {
+    if (MEDIA_TYPE_ICONS.hasOwnProperty(this.mediaType)) {
+      return MEDIA_TYPE_ICONS[this.mediaType];
+    }
+    return 'document';
   }
 
   /**

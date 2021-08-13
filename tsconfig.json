@@ -15,6 +15,9 @@
       "@app/*": [
         "app/*"
       ],
+      "@constants/*": [
+        "constants/*"
+      ],
       "@models/*": [
         "models/*"
       ],

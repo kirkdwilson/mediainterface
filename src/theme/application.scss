@@ -1,0 +1,9 @@
+.text-capitalize {
+    text-transform: capitalize;
+}
+.media-type {
+    color: map-get($colors, secondary) !important;
+    font-size: .8em !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}

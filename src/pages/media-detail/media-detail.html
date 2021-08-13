@@ -12,22 +12,14 @@
       <ion-grid id="media-detail-info">
         <ion-row>
           <ion-col col-4>
-            <p>
-              <span *ngIf="media?.mediaType === 'video'">
-                <ion-icon name="film"></ion-icon> Video
-              </span>
-              <span *ngIf="media?.mediaType === 'audio'">
-                <ion-icon name="microphone"></ion-icon> Audio
-              </span>
-              <span *ngIf="media?.mediaType === 'document'">
-                <ion-icon name="document"></ion-icon> Document
-              </span>
+            <p class="text-capitalize">
+              <ion-icon name="{{ media?.icon }}"></ion-icon> {{ media?.mediaType }}
             </p>
           </ion-col>
           <ion-col col-4>
             <p class="categories" text-center>
               <ion-icon name="list"></ion-icon>
-              <span class="emphasize">Categories:</span> {{ media.categoryList }}
+              <span class="emphasize">Categories:</span> {{ media?.categoryList }}
             </p>
           </ion-col>
           <ion-col col-4 text-right>
@@ -51,6 +43,9 @@
           </ion-thumbnail>
           <h2>{{ episode.title }}</h2>
           <p>{{ episode.desc }}</p>
+          <p class="text-capitalize media-type">
+            <ion-icon name="{{ episode?.icon }}"></ion-icon> {{ episode?.mediaType }}
+          </p>
           <ion-icon name="play" color="primary" item-end></ion-icon>
         </button>
       </ion-list>
