@@ -13,6 +13,7 @@ export class Episode {
    * @param fileName      The file name
    * @param image         The image file name
    * @param mediaType     The type of media
+   * @param mimeType      The mime type of the file
    * @param title         The title
    * @param language='en' The language
    */
@@ -21,6 +22,7 @@ export class Episode {
     public fileName: string,
     public image: string,
     public mediaType: string,
+    public mimeType: string,
     public order: number,
     public title: string,
     public language = 'en'

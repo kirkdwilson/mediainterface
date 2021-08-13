@@ -21,9 +21,11 @@ export class Media {
    * @param mediaType         The type of media
    * @param slug              A slug to identify the media
    * @param title             The title
+   * @param fileName=''       The name of the file
    * @param language='en'     The current language
+   * @param mimeType=''       The mime type of the file
    * @param recommended=false Is it recommended?
-   * @param tags              An array of tags
+   * @param tags =[]          An array of tags
    */
   constructor(
     public categories: Array<Category>,
@@ -32,9 +34,10 @@ export class Media {
     public mediaType: string,
     public slug: string,
     public title: string,
-    public language = 'en',
-    public recommended = false,
     public fileName = '',
+    public language = 'en',
+    public mimeType = '',
+    public recommended = false,
     public tags: Array<string> = []
   ) {}
 

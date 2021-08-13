@@ -39,6 +39,7 @@ export class MediaDetailProvider {
         }
         const recommended = (response.hasOwnProperty('recommended')) ? response.recommended : false;
         const fileName = (response.hasOwnProperty('filename')) ? response.filename : '';
+        const mimeType = (response.hasOwnProperty('mimeType')) ? response.mimeType : '';
         let categories = [];
         if (response.categories.length > 0) {
           categories = response.categories.map((category) => new Category(category));;
@@ -50,9 +51,10 @@ export class MediaDetailProvider {
           response.mediaType,
           response.slug,
           response.title,
-          this.language,
-          recommended,
           fileName,
+          this.language,
+          mimeType,
+          recommended,
           response.tags
         );
 
@@ -63,6 +65,7 @@ export class MediaDetailProvider {
               data.filename,
               data.image,
               data.mediaType,
+              data.mimeType,
               data.order,
               data.title,
               this.language
