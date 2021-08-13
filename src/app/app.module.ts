@@ -13,7 +13,7 @@ import { MyApp } from '@app/app.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, { pageTransition: 'ios-transition' }),
     IonicStorageModule.forRoot(),
   ],
   bootstrap: [IonicApp],
