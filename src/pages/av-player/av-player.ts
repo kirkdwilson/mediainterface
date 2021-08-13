@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { AvPlayerItem } from './av-player-item.interface';
+import { take } from 'rxjs/operators/take';
+import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-player-data-store';
+import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 
 /**
  * An audio and video player.
@@ -28,19 +30,9 @@ export class AvPlayerPage {
     current: AvPlayerItem = null;
 
     /**
-     * The index of the current playing item
-     */
-    currentIndex: number = 0;
-
-    /**
      * Is the item playing?
      */
     isPlaying = true;
-
-    /**
-     * The item to be played
-     */
-    items: Array<AvPlayerItem> = [];
 
     /**
      * The callback triggered when the audio/video ended.
@@ -58,6 +50,7 @@ export class AvPlayerPage {
     private mediaPlayCallback: any = null;
 
     constructor(
+      private dataStore: AvPlayerDataStoreProvider,
       private navController: NavController,
       private navParams: NavParams
     ) {
@@ -69,9 +62,14 @@ export class AvPlayerPage {
      * @return void
      */
     ionViewWillEnter() {
-      this.items = this.navParams.get('items');
-      this.current = this.items.find((item) => item.playFirst);
-      this.currentIndex = this.items.findIndex((item) => item.playFirst);
+      const items = this.navParams.get('items');
+      this.dataStore.init(items).pipe(take(1)).subscribe((current: AvPlayerItem) => {
+        if (!current) {
+          this.goBack();
+        } else {
+          this.current = current;
+        }
+      });
     }
 
     /**
@@ -120,6 +118,7 @@ export class AvPlayerPage {
      * @return void
      */
     goBack() {
+      this.dataStore.clear();
       this.navController.pop();
     }
 
@@ -129,7 +128,7 @@ export class AvPlayerPage {
      * @return yes|no
      */
     isFirstItem(): boolean {
-      return (this.currentIndex === 0);
+      return this.dataStore.onFirstItem();
     }
 
     /**
@@ -138,7 +137,7 @@ export class AvPlayerPage {
      * @return yes|no
      */
     isLastItem(): boolean {
-      return ((this.currentIndex + 1) === this.items.length);
+      return this.dataStore.onLastItem();
     }
 
     /**
@@ -147,11 +146,13 @@ export class AvPlayerPage {
      * @return void
      */
     nextEpisode() {
-      if (this.isLastItem()) {
-        return;
-      }
-      this.currentIndex = (this.currentIndex + 1);
-      this.current = this.items[this.currentIndex];
+      this.dataStore.next().pipe(take(1)).subscribe((next: AvPlayerItem) => {
+        if (next == null) {
+          this.goBack();
+        } else {
+          this.current = next;
+        }
+      });
     }
 
     /**
@@ -188,11 +189,13 @@ export class AvPlayerPage {
      * @return void
      */
     previousEpisode() {
-      if (this.isFirstItem()) {
-        return;
-      }
-      this.currentIndex = (this.currentIndex - 1);
-      this.current = this.items[this.currentIndex];
+      this.dataStore.previous().pipe(take(1)).subscribe((prev: AvPlayerItem) => {
+        if (prev == null) {
+          this.goBack();
+        } else {
+          this.current = prev;
+        }
+      });
     }
 
     /**
@@ -202,7 +205,7 @@ export class AvPlayerPage {
      */
     videoDidEnd() {
       this.isPlaying = false;
-      if ((this.currentIndex + 1) < this.items.length) {
+      if (this.dataStore.hasMore()) {
           setTimeout(() => {
             this.nextEpisode();
           }, 2000);

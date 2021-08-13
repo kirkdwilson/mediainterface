@@ -18,6 +18,7 @@ module.exports = {
     alias: {
       "@app": path.resolve('./src/app/'),
       "@constants": path.resolve('./src/constants/'),
+      "@mocks": path.resolve('./src/mocks/'),
       "@models": path.resolve('./src/models/'),
       "@pages": path.resolve('./src/pages/'),
       "@providers": path.resolve('./src/providers/'),

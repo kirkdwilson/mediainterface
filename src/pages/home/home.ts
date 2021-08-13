@@ -66,6 +66,6 @@ export class HomePage {
    * @return      void
    */
   goToDetails(slug: string) {
-    this.navController.push('MediaDetailPage', { slug: slug });
+    this.navController.push('media-details', { slug: slug });
   }
 }

@@ -5,12 +5,15 @@ import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
 import { Media } from '@models/media';
-import { AvPlayerItem } from '@pages/av-player/av-player-item.interface';
+import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 
 /**
  * The detail page for a specific piece of media.
  */
-@IonicPage()
+@IonicPage({
+  name: 'media-details',
+  segment: 'details/:slug',
+})
 @Component({
   selector: 'page-media-detail',
   templateUrl: 'media-detail.html',
