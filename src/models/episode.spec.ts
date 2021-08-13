@@ -11,6 +11,7 @@ describe('Episode', () => {
         'tuna.mp4',
         'tuna.jpg',
         'video',
+        'video/mp4',
         1,
         'A Fishy Tale',
         'ch'
@@ -28,6 +29,7 @@ describe('Episode', () => {
         'A show about boats!',
         'boat.mp4',
         'boat.jpg',
+        'video/mp4',
         'video',
         1,
         'A Tuna Boat',

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MediaDetailPage } from './media-detail';
 import { IonicPageModule } from 'ionic-angular';
+import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 
 /**
@@ -14,6 +15,9 @@ import { MediaDetailProvider } from '@providers/media-detail/media-detail';
     ],
     exports: [],
     declarations: [MediaDetailPage],
-    providers: [MediaDetailProvider],
+    providers: [
+      DownloadFileProvider,
+      MediaDetailProvider,
+    ],
 })
 export class MediaDetailModule { }

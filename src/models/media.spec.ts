@@ -14,9 +14,10 @@ describe('Media', () => {
         'video',
         'original-series',
         'Original Series',
-        'zh',
-        false,
         '',
+        'zh',
+        '',
+        false,
         ['free']
       );
       expect(media.imagePath).toContain('/zh/');
@@ -35,9 +36,10 @@ describe('Media', () => {
         'video',
         'really-free',
         'Really Free',
-        'ch',
-        false,
         'really-free.mp4',
+        'ch',
+        'video/mp4',
+        false,
         ['free']
       );
       expect(media.filePath).toContain('/ch/');
@@ -52,9 +54,10 @@ describe('Media', () => {
         'video',
         'the-best',
         'The Best',
-        'ch',
-        false,
         '',
+        'ch',
+        '',
+        false,
         ['free']
       );
       expect(media.filePath).toEqual('');

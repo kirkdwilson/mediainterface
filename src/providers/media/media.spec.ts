@@ -64,6 +64,7 @@ describe('MediaProvider', () => {
           expect(glenn.desc).toEqual('A story about Glenn Ivy');
           expect(glenn.image).toEqual('glenn-ivy.jpg');
           expect(glenn.mediaType).toEqual('video');
+          expect(glenn.mimeType).toEqual('');
           expect(glenn.tags).toEqual(['locations', 'unique', 'travel']);
           expect(glenn.language).toEqual('en');
           expect(cream.recommended).toBe(false);

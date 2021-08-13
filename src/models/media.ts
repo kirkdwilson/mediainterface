@@ -1,6 +1,7 @@
 import { environment } from '@env';
 import { Category } from './category';
 import { Episode } from './episode';
+import { MEDIA_TYPE_ICONS } from '@constants/icons';
 
 /**
  * A model for a piece of Media
@@ -20,9 +21,11 @@ export class Media {
    * @param mediaType         The type of media
    * @param slug              A slug to identify the media
    * @param title             The title
+   * @param fileName=''       The name of the file
    * @param language='en'     The current language
+   * @param mimeType=''       The mime type of the file
    * @param recommended=false Is it recommended?
-   * @param tags              An array of tags
+   * @param tags =[]          An array of tags
    */
   constructor(
     public categories: Array<Category>,
@@ -31,9 +34,10 @@ export class Media {
     public mediaType: string,
     public slug: string,
     public title: string,
-    public language = 'en',
-    public recommended = false,
     public fileName = '',
+    public language = 'en',
+    public mimeType = '',
+    public recommended = false,
     public tags: Array<string> = []
   ) {}
 
@@ -64,6 +68,18 @@ export class Media {
       return '';
     }
     return `${environment.assetPath.replace('{LANG}', this.language)}media/${this.fileName}`;
+  }
+
+  /**
+   * Get the icon that represents this media type.
+   *
+   * @return The HTML for the icon
+   */
+  get icon(): string {
+    if (MEDIA_TYPE_ICONS.hasOwnProperty(this.mediaType)) {
+      return MEDIA_TYPE_ICONS[this.mediaType];
+    }
+    return 'document';
   }
 
   /**
