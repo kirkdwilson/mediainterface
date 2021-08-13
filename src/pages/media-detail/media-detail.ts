@@ -11,6 +11,7 @@ import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.int
  * The detail page for a specific piece of media.
  */
 @IonicPage({
+  defaultHistory: ['HomePage'],
   name: 'media-details',
   segment: 'details/:slug',
 })
@@ -64,18 +65,6 @@ export class MediaDetailPage {
       link.download = fileName;
       link.click();
       window.URL.revokeObjectURL(url);
-    });
-  }
-
-  /**
-   * Go to the home page.
-   *
-   * @return void
-   */
-  goHome() {
-    this.navController.goToRoot({
-      animate: true,
-      animation: 'ios-transition',
     });
   }
 
