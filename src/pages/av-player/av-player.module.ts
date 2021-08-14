@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { AvPlayerPage } from './av-player';
 import { IonicPageModule } from 'ionic-angular';
+import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-player-data-store';
 
 /**
  * Let's lazy load the pages.
@@ -13,6 +14,6 @@ import { IonicPageModule } from 'ionic-angular';
     ],
     exports: [],
     declarations: [AvPlayerPage],
-    providers: [],
+    providers: [AvPlayerDataStoreProvider],
 })
 export class AvPlayerModule { }

@@ -5,12 +5,16 @@ import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
 import { Media } from '@models/media';
-import { AvPlayerItem } from '@pages/av-player/av-player-item.interface';
+import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 
 /**
  * The detail page for a specific piece of media.
  */
-@IonicPage()
+@IonicPage({
+  defaultHistory: ['HomePage'],
+  name: 'media-details',
+  segment: 'details/:slug',
+})
 @Component({
   selector: 'page-media-detail',
   templateUrl: 'media-detail.html',
@@ -27,6 +31,11 @@ export class MediaDetailPage {
    */
   media: Media = null;
 
+  /**
+   * The current slug
+   */
+  slug = '';
+
   constructor(
     private downloadFileProvider: DownloadFileProvider,
     private mediaDetailProvider: MediaDetailProvider,
@@ -40,8 +49,8 @@ export class MediaDetailPage {
    * @return void
    */
   ionViewWillEnter() {
-    const slug = this.navParams.get('slug');
-    this.mediaDetailProvider.get(slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
+    this.slug = this.navParams.get('slug');
+    this.mediaDetailProvider.get(this.slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
   }
 
   /**
@@ -81,7 +90,7 @@ export class MediaDetailPage {
           type: episode.mediaType,
         };
       });
-      this.navController.push('AvPlayerPage', { items: items });
+      this.navController.push('av-player', { items: items, slug: this.slug });
     }
   }
 
@@ -101,7 +110,7 @@ export class MediaDetailPage {
         posterUrl: this.media.imagePath,
         type: this.media.mediaType,
       };
-      this.navController.push('AvPlayerPage', { items: [item] });
+      this.navController.push('av-player', { items: [item], slug: this.slug });
     }
   }
 
