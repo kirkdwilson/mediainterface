@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-player-data-store';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
@@ -7,7 +7,10 @@ import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.int
 /**
  * An audio and video player.
  */
-@IonicPage()
+@IonicPage({
+  name: 'av-player',
+  segment: 'details/:slug/media-player',
+})
 @Component({
   selector: 'page-av-player',
   templateUrl: 'av-player.html',
@@ -49,10 +52,16 @@ export class AvPlayerPage {
      */
     private mediaPlayCallback: any = null;
 
+    /**
+     * The slug for the previous page
+     */
+    slug = '';
+
     constructor(
       private dataStore: AvPlayerDataStoreProvider,
       private navController: NavController,
-      private navParams: NavParams
+      private navParams: NavParams,
+      private viewController: ViewController,
     ) {
     }
 
@@ -63,6 +72,7 @@ export class AvPlayerPage {
      */
     ionViewWillEnter() {
       const items = this.navParams.get('items');
+      this.slug = this.navParams.get('slug');
       this.dataStore.init(items).pipe(take(1)).subscribe((current: AvPlayerItem) => {
         if (!current) {
           this.goBack();
@@ -119,7 +129,28 @@ export class AvPlayerPage {
      */
     goBack() {
       this.dataStore.clear();
-      this.navController.pop();
+      if (this.navController.canGoBack()) {
+        this.navController.pop();
+      } else if (this.slug !== '') {
+        this.navController.push(
+          'media-details',
+          { slug: this.slug },
+          {
+            animate: true,
+            animation: 'ios-transition',
+            direction: 'back',
+          },
+        ).then(() => {
+          // Remove us from backstack
+          this.navController.remove(this.viewController.index);
+          this.navController.insert(0, 'HomePage');
+        });
+      } else {
+        this.navController.goToRoot({
+          animate: true,
+          animation: 'ios-transition',
+        });
+      }
     }
 
     /**
