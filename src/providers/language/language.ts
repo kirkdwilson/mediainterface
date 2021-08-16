@@ -1,8 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operators/map';
+import { switchMap } from 'rxjs/operators/switchMap';
 import { Language } from '@models/language';
 import { environment } from '@env';
 
@@ -11,14 +15,39 @@ import { environment } from '@env';
  */
 @Injectable()
 export class LanguageProvider {
+
   /**
    * The supported languages
    */
-  public languages: Array<Language> = [];
+  languages: Array<Language> = [];
+
+  /**
+   * When the language changes, this will notify users.
+   */
+  onLanguageChange: Observable<Language>;
+
+  /**
+   * The storage key that stores the file.
+   */
+  storageKey = 'language';
+
+  /**
+   * The current selected language
+   */
+  private currentLanguage: Language = null;
+
+  /**
+   * The subject for traking changes to the language
+   */
+  private languageSubject: Subject<Language>;
 
   constructor(
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
+    private storage: Storage,
+  ) {
+    this.languageSubject = new Subject();
+    this.onLanguageChange = this.languageSubject.asObservable();
+  }
 
   /**
    * Get the default supported language.
@@ -27,7 +56,29 @@ export class LanguageProvider {
    */
   getDefaultLanguage(): Observable<Language> {
     return this.load().pipe(
-      map((languages: Array<Language>) => languages.find((lang) => lang.isDefault))
+      map((supported: Array<Language>) => supported.find((lang) => lang.isDefault))
+    );
+  }
+
+  /**
+   * Save the new language selected.
+   *
+   * @param  language The selected language
+   * @return          Was it saved?
+   */
+  saveLanguage(language: Language): Observable<boolean> {
+    return this.load().pipe(
+      switchMap((supported: Array<Language>) => {
+        const found = supported.find((lang: Language) => lang.text.toLowerCase() === language.text.toLowerCase());
+        if (!found) {
+          return of(false);
+        }
+        this.currentLanguage = found;
+        this.languageSubject.next(found);
+        return from(
+          this.storage.set(this.storageKey, JSON.stringify(found))
+        ).pipe(map(() => true));
+      })
     );
   }
 
