@@ -53,6 +53,29 @@ describe('LanguageProvider', () => {
         request.flush(mockedResponse);
       })));
 
+    });
+
+    describe('getDefaultLanguage()', () => {
+
+      beforeEach(() => {
+          app = new AppTestingModule();
+          storage = new StorageMock();
+          app.configure([], [
+            LanguageProvider,
+            { provide: Storage, useValue: storage },
+          ], true);
+      });
+
+      it('should return the correct language', async(inject([LanguageProvider], (languageProvider) => {
+        languageProvider.getDefaultLanguage().pipe(take(1)).subscribe((lang: Language) => {
+          expect(lang).not.toBeNull();
+          expect(lang.text).toEqual('English');
+          expect(lang.codes).toEqual(['en-US', 'en']);
+          expect(lang.isDefault).toBe(true);
+        });
+        const request = app.httpMock.expectOne(environment.languagePath);
+        request.flush(mockedResponse);
+      })));
 
     });
 

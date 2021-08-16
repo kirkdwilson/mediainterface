@@ -21,6 +21,17 @@ export class LanguageProvider {
   ) {}
 
   /**
+   * Get the default supported language.
+   *
+   * @return The default language
+   */
+  getDefaultLanguage(): Observable<Language> {
+    return this.load().pipe(
+      map((languages: Array<Language>) => languages.find((lang) => lang.isDefault))
+    );
+  }
+
+  /**
    * Get a list of all the supported languages
    *
    * @return The languages
