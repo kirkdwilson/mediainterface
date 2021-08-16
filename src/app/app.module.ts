@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from '@app/app.component';
+import { LanguageProvider } from '../providers/language/language';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MyApp } from '@app/app.component';
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    LanguageProvider,
   ]
 })
 export class AppModule {}
