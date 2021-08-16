@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { from } from 'rxjs/observable/from';
@@ -44,6 +45,7 @@ export class LanguageProvider {
   constructor(
     private http: HttpClient,
     private storage: Storage,
+    private translate: TranslateService,
   ) {
     this.languageSubject = new Subject();
     this.onLanguageChange = this.languageSubject.asObservable();
@@ -58,6 +60,48 @@ export class LanguageProvider {
     return this.load().pipe(
       map((supported: Array<Language>) => supported.find((lang) => lang.isDefault))
     );
+  }
+
+  /**
+   * Get a user's preferred language based on the browser.
+   *
+   * @return The preferred language or the default language
+   *
+   * NOTE: Android & iOS provide different codes.  For example, Traditional Chinese,
+   * The globalization plugin returns these codes:
+   *
+   * ios:
+   *
+   * zh-Hant-US - Chinese Traditional
+   * zh-Hant-HK - Hong Kong Traditional
+   * zh-Hant-MO - Macau Traditional
+   * zh-Hant-TW - Tawain Traditional
+   *
+   * Android:
+   *
+   * zh-HK - Hong Kong Traditional
+   * zh-MO - Macau Traditional
+   * zh-TW - Tawain Traditional
+   */
+  getPreferredLanguage(): Observable<Language> {
+    const preferred = this.translate.getBrowserCultureLang();
+    if (preferred) {
+      return this.load().pipe(
+        switchMap((supported: Array<Language>) => {
+          const regional = supported.find((lang: Language) => lang.codes.indexOf(preferred.toLowerCase()) !== -1);
+          if (regional) {
+            return of(regional);
+          }
+          const langParts = preferred.split('-');
+          const specific = supported.find((lang: Language) => lang.codes.indexOf(langParts[0].toLowerCase()) !== -1);
+          if (specific) {
+            return of(specific);
+          }
+          return this.getDefaultLanguage();
+        })
+      );
+    }
+    return this.getDefaultLanguage();
   }
 
   /**

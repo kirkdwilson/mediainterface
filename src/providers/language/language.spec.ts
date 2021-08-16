@@ -1,8 +1,10 @@
 import { async, inject } from '@angular/core/testing';
 import { Storage } from '@ionic/storage';
+import { TranslateService } from '@ngx-translate/core';
 import {} from 'jasmine';
 import { take } from 'rxjs/operators/take';
 import { StorageMock } from '@mocks/ionic/storage';
+import { TranslateServiceMock } from '@mocks/ngx/translate-service';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { LanguageProvider } from './language';
 import { Language } from '@models/language';
@@ -11,6 +13,8 @@ import { environment } from '@env';
 describe('LanguageProvider', () => {
   let app: AppTestingModule;
   let storage : StorageMock;
+  let translate: TranslateServiceMock;
+
   const mockedResponse: any = [
     {
       text: 'English',
@@ -36,9 +40,11 @@ describe('LanguageProvider', () => {
       beforeEach(() => {
           app = new AppTestingModule();
           storage = new StorageMock();
+          translate = new TranslateServiceMock();
           app.configure([], [
             LanguageProvider,
             { provide: Storage, useValue: storage },
+            { provide: TranslateService, useValue: translate },
           ], true);
       });
 
@@ -60,9 +66,11 @@ describe('LanguageProvider', () => {
       beforeEach(() => {
           app = new AppTestingModule();
           storage = new StorageMock();
+          translate = new TranslateServiceMock();
           app.configure([], [
             LanguageProvider,
             { provide: Storage, useValue: storage },
+            { provide: TranslateService, useValue: translate },
           ], true);
       });
 
@@ -70,7 +78,7 @@ describe('LanguageProvider', () => {
         languageProvider.getDefaultLanguage().pipe(take(1)).subscribe((lang: Language) => {
           expect(lang).not.toBeNull();
           expect(lang.text).toEqual('English');
-          expect(lang.codes).toEqual(['en-US', 'en']);
+          expect(lang.codes).toEqual(['en-us', 'en']);
           expect(lang.isDefault).toBe(true);
         });
         const request = app.httpMock.expectOne(environment.languagePath);
@@ -84,10 +92,12 @@ describe('LanguageProvider', () => {
       beforeEach(() => {
           app = new AppTestingModule();
           storage = new StorageMock();
+          translate = new TranslateServiceMock();
           spyOn(storage, 'set').and.callThrough();
           app.configure([], [
             LanguageProvider,
             { provide: Storage, useValue: storage },
+            { provide: TranslateService, useValue: translate },
           ], true);
       });
 
@@ -107,6 +117,62 @@ describe('LanguageProvider', () => {
           expect(saved).toBe(true);
           expect(storage.set).toHaveBeenCalled();
           expect(storage.set).toHaveBeenCalledWith(languageProvider.storageKey, JSON.stringify(lang));
+        });
+        const request = app.httpMock.expectOne(environment.languagePath);
+        request.flush(mockedResponse);
+      })));
+
+    });
+
+    describe('getPreferredLanguage()', () => {
+
+      beforeEach(() => {
+          app = new AppTestingModule();
+          storage = new StorageMock();
+          translate = new TranslateServiceMock();
+          app.configure([], [
+            LanguageProvider,
+            { provide: Storage, useValue: storage },
+            { provide: TranslateService, useValue: translate },
+          ], true);
+      });
+
+      it('should get the correct language', async(inject([LanguageProvider], (languageProvider) => {
+        spyOn(translate, 'getBrowserCultureLang').and.returnValue('zh-HK');
+        languageProvider.getPreferredLanguage().pipe(take(1)).subscribe((preferred: Language) => {
+          expect(preferred).not.toBeNull();
+          expect(preferred.text).toEqual('今日未得之民');
+        });
+        const request = app.httpMock.expectOne(environment.languagePath);
+        request.flush(mockedResponse);
+      })));
+
+      it('should use the language if the region is not found', async(inject([LanguageProvider], (languageProvider) => {
+        // Because es-AR is not in the codes array, it should try es.
+        spyOn(translate, 'getBrowserCultureLang').and.returnValue('es-AR');
+        languageProvider.getPreferredLanguage().pipe(take(1)).subscribe((preferred: Language) => {
+          expect(preferred).not.toBeNull();
+          expect(preferred.text).toEqual('Español');
+        });
+        const request = app.httpMock.expectOne(environment.languagePath);
+        request.flush(mockedResponse);
+      })));
+
+      it('should return the default if the preferred language is not offered', async(inject([LanguageProvider], (languageProvider) => {
+        spyOn(translate, 'getBrowserCultureLang').and.returnValue('hu-HU');
+        languageProvider.getPreferredLanguage().pipe(take(1)).subscribe((preferred: Language) => {
+          expect(preferred).not.toBeNull();
+          expect(preferred.text).toEqual('English');
+        });
+        const request = app.httpMock.expectOne(environment.languagePath);
+        request.flush(mockedResponse);
+      })));
+
+      it('should return the default language if language is undefined in browser', async(inject([LanguageProvider], (languageProvider)  =>  {
+        spyOn(translate, 'getBrowserCultureLang').and.returnValue(undefined);
+        languageProvider.getPreferredLanguage().pipe(take(1)).subscribe((preferred: Language) => {
+          expect(preferred).not.toBeNull();
+          expect(preferred.text).toEqual('English');
         });
         const request = app.httpMock.expectOne(environment.languagePath);
         request.flush(mockedResponse);

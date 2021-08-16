@@ -7,6 +7,8 @@ export class Language {
     public codes: Array<string>,
     public text: string,
     public isDefault = false,
-  ) {}
+  ) {
+    this.codes = codes.map((code) => code.toLowerCase());
+  }
 
 }
