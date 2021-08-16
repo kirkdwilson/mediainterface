@@ -8,7 +8,7 @@
 
 <ion-content padding>
   <div class="category-list-wrapper">
-    <h2>For You</h2>
+    <h2>{{ 'RECOMMENDED_TITLE' | translate }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of recommended">
         <div class="feature-photo">

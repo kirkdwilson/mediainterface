@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { AvPlayerPage } from './av-player';
 import { IonicPageModule } from 'ionic-angular';
 import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-player-data-store';
@@ -10,7 +11,8 @@ import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-pl
  */
 @NgModule({
     imports: [
-        IonicPageModule.forChild(AvPlayerPage)
+        IonicPageModule.forChild(AvPlayerPage),
+        TranslateModule
     ],
     exports: [],
     declarations: [AvPlayerPage],

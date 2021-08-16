@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { HomePage } from './home';
 import { IonicPageModule } from 'ionic-angular';
 import { MediaProvider } from '@providers/media/media';
@@ -10,7 +11,8 @@ import { MediaProvider } from '@providers/media/media';
  */
 @NgModule({
     imports: [
-        IonicPageModule.forChild(HomePage)
+        IonicPageModule.forChild(HomePage),
+        TranslateModule
     ],
     exports: [],
     declarations: [HomePage],
