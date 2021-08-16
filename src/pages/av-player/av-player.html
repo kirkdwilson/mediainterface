@@ -1,11 +1,11 @@
 <ion-content>
   <video [src]="current?.url" controls [autoplay]="current?.type === 'video'" [poster]="current?.posterUrl" [hidden]="current === null || current?.type !== 'video'" #videoPlayer>
-    Sorry, your browser does not support videos.
+    {{ 'UNSUPPORTED_TEXT' | translate }}
   </video>
   <div id="audio-player-wrapper" [hidden]="current === null || current?.type !== 'audio'">
     <div id="audio-poster" [ngStyle]="{ 'background-image': 'url(' + current?.posterUrl + ')'}"></div>
     <audio [src]="current?.url" controls [autoplay]="current?.type === 'audio'" #audioPlayer>
-      Sorry, your browser does not support videos.
+      {{ 'UNSUPPORTED_TEXT' | translate }}
     </audio>
   </div>
   <div id="secondary-controls">

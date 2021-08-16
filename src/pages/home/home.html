@@ -17,7 +17,7 @@
         <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
         <ion-card-content>
           <p class="media-type" text-capitalize>
-            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaType }}
+            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
           </p>
         </ion-card-content>
       </ion-card>
@@ -33,14 +33,14 @@
         <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
         <ion-card-content>
           <p class="media-type" text-capitalize>
-            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaType }}
+            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
           </p>
         </ion-card-content>
       </ion-card>
     </ion-scroll>
   </div>
   <div class="category-list-wrapper">
-    <h2>Other Media</h2>
+    <h2>{{'OTHER_MEDIA_TITLE' | translate }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of others">
         <div class="feature-photo">
@@ -49,7 +49,7 @@
         <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
         <ion-card-content>
           <p class="media-type" text-capitalize>
-            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaType }}
+            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
           </p>
         </ion-card-content>
       </ion-card>

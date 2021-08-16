@@ -92,6 +92,15 @@ export class Media {
   }
 
   /**
+   * Get the translation key for displaying the media type.
+   *
+   * @return The key
+   */
+  get mediaTypeTranslationKey(): string {
+    return `MEDIA_TYPE.${this.mediaType.toUpperCase()}`;
+  }
+
+  /**
    * Add an episode to the media.
    *
    * @param  episode The episode to add

@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>{{ media?.title }}<span *ngIf="media === null">Media is missing!</span></ion-title>
+    <ion-title>{{ media?.title }}<span *ngIf="media === null">{{ 'MISSING_MEDIA_TITLE' | translate }}</span></ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <p *ngIf="media === null">Something went wrong! The media is missing!</p>
+  <p *ngIf="media === null">{{ 'MISSING_MEDIA_TEXT' | translate }}</p>
   <div *ngIf="media">
     <div id="media-photo" [ngStyle]="{ 'background-image': 'url(' + media?.imagePath + ')'}"></div>
     <div id="media-details">
@@ -13,19 +13,19 @@
         <ion-row>
           <ion-col col-4>
             <p text-capitalize>
-              <ion-icon name="{{ media?.icon }}"></ion-icon> {{ media?.mediaType }}
+              <ion-icon name="{{ media?.icon }}"></ion-icon> {{ media?.mediaTypeTranslationKey | translate }}
             </p>
           </ion-col>
           <ion-col col-4>
             <p class="categories" text-center>
               <ion-icon name="list"></ion-icon>
-              <span class="emphasize">Categories:</span> {{ media?.categoryList }}
+              <span class="emphasize">{{ 'CATEGORIES_TITLE' | translate }}:</span> {{ media?.categoryList }}
             </p>
           </ion-col>
           <ion-col col-4 text-right>
             <p>
               <span *ngIf="media?.recommended">
-                <ion-icon name="star"></ion-icon> Recommended
+                <ion-icon name="star"></ion-icon> {{ 'RECOMMENDED_TEXT' | translate }}
               </span>
             </p>
           </ion-col>
@@ -46,7 +46,7 @@
     </div>
     <div id="media-episodes" *ngIf="media?.episodes.length > 0">
       <ion-list>
-        <ion-list-header>Episodes</ion-list-header>
+        <ion-list-header>{{ 'EPISODES_TEXT' | translate }}</ion-list-header>
         <ion-item *ngFor="let episode of media?.episodes" text-wrap>
           <ion-thumbnail item-start>
             <img src="{{ episode.imagePath }}" alt="{{ episode.title }}">
@@ -57,7 +57,7 @@
             <ion-row>
               <ion-col col-6 class="episode-media-type-wrap">
                 <p class="media-type" text-capitalize>
-                  <ion-icon name="{{ episode?.icon }}"></ion-icon> {{ episode?.mediaType }}
+                  <ion-icon name="{{ episode?.icon }}"></ion-icon> {{ episode?.mediaTypeTranslationKey | translate }}
                 </p>
               </ion-col>
               <ion-col col-6>
