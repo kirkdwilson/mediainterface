@@ -92,10 +92,12 @@ export class LanguageProvider {
           if (regional) {
             return of(regional);
           }
-          const langParts = preferred.split('-');
-          const specific = supported.find((lang: Language) => lang.codes.indexOf(langParts[0].toLowerCase()) !== -1);
-          if (specific) {
-            return of(specific);
+          if (preferred.indexOf('-') !== -1) {
+            const langParts = preferred.split('-');
+            const specific = supported.find((lang: Language) => lang.codes.indexOf(langParts[0].toLowerCase()) !== -1);
+            if (specific) {
+              return of(specific);
+            }
           }
           return this.getDefaultLanguage();
         })
