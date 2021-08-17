@@ -7,7 +7,7 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { CreateTranslateLoader } from './create-translate-loader';
 import { MyApp } from '@app/app.component';
-import { LanguageProvider } from '../providers/language/language';
+import { LanguageProvider } from '@providers/language/language';
 
 @NgModule({
   declarations: [
