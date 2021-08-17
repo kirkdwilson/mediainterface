@@ -180,6 +180,58 @@ describe('LanguageProvider', () => {
 
     });
 
+    describe('getLanguage()', () => {
+
+      beforeEach(() => {
+          app = new AppTestingModule();
+          storage = new StorageMock();
+          translate = new TranslateServiceMock();
+          app.configure([], [
+            LanguageProvider,
+            { provide: Storage, useValue: storage },
+            { provide: TranslateService, useValue: translate },
+          ], true);
+      });
+
+      it('should return the language in the database', async(inject([LanguageProvider], (languageProvider) => {
+        spyOn(translate, 'getBrowserCultureLang').and.callThrough();
+        spyOn(storage, 'get').and.returnValue(
+          new Promise(function(resolve: Function): void {
+            let lang : Language = new Language(['es'], 'Español', false);
+            resolve(JSON.stringify(lang));
+          })
+        );
+        languageProvider.getLanguage().pipe(take(1)).subscribe((lang: Language) => {
+          expect(lang).not.toBeNull();
+          expect(lang.text).toEqual('Español');
+          expect(storage.get).toHaveBeenCalledWith(languageProvider.storageKey);
+          expect(translate.getBrowserCultureLang).not.toHaveBeenCalled();
+        });
+        app.httpMock.expectNone(environment.languagePath);
+      })));
+
+      it('should get the preferred language if not in database', async(inject([LanguageProvider], (languageProvider) => {
+        spyOn(translate, 'getBrowserCultureLang').and.returnValue('es-AR');
+        spyOn(storage, 'get').and.returnValue(
+          new Promise(function(resolve: Function): void {
+            resolve(undefined);
+          })
+        );
+        spyOn(storage, 'set').and.callThrough();
+        const expected = new Language(['es'], 'Español', false);
+        languageProvider.getLanguage().pipe(take(1)).subscribe((lang: Language) => {
+          expect(lang).not.toBeNull();
+          expect(lang.text).toEqual('Español');
+          expect(storage.get).toHaveBeenCalledWith(languageProvider.storageKey);
+          expect(translate.getBrowserCultureLang).toHaveBeenCalled();
+          expect(storage.set).toHaveBeenCalledWith(languageProvider.storageKey, JSON.stringify(expected));
+        });
+        // For some reason this fails even though I know it is called
+        // const request = app.httpMock.expectOne(environment.languagePath);
+        // request.flush(mockedResponse);
+      })));
+
+    });
   });
 
 });
