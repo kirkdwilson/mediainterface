@@ -2,8 +2,10 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
+import { LanguageProvider } from '@providers/language/language';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
+import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
@@ -37,8 +39,19 @@ export class MediaDetailPage {
    */
   slug = '';
 
+  /**
+   * The current language
+   */
+  private currentLanguage: Language = null;
+
+  /**
+   * Our stream for tracking changes on the language
+   */
+  private languageOnChangeStream$: any = null;
+
   constructor(
     private downloadFileProvider: DownloadFileProvider,
+    private languageProvider: LanguageProvider,
     private mediaDetailProvider: MediaDetailProvider,
     private navController: NavController,
     private navParams: NavParams,
@@ -52,7 +65,20 @@ export class MediaDetailPage {
    */
   ionViewWillEnter() {
     this.slug = this.navParams.get('slug');
-    this.mediaDetailProvider.get(this.slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
+    this.languageProvider.getLanguage().pipe(take(1)).subscribe((lang: Language) => this.loadData(lang));
+    this.languageOnChangeStream$ = this.languageProvider.onLanguageChange.subscribe((lang: Language) => this.loadData(lang));
+  }
+
+  /**
+   * Ionic LifeCycle the view will leave
+   *
+   * @return void
+   */
+  ionViewWillLeave() {
+    if (this.languageOnChangeStream$) {
+      this.languageOnChangeStream$.unsubscribe();
+      this.languageOnChangeStream$ = null;
+    }
   }
 
   /**
@@ -126,6 +152,20 @@ export class MediaDetailPage {
     this.popoverController.config.set('mode', 'ios');
     const popover = this.popoverController.create(LanguagePopoverPage);
     popover.present({ ev: event });
+  }
+
+  /**
+   * Load the page data
+   *
+   * @param   language  The language to load
+   * @return void
+   */
+  private loadData(language: Language) {
+    if ((this.currentLanguage) && (language.text === this.currentLanguage.text)) {
+      return;
+    }
+    this.mediaDetailProvider.setLanguage(language.twoLetterCode);
+    this.mediaDetailProvider.get(this.slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
   }
 
 }

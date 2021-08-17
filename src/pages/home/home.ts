@@ -101,6 +101,7 @@ export class HomePage {
   /**
    * Load the page data
    *
+   * @param   language  The language to load
    * @return void
    */
   private loadData(language: Language) {
