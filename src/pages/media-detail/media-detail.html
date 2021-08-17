@@ -1,6 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ media?.title }}<span *ngIf="media === null">{{ 'MISSING_MEDIA_TITLE' | translate }}</span></ion-title>
+    <ion-buttons end>
+      <button ion-button icon-right (click)="openLanguagePopover($event)">
+        {{ 'LANGUAGE_BUTTON' | translate }} <ion-icon name="cog"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

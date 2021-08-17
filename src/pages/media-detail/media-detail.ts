@@ -1,11 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
 import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
+import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
 
 /**
  * The detail page for a specific piece of media.
@@ -40,7 +41,8 @@ export class MediaDetailPage {
     private downloadFileProvider: DownloadFileProvider,
     private mediaDetailProvider: MediaDetailProvider,
     private navController: NavController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private popoverController: PopoverController,
   ) {}
 
   /**
@@ -112,6 +114,18 @@ export class MediaDetailPage {
       };
       this.navController.push('av-player', { items: [item], slug: this.slug });
     }
+  }
+
+  /**
+   * Open the language popover
+   *
+   * @param   event The event that triggered it
+   * @return void
+   */
+  openLanguagePopover(event) {
+    this.popoverController.config.set('mode', 'ios');
+    const popover = this.popoverController.create(LanguagePopoverPage);
+    popover.present({ ev: event });
   }
 
 }
