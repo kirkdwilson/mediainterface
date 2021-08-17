@@ -57,7 +57,7 @@ export class LanguageProvider {
    * @return The default language
    */
   getDefaultLanguage(): Observable<Language> {
-    return this.load().pipe(
+    return this.supported().pipe(
       map((supported: Array<Language>) => supported.find((lang) => lang.isDefault))
     );
   }
@@ -112,7 +112,7 @@ export class LanguageProvider {
   getPreferredLanguage(): Observable<Language> {
     const preferred = this.translate.getBrowserCultureLang();
     if (preferred) {
-      return this.load().pipe(
+      return this.supported().pipe(
         switchMap((supported: Array<Language>) => {
           const regional = supported.find((lang: Language) => lang.codes.indexOf(preferred.toLowerCase()) !== -1);
           if (regional) {
@@ -139,7 +139,7 @@ export class LanguageProvider {
    * @return          Was it saved?
    */
   saveLanguage(language: Language): Observable<boolean> {
-    return this.load().pipe(
+    return this.supported().pipe(
       switchMap((supported: Array<Language>) => {
         const found = supported.find((lang: Language) => lang.text.toLowerCase() === language.text.toLowerCase());
         if (!found) {
@@ -178,7 +178,8 @@ export class LanguageProvider {
         if (!response) {
           return [];
         }
-        return response.map((lang: any) => new Language(lang.codes, lang.text, lang.default));
+        this.languages = response.map((lang: any) => new Language(lang.codes, lang.text, lang.default));
+        return this.languages;
       })
     );
   }
