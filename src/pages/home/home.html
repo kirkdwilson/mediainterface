@@ -1,8 +1,13 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      MM Interface
+      {{ 'APP_NAME' | translate }}
     </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-right (click)="openLanguagePopover($event)">
+        {{ 'LANGUAGE_BUTTON' | translate }} <ion-icon name="cog"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

@@ -7,6 +7,18 @@ export class Language {
    */
   twoLetterCode = '';
 
+  /**
+   * Is this language selected?
+   */
+  isSelected = false;
+
+  /**
+   * Build the model
+   *
+   * @param codes           An array of codes for this specific language
+   * @param text            The text for this language
+   * @param isDefault=false Is this the default language
+   */
   constructor(
     public codes: Array<string>,
     public text: string,

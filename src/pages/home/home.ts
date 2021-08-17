@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { IonicPage, NavController, PopoverController } from 'ionic-angular';
+import { mergeMap } from 'rxjs/operators/mergeMap';
+import { take } from 'rxjs/operators/take';
 import { MediaProvider } from '@providers/media/media';
 import { GroupedMedia } from '@providers/media/grouped-media.interface';
 import { Category } from '@models/category';
 import { Media } from '@models/media';
-import { mergeMap } from 'rxjs/operators/mergeMap';
-import { take } from 'rxjs/operators/take';
+import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
 
 @IonicPage()
 @Component({
@@ -36,7 +37,8 @@ export class HomePage {
 
   constructor(
     private mediaProvider: MediaProvider,
-    private navController: NavController
+    private navController: NavController,
+    private popoverController: PopoverController,
   ) {}
 
   /**
@@ -68,4 +70,17 @@ export class HomePage {
   goToDetails(slug: string) {
     this.navController.push('media-details', { slug: slug });
   }
+
+  /**
+   * Open the language popover
+   *
+   * @param   event The event that triggered it
+   * @return void
+   */
+  openLanguagePopover(event) {
+    this.popoverController.config.set('mode', 'ios');
+    const popover = this.popoverController.create(LanguagePopoverPage);
+    popover.present({ ev: event });
+  }
+
 }
