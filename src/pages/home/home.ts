@@ -2,9 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, PopoverController } from 'ionic-angular';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
+import { LanguageProvider } from '@providers/language/language';
 import { MediaProvider } from '@providers/media/media';
 import { GroupedMedia } from '@providers/media/grouped-media.interface';
 import { Category } from '@models/category';
+import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
 
@@ -35,9 +37,20 @@ export class HomePage {
    */
   others: Array<Media> = [];
 
+  /**
+   * The current language
+   */
+  private currentLanguage: Language = null;
+
+  /**
+   * Our stream for tracking changes on the language
+   */
+  private languageOnChangeStream$: any = null;
+
   constructor(
     private mediaProvider: MediaProvider,
     private navController: NavController,
+    private languageProvider: LanguageProvider,
     private popoverController: PopoverController,
   ) {}
 
@@ -47,18 +60,20 @@ export class HomePage {
    * @return void
    */
   ionViewWillEnter() {
-    this.mediaProvider.recommended().pipe(
-      mergeMap((recommended: Array<Media>) => {
-        this.recommended = recommended;
-        return this.mediaProvider.groupedByCategory(true);
-      })
-    ).pipe(
-      take(1)
-    ).subscribe((media: GroupedMedia) => {
-      this.groups = media;
-      this.others = this.groups['other'].media;
-      this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
-    });
+    this.languageProvider.getLanguage().pipe(take(1)).subscribe((lang: Language) => this.loadData(lang));
+    this.languageOnChangeStream$ = this.languageProvider.onLanguageChange.subscribe((lang: Language) => this.loadData(lang));
+  }
+
+  /**
+   * Ionic LifeCycle the view will leave
+   *
+   * @return void
+   */
+  ionViewWillLeave() {
+    if (this.languageOnChangeStream$) {
+      this.languageOnChangeStream$.unsubscribe();
+      this.languageOnChangeStream$ = null;
+    }
   }
 
   /**
@@ -81,6 +96,31 @@ export class HomePage {
     this.popoverController.config.set('mode', 'ios');
     const popover = this.popoverController.create(LanguagePopoverPage);
     popover.present({ ev: event });
+  }
+
+  /**
+   * Load the page data
+   *
+   * @return void
+   */
+  private loadData(language: Language) {
+    if ((this.currentLanguage) && (language.text === this.currentLanguage.text)) {
+      return;
+    }
+    this.currentLanguage = language;
+    this.mediaProvider.setLanguage(language.twoLetterCode);
+    this.mediaProvider.recommended().pipe(
+      mergeMap((recommended: Array<Media>) => {
+        this.recommended = recommended;
+        return this.mediaProvider.groupedByCategory(true);
+      })
+    ).pipe(
+      take(1)
+    ).subscribe((media: GroupedMedia) => {
+      this.groups = media;
+      this.others = this.groups['other'].media;
+      this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
+    });
   }
 
 }
