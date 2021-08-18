@@ -18,11 +18,14 @@ export class Language {
    * @param codes           An array of codes for this specific language
    * @param text            The text for this language
    * @param isDefault=false Is this the default language
+   * @param isRtl=false     Is the language right to left?
+   *
    */
   constructor(
     public codes: Array<string>,
     public text: string,
     public isDefault = false,
+    public isRtl = false,
   ) {
     this.codes = codes.map((code) => code.toLowerCase());
     const specific = codes.find((code) => code.length === 2);

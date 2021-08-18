@@ -178,7 +178,10 @@ export class LanguageProvider {
         if (!response) {
           return [];
         }
-        this.languages = response.map((lang: any) => new Language(lang.codes, lang.text, lang.default));
+        this.languages = response.map((lang: any) => {
+          const isRtl = (lang.hasOwnProperty('rtl')) ? lang.rtl : false;
+          return new Language(lang.codes, lang.text, lang.default, isRtl);
+        });
         return this.languages;
       })
     );
