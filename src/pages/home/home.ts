@@ -8,7 +8,7 @@ import { GroupedMedia } from '@providers/media/grouped-media.interface';
 import { Category } from '@models/category';
 import { Language } from '@models/language';
 import { Media } from '@models/media';
-import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
+import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 
 @IonicPage()
 @Component({
@@ -94,7 +94,7 @@ export class HomePage {
    */
   openLanguagePopover(event) {
     this.popoverController.config.set('mode', 'ios');
-    const popover = this.popoverController.create(LanguagePopoverPage);
+    const popover = this.popoverController.create(LanguagePopoverComponent);
     popover.present({ ev: event });
   }
 

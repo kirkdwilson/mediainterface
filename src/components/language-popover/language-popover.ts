@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, ViewController } from 'ionic-angular';
+import { Component, OnInit } from '@angular/core';
+import { ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { zip } from 'rxjs/observable/zip';
 import { LanguageProvider } from '@providers/language/language';
@@ -9,12 +9,11 @@ import { Language } from '@models/language';
  * The language selector popover
  *
  */
-@IonicPage()
 @Component({
-  selector: 'page-language-popover',
-  templateUrl: 'language-popover.html',
+  selector: 'language-popover',
+  templateUrl: 'language-popover.html'
 })
-export class LanguagePopoverPage {
+export class LanguagePopoverComponent implements OnInit {
 
   /**
    * The supported languages
@@ -27,11 +26,11 @@ export class LanguagePopoverPage {
   ) {}
 
   /**
-   * Ionic LifeCycle the view will enter
+   * Angular life cycle on init
    *
    * @return void
    */
-  ionViewWillEnter() {
+  ngOnInit() {
     zip(
       this.languageProvider.getLanguage().pipe(take(1)),
       this.languageProvider.supported().pipe(take(1)),
@@ -52,4 +51,5 @@ export class LanguagePopoverPage {
   saveLanguage(language: Language) {
     this.languageProvider.saveLanguage(language).pipe(take(1)).subscribe(() => this.viewController.dismiss());
   }
+
 }

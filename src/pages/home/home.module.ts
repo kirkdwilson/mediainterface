@@ -11,8 +11,8 @@ import { MediaProvider } from '@providers/media/media';
  */
 @NgModule({
     imports: [
-        IonicPageModule.forChild(HomePage),
-        TranslateModule
+      IonicPageModule.forChild(HomePage),
+      TranslateModule
     ],
     exports: [],
     declarations: [HomePage],

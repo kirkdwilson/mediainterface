@@ -7,13 +7,13 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { CreateTranslateLoader } from './create-translate-loader';
 import { MyApp } from '@app/app.component';
+import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 import { LanguageProvider } from '@providers/language/language';
-import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
 
 @NgModule({
   declarations: [
     MyApp,
-    LanguagePopoverPage,
+    LanguagePopoverComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +31,7 @@ import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LanguagePopoverPage,
+    LanguagePopoverComponent,
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},

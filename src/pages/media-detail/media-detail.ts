@@ -8,7 +8,7 @@ import { Episode } from '@models/episode';
 import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
-import { LanguagePopoverPage } from '@pages/language-popover/language-popover';
+import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 
 /**
  * The detail page for a specific piece of media.
@@ -150,7 +150,7 @@ export class MediaDetailPage {
    */
   openLanguagePopover(event) {
     this.popoverController.config.set('mode', 'ios');
-    const popover = this.popoverController.create(LanguagePopoverPage);
+    const popover = this.popoverController.create(LanguagePopoverComponent);
     popover.present({ ev: event });
   }
 

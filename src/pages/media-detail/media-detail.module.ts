@@ -12,8 +12,8 @@ import { MediaDetailProvider } from '@providers/media-detail/media-detail';
  */
 @NgModule({
     imports: [
-        IonicPageModule.forChild(MediaDetailPage),
-        TranslateModule
+      IonicPageModule.forChild(MediaDetailPage),
+      TranslateModule,
     ],
     exports: [],
     declarations: [MediaDetailPage],
