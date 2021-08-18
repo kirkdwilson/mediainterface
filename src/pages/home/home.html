@@ -1,7 +1,8 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      {{ 'APP_NAME' | translate }}
+    <ion-title class="vertical-center-items">
+      <img src="assets/{{ 'APP_LOGO' | translate }}" class="brand-title-logo" />
+      <p>{{ 'APP_NAME' | translate }}</p>
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-right (click)="openLanguagePopover($event)">

@@ -14,3 +14,18 @@ h2 {
     margin-top: .70em !important;
     margin-bottom: .70em !important;
 }
+.brand-title-logo {
+    height: 75px;
+}
+.vertical-center-items .toolbar-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    img {
+        margin-right: auto;
+        margin-right: 1em;
+    }
+    p {
+        margin: auto;
+    }
+}
