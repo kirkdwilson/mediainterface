@@ -18,6 +18,12 @@
       "@constants/*": [
         "constants/*"
       ],
+      "@env": [
+        "environments/environment"
+      ],
+      "@helpers/*":[
+        "helpers/*"
+      ],
       "@mocks/*": [
         "mocks/*"
       ],
@@ -29,9 +35,6 @@
       ],
       "@providers/*":[
         "providers/*"
-      ],
-      "@env": [
-        "environments/environment"
       ]
     },
     "sourceMap": true,

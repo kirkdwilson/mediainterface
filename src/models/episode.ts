@@ -58,4 +58,13 @@ export class Episode {
     return `${environment.assetPath.replace('{LANG}', this.language)}images/${this.image}`;
   }
 
+  /**
+   * Get the translation key for displaying the media type.
+   *
+   * @return The key
+   */
+  get mediaTypeTranslationKey(): string {
+    return `MEDIA_TYPE.${this.mediaType.toUpperCase()}`;
+  }
+
 }

@@ -3,15 +3,16 @@ import { Category } from './category';
 
 describe('Category', () => {
 
-  describe('slug', () => {
+  describe('hash', () => {
 
-    it('should create the slug on construction', () => {
-      const category = new Category('Favorite Movies');
-      expect(category.slug).toEqual('favorite-movies');
-      const categoryTwo = new Category('Ice Cream and Soda');
-      expect(categoryTwo.slug).toEqual('ice-cream-and-soda');
-      const categoryThree = new Category('special * % $ twilight');
-      expect(categoryThree.slug).toEqual('special-twilight');
+    it('should work with strange characters', () => {
+      const category = new Category('神之羔羊系列');
+      expect(category.hash).not.toEqual('');
+      expect(category.hash).not.toEqual('神之羔羊系列');
+      const categoryTwo = new Category('لك');
+      expect(categoryTwo.hash).not.toEqual('');
+      expect(categoryTwo.hash).not.toEqual('لك');
+      expect(categoryTwo.hash).not.toEqual(category.hash);
     });
 
   });

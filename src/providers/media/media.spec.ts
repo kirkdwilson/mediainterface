@@ -4,6 +4,7 @@ import { take } from 'rxjs/operators/take';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { MediaProvider } from './media';
 import { GroupedMedia } from './grouped-media.interface';
+import { hashify } from '@helpers/utilities';
 import { Category } from '@models/category';
 import { Media } from '@models/media';
 
@@ -57,8 +58,6 @@ describe('MediaProvider', () => {
           const cream = data.find((media) => media.slug === 'ice-cream-special');
           expect(slugs.indexOf('glenn-ivy')).not.toEqual(-1);
           expect(slugs.indexOf('ice-cream-special')).not.toEqual(-1);
-          const categorySlugs = glenn.categories.map((cat: Category) => cat.slug);
-          expect(categorySlugs).toEqual(['new', 'originals']);
           expect(glenn.recommended).toBe(true);
           expect(glenn.title).toEqual('Glenn Ivy');
           expect(glenn.desc).toEqual('A story about Glenn Ivy');
@@ -136,17 +135,17 @@ describe('MediaProvider', () => {
         mediaProvider.groupedByCategory().pipe(take(1)).subscribe((media: Array<GroupedMedia>) => {
           expect(media).not.toBeNull();
           expect(Object.keys(media).length).toEqual(4);
-          const originals = media['originals'];
-          expect(originals.media.length).toEqual(2);
-          const originalTitles = originals.media.map((orig) => orig.title);
+          const originalHash: string = hashify('originals');
+          expect(media[originalHash].media.length).toEqual(2);
+          const originalTitles = media[originalHash].media.map((orig) => orig.title);
           expect(originalTitles).toEqual(['Newbies Welcome', 'Attack of the Shoe']);
-          const newMedia = media['new'];
-          expect(newMedia.media.length).toEqual(1);
-          const newTitles = newMedia.media.map((nm) => nm.title);
+          const newHash: string = hashify('new');
+          expect(media[newHash].media.length).toEqual(1);
+          const newTitles = media[newHash].media.map((nm) => nm.title);
           expect(newTitles).toEqual(['Newbies Welcome']);
-          const comedy = media['comedy'];
-          expect(comedy.media.length).toEqual(1);
-          const comedyTitles = comedy.media.map((com) => com.title);
+          const comedyHash: string = hashify('comedy');
+          expect(media[comedyHash].media.length).toEqual(1);
+          const comedyTitles = media[comedyHash].media.map((com) => com.title);
           expect(comedyTitles).toEqual(['A Sneeze is a Breeze']);
           const other = media['other'];
           expect(other.media.length).toEqual(1);

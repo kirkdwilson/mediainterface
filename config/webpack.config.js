@@ -13,6 +13,7 @@ const webpackConfig = require('../node_modules/@ionic/app-scripts/config/webpack
 webpackConfig['dev'].resolve.alias = {
   "@app": path.resolve('./src/app/'),
   "@constants": path.resolve('./src/constants/'),
+  "@helpers": path.resolve('./src/helpers/'),
   "@mocks": path.resolve('./src/mocks/'),
   "@models": path.resolve('./src/models/'),
   "@pages": path.resolve('./src/pages/'),
@@ -21,6 +22,7 @@ webpackConfig['dev'].resolve.alias = {
 }
 webpackConfig['prod'].resolve.alias = {
   "@app": path.resolve('./src/app/'),
+  "@helpers": path.resolve('./src/helpers/'),
   "@mocks": path.resolve('./src/mocks/'),
   "@models": path.resolve('./src/models/'),
   "@pages": path.resolve('./src/pages/'),

@@ -54,9 +54,9 @@ export class MediaProvider {
               return groups;
             }
             item.categories.forEach((category: Category) => {
-              const group = (groups[category.slug] || {label: category.name, media: []});
+              const group = (groups[category.hash] || { label: category.name, media: [] });
               group.media.push(item);
-              groups[category.slug] = group;
+              groups[category.hash] = group;
             });
             return groups;
           },
@@ -76,7 +76,7 @@ export class MediaProvider {
 
   /**
    * Get a list of all recommended media. The keys of the array are the
-   * category slugs.
+   * category hashes.
    *
    * @return The recommended media
    */
