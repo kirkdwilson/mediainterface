@@ -115,12 +115,11 @@ export class MediaProvider {
         if (
           (!response) ||
           (!response.hasOwnProperty('content')) ||
-          (response.content.length === 0) ||
-          (!response.content[0].hasOwnProperty('content'))
+          (response.content.length === 0)
         ) {
           return [];
         }
-        this.media = response.content[0].content.map((media) => {
+        this.media = response.content.map((media) => {
           const recommended = (media.hasOwnProperty('recommended')) ? media.recommended : false;
           const fileName = (media.hasOwnProperty('filename')) ? media.filename : '';
           const mimeType = (media.hasOwnProperty('mimeType')) ? media.mimeType : '';

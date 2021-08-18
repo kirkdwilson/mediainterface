@@ -22,30 +22,26 @@ describe('MediaProvider', () => {
 
       it('should return all', async(inject([MediaProvider], (mediaProvider) => {
         const response = {
+          itemName: 'test response',
           content: [
             {
-              itemName: 'test response',
-              content: [
-                {
-                  categories: ['New', 'Originals'],
-                  recommended: true,
-                  slug: 'glenn-ivy',
-                  title: 'Glenn Ivy',
-                  desc: 'A story about Glenn Ivy',
-                  image: 'glenn-ivy.jpg',
-                  mediaType: 'video',
-                  tags: ['locations', 'unique', 'travel'],
-                },
-                {
-                  categories: ['Specials'],
-                  slug: 'ice-cream-special',
-                  title: 'Ice Cream Special',
-                  desc: 'A story about Ice Cream',
-                  image: 'ice-cream.jpg',
-                  mediaType: 'video',
-                  tags: ['desserts', 'sweets'],
-                }
-              ]
+              categories: ['New', 'Originals'],
+              recommended: true,
+              slug: 'glenn-ivy',
+              title: 'Glenn Ivy',
+              desc: 'A story about Glenn Ivy',
+              image: 'glenn-ivy.jpg',
+              mediaType: 'video',
+              tags: ['locations', 'unique', 'travel'],
+            },
+            {
+              categories: ['Specials'],
+              slug: 'ice-cream-special',
+              title: 'Ice Cream Special',
+              desc: 'A story about Ice Cream',
+              image: 'ice-cream.jpg',
+              mediaType: 'video',
+              tags: ['desserts', 'sweets'],
             }
           ]
         };
@@ -84,50 +80,46 @@ describe('MediaProvider', () => {
 
       it('should return the correct grouping', async(inject([MediaProvider], (mediaProvider) => {
         const response = {
+          itemName: 'test response',
           content: [
             {
-              itemName: 'test response',
-              content: [
-                {
-                  categories: ['New', 'Originals'],
-                  recommended: true,
-                  slug: 'newbies-welcome',
-                  title: 'Newbies Welcome',
-                  desc: 'A story about a Newbie finding belonging',
-                  image: 'newby.jpg',
-                  mediaType: 'video',
-                  tags: ['newby', 'friends', 'connections'],
-                },
-                {
-                  categories: ['originals'],
-                  recommended: true,
-                  slug: 'attack-of-the-shoe',
-                  title: 'Attack of the Shoe',
-                  desc: 'A story about a show that wants freedom',
-                  image: 'shoe.jpg',
-                  mediaType: 'video',
-                  tags: ['fashion', 'shoes', 'freedom'],
-                },
-                {
-                  categories: ['comedy'],
-                  recommended: true,
-                  slug: 'a-sneeze-is-a-breeze',
-                  title: 'A Sneeze is a Breeze',
-                  desc: 'A story about how to sneeze',
-                  image: 'sneeze.jpg',
-                  mediaType: 'pdf',
-                  tags: ['sneezing', 'release'],
-                },
-                {
-                  categories: [],
-                  slug: 'not-that-important',
-                  title: 'Not That Important',
-                  desc: 'A story about nothing important',
-                  image: 'nothing.jpg',
-                  mediaType: 'audio',
-                  tags: ['nothing', 'really'],
-                }
-              ]
+              categories: ['New', 'Originals'],
+              recommended: true,
+              slug: 'newbies-welcome',
+              title: 'Newbies Welcome',
+              desc: 'A story about a Newbie finding belonging',
+              image: 'newby.jpg',
+              mediaType: 'video',
+              tags: ['newby', 'friends', 'connections'],
+            },
+            {
+              categories: ['originals'],
+              recommended: true,
+              slug: 'attack-of-the-shoe',
+              title: 'Attack of the Shoe',
+              desc: 'A story about a show that wants freedom',
+              image: 'shoe.jpg',
+              mediaType: 'video',
+              tags: ['fashion', 'shoes', 'freedom'],
+            },
+            {
+              categories: ['comedy'],
+              recommended: true,
+              slug: 'a-sneeze-is-a-breeze',
+              title: 'A Sneeze is a Breeze',
+              desc: 'A story about how to sneeze',
+              image: 'sneeze.jpg',
+              mediaType: 'pdf',
+              tags: ['sneezing', 'release'],
+            },
+            {
+              categories: [],
+              slug: 'not-that-important',
+              title: 'Not That Important',
+              desc: 'A story about nothing important',
+              image: 'nothing.jpg',
+              mediaType: 'audio',
+              tags: ['nothing', 'really'],
             }
           ]
         };
@@ -167,40 +159,36 @@ describe('MediaProvider', () => {
 
       it('should return the recommended shows', async(inject([MediaProvider], (mediaProvider) => {
         const response = {
+          itemName: 'test response',
           content: [
             {
-              itemName: 'test response',
-              content: [
-                {
-                  categories: ['New', 'Originals'],
-                  recommended: true,
-                  slug: 'the-perfect-beard',
-                  title: 'The Perfect Beard',
-                  desc: 'Learn how to develop the perfect beard.',
-                  image: 'bearded-man.jpg',
-                  mediaType: 'video',
-                  tags: ['beards', 'how-to', 'specials'],
-                },
-                {
-                  categories: ['Specials'],
-                  slug: 'grow-fabulous-hair',
-                  title: 'Grow Fabulous Hair',
-                  desc: 'A story about Hair Growth',
-                  image: 'Hair.jpg',
-                  mediaType: 'video',
-                  tags: ['long', 'vibrant'],
-                },
-                {
-                  categories: ['Unique'],
-                  recommended: true,
-                  slug: 'unique-fashion',
-                  title: 'Unique Fashion',
-                  desc: 'Learn about fashion around the world',
-                  image: 'fashion.jpg',
-                  mediaType: 'video',
-                  tags: ['fashion', 'colors'],
-                }
-              ]
+              categories: ['New', 'Originals'],
+              recommended: true,
+              slug: 'the-perfect-beard',
+              title: 'The Perfect Beard',
+              desc: 'Learn how to develop the perfect beard.',
+              image: 'bearded-man.jpg',
+              mediaType: 'video',
+              tags: ['beards', 'how-to', 'specials'],
+            },
+            {
+              categories: ['Specials'],
+              slug: 'grow-fabulous-hair',
+              title: 'Grow Fabulous Hair',
+              desc: 'A story about Hair Growth',
+              image: 'Hair.jpg',
+              mediaType: 'video',
+              tags: ['long', 'vibrant'],
+            },
+            {
+              categories: ['Unique'],
+              recommended: true,
+              slug: 'unique-fashion',
+              title: 'Unique Fashion',
+              desc: 'Learn about fashion around the world',
+              image: 'fashion.jpg',
+              mediaType: 'video',
+              tags: ['fashion', 'colors'],
             }
           ]
         };
