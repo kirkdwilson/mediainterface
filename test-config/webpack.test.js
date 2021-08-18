@@ -18,11 +18,12 @@ module.exports = {
     alias: {
       "@app": path.resolve('./src/app/'),
       "@constants": path.resolve('./src/constants/'),
+      "@env": path.resolve('./src/environments/environment.ts'),
+      "@helpers": path.resolve('./src/helpers/'),
       "@mocks": path.resolve('./src/mocks/'),
       "@models": path.resolve('./src/models/'),
       "@pages": path.resolve('./src/pages/'),
       "@providers": path.resolve('./src/providers/'),
-      "@env": path.resolve('./src/environments/environment.ts')
     },
     extensions: ['.ts', '.js']
   },
