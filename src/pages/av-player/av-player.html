@@ -1,9 +1,17 @@
 <ion-content>
-  <video [src]="current?.url" controls [autoplay]="current?.type === 'video'" [poster]="current?.posterUrl" [hidden]="current === null || current?.type !== 'video'" #videoPlayer>
-    {{ 'UNSUPPORTED_TEXT' | translate }}
-  </video>
+  <div id="video-player-wrapper" [hidden]="current === null || current?.type !== 'video'">
+    <div class="overlay" [hidden]="!showOverlay">
+      <button icon-only ion-button clear color="primary" (click)="goBack()" class="close-btn"><ion-icon name="close"></ion-icon></button>
+    </div>
+    <video [src]="current?.url" controls [autoplay]="current?.type === 'video'" [poster]="current?.posterUrl" #videoPlayer>
+      {{ 'UNSUPPORTED_TEXT' | translate }}
+    </video>
+  </div>
   <div id="audio-player-wrapper" [hidden]="current === null || current?.type !== 'audio'">
-    <div id="audio-poster" [ngStyle]="{ 'background-image': 'url(' + current?.posterUrl + ')'}"></div>
+    <div class="overlay" [hidden]="!showOverlay">
+      <button icon-only ion-button clear color="primary" (click)="goBack()" class="close-btn"><ion-icon name="close"></ion-icon></button>
+    </div>
+    <div id="audio-poster" [ngStyle]="{ 'background-image': 'url(' + current?.posterUrl + ')'}" #audioPoster></div>
     <audio [src]="current?.url" controls [autoplay]="current?.type === 'audio'" #audioPlayer>
       {{ 'UNSUPPORTED_TEXT' | translate }}
     </audio>
@@ -11,18 +19,15 @@
   <div id="secondary-controls">
     <ion-grid>
       <ion-row>
-        <ion-col col-3 text-center>
+        <ion-col col-2 text-center offset-3>
           <button icon-only ion-button clear color="primary" (click)="previousEpisode()" [disabled]="isFirstItem()"><ion-icon name="skip-backward"></ion-icon></button>
         </ion-col>
-        <ion-col col-3 text-center>
+        <ion-col col-2 text-center>
           <button icon-only ion-button clear color="primary" (click)="play()" *ngIf="!isPlaying"><ion-icon name="play"></ion-icon></button>
           <button icon-only ion-button clear color="primary" (click)="pause()" *ngIf="isPlaying"><ion-icon name="pause"></ion-icon></button>
         </ion-col>
-        <ion-col col-3 text-center>
+        <ion-col col-2 text-center>
           <button icon-only ion-button clear color="primary" (click)="nextEpisode()" [disabled]="isLastItem()"><ion-icon name="skip-forward"></ion-icon></button>
-        </ion-col>
-        <ion-col col-3 text-center>
-          <button icon-only ion-button clear color="primary" (click)="goBack()"><ion-icon name="close"></ion-icon></button>
         </ion-col>
       </ion-row>
     </ion-grid>

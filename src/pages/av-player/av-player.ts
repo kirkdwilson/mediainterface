@@ -18,9 +18,14 @@ import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.int
 export class AvPlayerPage {
 
     /**
-     * The video player element
+     * The audio player element
      */
     @ViewChild('audioPlayer') audioPlayer: ElementRef;
+
+    /**
+     * The audio player poster
+     */
+    @ViewChild('audioPoster') audioPoster: ElementRef;
 
     /**
      * The video player element
@@ -38,6 +43,11 @@ export class AvPlayerPage {
     isPlaying = true;
 
     /**
+     * Should we show the overlay?
+     */
+    showOverlay = false;
+
+    /**
      * The callback triggered when the audio/video ended.
      */
     private mediaEndedCallback: any = null;
@@ -51,6 +61,11 @@ export class AvPlayerPage {
      * The callback triggered when the audio/video is started.
      */
     private mediaPlayCallback: any = null;
+
+    /**
+     * The callback triggered when the audio/video is hovered/tapped.
+     */
+    private mediaEngagedCallback: any = null;
 
     /**
      * The slug for the previous page
@@ -91,12 +106,20 @@ export class AvPlayerPage {
       this.mediaEndedCallback = () => this.videoDidEnd();
       this.mediaPauseCallback = () => this.isPlaying = false;
       this.mediaPlayCallback = () => this.isPlaying = true;
+      this.mediaEngagedCallback = (event) => this.displayOverlay(event);
       this.videoPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
       this.audioPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
       this.videoPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
       this.audioPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
       this.videoPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
       this.audioPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
+
+      this.videoPlayer.nativeElement.addEventListener('touchstart', this.mediaEngagedCallback, false);
+      this.videoPlayer.nativeElement.addEventListener('mouseenter', this.mediaEngagedCallback, false);
+      this.audioPoster.nativeElement.addEventListener('touchstart', this.mediaEngagedCallback, false);
+      this.audioPoster.nativeElement.addEventListener('mouseenter', this.mediaEngagedCallback, false);
+      this.audioPlayer.nativeElement.addEventListener('touchstart', this.mediaEngagedCallback, false);
+      this.audioPlayer.nativeElement.addEventListener('mouseenter', this.mediaEngagedCallback, false);
     }
 
     /**
@@ -119,6 +142,15 @@ export class AvPlayerPage {
         this.videoPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
         this.audioPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
         this.mediaPlayCallback = null;
+      }
+      if (this.mediaEngagedCallback) {
+        this.videoPlayer.nativeElement.removeEventListener('touchstart', this.mediaEngagedCallback);
+        this.videoPlayer.nativeElement.removeEventListener('mouseenter', this.mediaEngagedCallback);
+        this.audioPoster.nativeElement.removeEventListener('touchstart', this.mediaEngagedCallback);
+        this.audioPoster.nativeElement.removeEventListener('mouseenter', this.mediaEngagedCallback);
+        this.audioPlayer.nativeElement.removeEventListener('touchstart', this.mediaEngagedCallback);
+        this.audioPlayer.nativeElement.removeEventListener('mouseenter', this.mediaEngagedCallback);
+        this.mediaEngagedCallback = null;
       }
     }
 
@@ -227,6 +259,21 @@ export class AvPlayerPage {
           this.current = prev;
         }
       });
+    }
+
+    /**
+     * Display the overlay for a set amount of seconds.
+     *
+     * @param   event   the event that triggered it
+     * @return void
+     */
+    displayOverlay(event) {
+      event.preventDefault();
+      if (this.showOverlay) {
+        return;
+      }
+      this.showOverlay = true;
+      setTimeout(() => this.showOverlay = false, 3000);
     }
 
     /**
