@@ -77,7 +77,7 @@ export class LanguageProvider {
       switchMap((data: any) => {
         if (data) {
           const parsed = JSON.parse(data);
-          const lang = new Language(parsed.codes, parsed.text, parsed.isDefault);
+          const lang = new Language(parsed.codes, parsed.text, parsed.isDefault, parsed.isRtl);
           this.languageSubject.next(lang);
           return of(lang);
         }
