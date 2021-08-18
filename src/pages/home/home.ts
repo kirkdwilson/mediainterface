@@ -119,7 +119,6 @@ export class HomePage {
       take(1)
     ).subscribe((media: GroupedMedia) => {
       this.groups = media;
-      console.log(this.groups);
       this.others = this.groups['other'].media;
       this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
     });
