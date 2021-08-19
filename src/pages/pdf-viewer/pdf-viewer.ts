@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
@@ -97,6 +97,7 @@ export class PdfViewerPage {
     private navParams: NavParams,
     private dataStore: NavParamsDataStoreProvider,
     private viewController: ViewController,
+    private zone: NgZone,
   ) {}
 
   /**
@@ -142,7 +143,7 @@ export class PdfViewerPage {
     if (!this.canDecreaseScale()) {
         return;
     }
-    this.pageState.scale = this.pageState.scale - this.pageState.scaleRate;
+    this.zone.run(() => this.pageState.scale = this.pageState.scale - this.pageState.scaleRate);
     this.loadPage(this.pageState.current);
   }
 
@@ -181,7 +182,8 @@ export class PdfViewerPage {
    * @return void
    */
   increaseScale() {
-    this.pageState.scale = this.pageState.scale + this.pageState.scaleRate;
+    this.zone.run(() => this.pageState.scale = this.pageState.scale + this.pageState.scaleRate);
+
     this.loadPage(this.pageState.current);
   }
 
@@ -236,9 +238,9 @@ export class PdfViewerPage {
    */
   loadPdf(): Promise<boolean> {
     return this.PDFJSViewer.getDocument(this.item.url)
-      .then(pdf => {
+      .promise.then(pdf => {
         this.pdfDocument = pdf;
-        this.pageState.total = pdf.numPages;
+        this.zone.run(() => this.pageState.total = pdf.numPages);
         return this.loadPage(1);
       }).catch(e => {
         console.error(e);
@@ -259,7 +261,7 @@ export class PdfViewerPage {
       pdfPage = thisPage;
       return this.renderOnePage(pdfPage);
     }).then(() => {
-      this.pageState.current = pageNum;
+      this.zone.run(() => this.pageState.current = pageNum);
       return pdfPage;
     });
   }
