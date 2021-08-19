@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
 import { PdfViewerItem } from './pdf-viewer-item.interface';
@@ -93,9 +93,10 @@ export class PdfViewerPage {
   private storageKey = 'pdf-viewer';
 
   constructor(
-    private navCtrl: NavController,
+    private navController: NavController,
     private navParams: NavParams,
     private dataStore: NavParamsDataStoreProvider,
+    private viewController: ViewController,
   ) {}
 
   /**
@@ -113,7 +114,7 @@ export class PdfViewerPage {
     if (typeof this.item === 'undefined') {
       this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
         if (data === '') {
-          // Redirect back
+          this.goBack();
         }
         this.item = JSON.parse(data);
         this.loadPdf();
@@ -143,6 +144,35 @@ export class PdfViewerPage {
     }
     this.pageState.scale = this.pageState.scale - this.pageState.scaleRate;
     this.loadPage(this.pageState.current);
+  }
+
+  /**
+   * Go back to the previous page
+   *
+   * @return void
+   */
+  goBack() {
+    this.dataStore.remove(this.storageKey);
+    if (this.navController.canGoBack()) {
+      this.navController.pop();
+    } else if (this.slug !== '') {
+      this.navController.push(
+        'media-details',
+        { slug: this.slug },
+        {
+          animate: true,
+          direction: 'back',
+        },
+      ).then(() => {
+        // Remove us from backstack
+        this.navController.remove(this.viewController.index);
+        this.navController.insert(0, 'HomePage');
+      });
+    } else {
+      this.navController.goToRoot({
+        animate: true,
+      });
+    }
   }
 
   /**
