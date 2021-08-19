@@ -1,9 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
 import { PdfViewerItem } from './pdf-viewer-item.interface';
 import { PDFPageProxy, PDFPageViewport, PDFRenderTask } from 'pdfjs-dist';
 import { PageState } from './page-state.interface';
+import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
 
 /**
  * A PDF viewer
@@ -85,9 +87,15 @@ export class PdfViewerPage {
    */
   slug = '';
 
+  /**
+   * Our storage key
+   */
+  private storageKey = 'pdf-viewer';
+
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private dataStore: NavParamsDataStoreProvider,
   ) {}
 
   /**
@@ -102,8 +110,16 @@ export class PdfViewerPage {
     this.pageContainerUnique.canvasWrapper = this.canvasWrapperRef.nativeElement as HTMLCanvasElement;
     this.pageContainerUnique.canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
     this.pageContainerUnique.textContainer = this.textContainerRef.nativeElement as HTMLCanvasElement;
-    if (this.item) {
-      this.loadPdf();
+    if (typeof this.item === 'undefined') {
+      this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
+        if (data === '') {
+          // Redirect back
+        }
+        this.item = JSON.parse(data);
+        this.loadPdf();
+      });
+    } else {
+      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadPdf())
     }
   }
 

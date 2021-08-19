@@ -17,4 +17,10 @@ export class StorageMock {
     });
   }
 
+  remove(key: string) {
+    return new Promise((resolve, reject) => {
+      resolve(null);
+    });
+  }
+
 }
