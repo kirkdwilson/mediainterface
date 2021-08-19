@@ -18,7 +18,7 @@ import { LanguageProvider } from '@providers/language/language';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp, { pageTransition: 'ios-transition' }),
+    IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
