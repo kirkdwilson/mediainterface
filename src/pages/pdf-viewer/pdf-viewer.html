@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ item?.title }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div #viewerContainer class="viewer-container">
+      <div #viewer class="viewer">
+        <ng-container #pagesContainer>
+          <div #pageContainer class="page" [style.width.px]="pageContainerUnique.width" [style.height.px]="pageContainerUnique.height">
+            <div class="canvas-wrapper" #canvasWrapper>
+              <canvas class="page-canvas" #canvas></canvas>
+            </div>
+            <div #textContainer class="text-layer selectable" [hidden]="true"></div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2 offset-1 text-center>
+          <button icon-only ion-button clear color="primary" (click)="loadPreviousPage()" [disabled]="isFirstPage()"><ion-icon ios="ios-arrow-back" md="ios-arrow-back"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="decreaseScale()" [disabled]="!canDecreaseScale()"><ion-icon name="remove"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center z>
+          <p>{{ this.pageState.current }}/{{ this.pageState.total }}</p>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="increaseScale()"><ion-icon name="add"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="loadNextPage()" [disabled]="isLastPage()"><ion-icon ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
