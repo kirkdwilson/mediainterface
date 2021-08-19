@@ -9,6 +9,7 @@ import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
+import { PdfViewerItem } from '@pages/pdf-viewer/pdf-viewer-item.interface';
 
 /**
  * The detail page for a specific piece of media.
@@ -102,6 +103,16 @@ export class MediaDetailPage {
   }
 
   /**
+   * Is this a book?
+   *
+   * @param  mediaType The type of media
+   * @return           yes|no
+   */
+  isBook(mediaType: string): boolean {
+    return (['pdf', 'epub'].indexOf(mediaType) !== -1);
+  }
+
+  /**
    * Play the provided episode
    *
    * @param  episode The episode to play
@@ -119,6 +130,12 @@ export class MediaDetailPage {
         };
       });
       this.navController.push('av-player', { items: items, slug: this.slug });
+    } else if (current.mediaType === 'pdf') {
+      const item: PdfViewerItem = {
+        title: current.title,
+        url: current.filePath,
+      };
+      this.navController.push('pdf-viewer', { item: item, slug: this.slug });
     }
   }
 
@@ -139,6 +156,12 @@ export class MediaDetailPage {
         type: this.media.mediaType,
       };
       this.navController.push('av-player', { items: [item], slug: this.slug });
+    } else if (this.media.mediaType === 'pdf') {
+      const item: PdfViewerItem = {
+        title: this.media.title,
+        url: this.media.filePath,
+      };
+      this.navController.push('pdf-viewer', { item: item, slug: this.slug });
     }
   }
 
