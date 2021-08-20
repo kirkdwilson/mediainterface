@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { Component, ElementRef, NgZone, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
@@ -52,19 +52,19 @@ export class PdfViewerPage {
   PDFJSViewer = PDFJS;
 
   /**
-   * The canvas where the PDF is drawn
-   */
-  @ViewChild('canvas') canvasRef: ElementRef;
-
-  /**
    * A reference to the download link
    */
   @ViewChild('downloadLink') downloadLinkRef: ElementRef;
 
   /**
-   * The text container for storing the text layer that enables copy and paste
+   * The template for each page of the PDF
    */
-  @ViewChild('textContainer') textContainerRef: ElementRef;
+  @ViewChild('pageCanvasTemplate') pageCanvasTemplate: TemplateRef<any>;
+
+  /**
+   * The view container that holds the pages
+   */
+  @ViewChild('pagesContainer', { read: ViewContainerRef }) pagesContainer: ViewContainerRef;
 
   /**
    * The viewer
@@ -91,8 +91,9 @@ export class PdfViewerPage {
     private downloadFileProvider: DownloadFileProvider,
     private navController: NavController,
     private navParams: NavParams,
-    private viewController: ViewController,
     private zone: NgZone,
+    private renderer: Renderer2,
+    private viewController: ViewController,
   ) {}
 
   /**
@@ -137,6 +138,17 @@ export class PdfViewerPage {
     this.pageState.scale = this.pageState.scale - this.pageState.scaleRate;
     this.pageState.alteredScale = true;
     this.loadPage(this.pageState.current);
+  }
+
+  /**
+   * What do we do when the user scrolls?
+   *
+   * @param  infiniteScroll The infinite scroll event
+   * @return                void
+   */
+  doInfinite(infiniteScroll) {
+    this.loadNextPage();
+    infiniteScroll.complete();
   }
 
   /**
@@ -267,10 +279,12 @@ export class PdfViewerPage {
    */
   loadPage(pageNum: number = 1) {
     let pdfPage: PDFPageProxy;
-
+    const pageView: ViewRef = this.pageCanvasTemplate.createEmbeddedView({ pageNum: pageNum });
+    pageView.detectChanges();
+    this.pagesContainer.insert(pageView);
     return this.pdfDocument.getPage(pageNum).then(thisPage => {
       pdfPage = thisPage;
-      return this.renderOnePage(pdfPage);
+      return this.renderPage(pdfPage, pageNum);
     }).then(() => {
       this.zone.run(() => this.pageState.current = pageNum);
       return pdfPage;
@@ -280,14 +294,15 @@ export class PdfViewerPage {
   /**
    * Render a single page
    *
-   * @param  pdfPage Page to render
+   * @param   pdfPage Page to render
+   * @param   pageNum The page number
    * @return         void
    */
-  private async renderOnePage(pdfPage: PDFPageProxy) {
+  private async renderPage(pdfPage: PDFPageProxy, pageNum: number) {
     let canvasContext: CanvasRenderingContext2D;
-    const textContainer = this.textContainerRef.nativeElement as HTMLElement;
-    const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
     const viewer = this.viewerRef.nativeElement as HTMLElement;
+    const canvas = viewer.querySelector(`#page-${pageNum} .page-canvas`) as HTMLCanvasElement;
+    const textContainer = viewer.querySelector(`#page-${pageNum} .text-container`) as HTMLElement;
 
     canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
     canvasContext.imageSmoothingEnabled = false;
@@ -297,7 +312,11 @@ export class PdfViewerPage {
 
     let scale = this.pageState.scale;
 
-    if (!this.pageState.alteredScale) {
+    if ((pageNum === 1) && (!this.pageState.alteredScale)) {
+      /**
+       * We need to only dynamically change scale to device screen size the first time.  Once content
+       * is added the unscaledViewport.width becomes larger and warps the scale.
+       */
       const unscaledViewport = pdfPage.getViewport({ scale: this.pageState.scale }) as PDFPageViewport;
       scale = viewer.offsetWidth / unscaledViewport.width;
       this.pageState.scale = scale;
