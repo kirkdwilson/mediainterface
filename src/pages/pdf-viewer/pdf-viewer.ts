@@ -1,9 +1,10 @@
 import { Component, ElementRef, NgZone, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Content, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
 import { PdfViewerItem } from './pdf-viewer-item.interface';
 import { PDFPageProxy, PDFPageViewport, PDFRenderTask } from 'pdfjs-dist';
+import { PagePosition } from './page-position.interface';
 import { PageState } from './page-state.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
@@ -36,6 +37,7 @@ export class PdfViewerPage {
   pageState: PageState = {
     alteredScale: false,
     current: 1,
+    lastLoaded: 1,
     scale: 1,
     scaleRate: .25,
     total: 1,
@@ -50,6 +52,11 @@ export class PdfViewerPage {
    * The PDFJS instance
    */
   PDFJSViewer = PDFJS;
+
+  /**
+   * The content view child.
+   */
+  @ViewChild(Content) content: Content;
 
   /**
    * A reference to the download link
@@ -80,6 +87,21 @@ export class PdfViewerPage {
    * The slug for the previous page
    */
   slug = '';
+
+  /**
+   * Are we scrolling to the next or previous view?
+   */
+  private isAutoScrolling = false;
+
+  /**
+   * Holds information about each page's position on the view.
+   */
+  private pagePositions: Array<PagePosition> = [];
+
+  /**
+   * Our subscription to scroll events
+   */
+  private scrollStream$: any = null;
 
   /**
    * Our storage key
@@ -118,6 +140,39 @@ export class PdfViewerPage {
   }
 
   /**
+   * Ionic LifeCycle the view will enter
+   *
+   * @return void
+   */
+  ionViewWillEnter() {
+    /**
+     * We need to keep track of which page the user is viewing
+     */
+    this.scrollStream$ = this.content.ionScroll.subscribe((event: any) => {
+      if (!event) {
+        return;
+      }
+      const current = this.pagePositions.find((page: PagePosition) => (event.scrollTop >= page.top) && (event.scrollTop <= page.bottom));
+      if (!current) {
+        return;
+      }
+      this.zone.run(() => this.pageState.current = current.pageNumber);
+    });
+  }
+
+  /**
+   * Ionic LifeCycle the view will leave
+   *
+   * @return void
+   */
+  ionViewWillLeave() {
+    if (this.scrollStream$) {
+      this.scrollStream$.unsubscribe();
+      this.scrollStream$ = null;
+    }
+  }
+
+  /**
    * Can we still decrease the scale?
    *
    * @return yes|no
@@ -147,8 +202,12 @@ export class PdfViewerPage {
    * @return                void
    */
   doInfinite(infiniteScroll) {
-    this.loadNextPage();
-    infiniteScroll.complete();
+    if (this.pageState.lastLoaded === this.pageState.total) {
+      infiniteScroll.complete();
+      return;
+    }
+    const next = this.pageState.lastLoaded + 1;
+    this.loadPage(next).then(() => infiniteScroll.complete());
   }
 
   /**
@@ -233,12 +292,27 @@ export class PdfViewerPage {
    *
    * @return void
    */
-  loadNextPage() {
-    if (this.isLastPage()) {
+  goToNextPage() {
+    if ((this.isLastPage()) || (this.isAutoScrolling)) {
+      // prevent hitting the button twice
       return;
     }
     const page = this.pageState.current + 1;
-    this.loadPage(page);
+    const existing: PagePosition = this.pagePositions.find((data: PagePosition) => data.pageNumber === page);
+    if (existing) {
+      this.isAutoScrolling = true;
+      this.content.scrollTo(0, existing.top + 10, 3000)
+        .then(() => this.isAutoScrolling = false)
+        .catch(() => this.isAutoScrolling = false);
+    } else {
+      this.loadPage(page).then(() => {
+        const data: PagePosition = this.pagePositions.find((data: PagePosition) => data.pageNumber === page);
+        this.isAutoScrolling = true;
+        this.content.scrollTo(0, data.top + 10, 3000)
+          .then(() => this.isAutoScrolling = false)
+          .catch(() => this.isAutoScrolling = false);
+      });
+    }
   }
 
   /**
@@ -246,12 +320,18 @@ export class PdfViewerPage {
    *
    * @return void
    */
-  loadPreviousPage() {
-    if (this.isFirstPage()) {
+  goToPreviousPage() {
+    if ((this.isFirstPage()) || (this.isAutoScrolling)) {
+      // prevent hitting the button twice
       return;
     }
     const page = this.pageState.current - 1;
-    this.loadPage(page);
+    const existing: PagePosition = this.pagePositions.find((data: PagePosition) => data.pageNumber === page);
+    // Page should already exist!
+    this.isAutoScrolling = true;
+    this.content.scrollTo(0, existing.top, 3000)
+      .then(() => this.isAutoScrolling = false)
+      .catch(() => this.isAutoScrolling = false);
   }
 
   /**
@@ -286,7 +366,16 @@ export class PdfViewerPage {
       pdfPage = thisPage;
       return this.renderPage(pdfPage, pageNum);
     }).then(() => {
-      this.zone.run(() => this.pageState.current = pageNum);
+      this.pageState.lastLoaded = pageNum;
+      const pageEle = document.getElementById(`page-${pageNum}`);
+      const top = pageEle.offsetTop;
+      const bottom = (pageEle.offsetTop + pageEle.offsetHeight);
+      const position: PagePosition = {
+        bottom: bottom,
+        pageNumber: pageNum,
+        top: top,
+      };
+      this.pagePositions.push(position);
       return pdfPage;
     });
   }
@@ -326,8 +415,10 @@ export class PdfViewerPage {
 
     canvas.width = viewport.width;
     canvas.height = viewport.height;
-    this.canvasSize.width = viewport.width;
-    this.canvasSize.height = viewport.height;
+    this.zone.run(() => {
+      this.canvasSize.width = viewport.width;
+      this.canvasSize.height = viewport.height;
+    });
 
     //fix for 4K
     if (window.devicePixelRatio > 1) {
@@ -338,6 +429,11 @@ export class PdfViewerPage {
       canvas.height = canvasHeight * window.devicePixelRatio;
       canvas.style.width = canvasWidth + "px";
       canvas.style.height = canvasHeight + "px";
+
+      this.zone.run(() => {
+        this.canvasSize.width = canvasWidth;
+        this.canvasSize.height = canvasHeight;
+      });
 
       canvasContext.scale(window.devicePixelRatio, window.devicePixelRatio);
     }

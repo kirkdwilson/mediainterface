@@ -7,9 +7,13 @@ export interface PageState {
    */
   alteredScale: boolean;
   /**
-   * The current page
+   * The page they are currently viewing
    */
   current: number;
+  /**
+   * The last loaded page in the view
+   */
+  lastLoaded: number;
   /**
    * The current scale
    */
