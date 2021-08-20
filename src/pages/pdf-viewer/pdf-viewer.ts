@@ -94,6 +94,11 @@ export class PdfViewerPage {
   private isAutoScrolling = false;
 
   /**
+   * Are we refreshing the page?
+   */
+  private isRefreshing = false;
+
+  /**
    * Holds information about each page's position on the view.
    */
   private pagePositions: Array<PagePosition> = [];
@@ -187,12 +192,12 @@ export class PdfViewerPage {
    * @return void
    */
   decreaseScale() {
-    if (!this.canDecreaseScale()) {
+    if ((!this.canDecreaseScale()) || (this.doingWork())) {
         return;
     }
     this.pageState.scale = this.pageState.scale - this.pageState.scaleRate;
     this.pageState.alteredScale = true;
-    this.loadPage(this.pageState.current);
+    this.refreshPdf();
   }
 
   /**
@@ -263,10 +268,12 @@ export class PdfViewerPage {
    * @return void
    */
   increaseScale() {
+    if (this.doingWork()) {
+      return;
+    }
     this.pageState.scale = this.pageState.scale + this.pageState.scaleRate;
     this.pageState.alteredScale = true;
-
-    this.loadPage(this.pageState.current);
+    this.refreshPdf();
   }
 
   /**
@@ -293,7 +300,7 @@ export class PdfViewerPage {
    * @return void
    */
   goToNextPage() {
-    if ((this.isLastPage()) || (this.isAutoScrolling)) {
+    if ((this.isLastPage()) || (this.doingWork())) {
       // prevent hitting the button twice
       return;
     }
@@ -304,6 +311,7 @@ export class PdfViewerPage {
       this.content.scrollTo(0, existing.top + 10, 3000)
         .then(() => this.isAutoScrolling = false)
         .catch(() => this.isAutoScrolling = false);
+      return;
     } else {
       this.loadPage(page).then(() => {
         const data: PagePosition = this.pagePositions.find((data: PagePosition) => data.pageNumber === page);
@@ -321,7 +329,7 @@ export class PdfViewerPage {
    * @return void
    */
   goToPreviousPage() {
-    if ((this.isFirstPage()) || (this.isAutoScrolling)) {
+    if ((this.isFirstPage()) || (this.doingWork())) {
       // prevent hitting the button twice
       return;
     }
@@ -367,16 +375,65 @@ export class PdfViewerPage {
       return this.renderPage(pdfPage, pageNum);
     }).then(() => {
       this.pageState.lastLoaded = pageNum;
-      const pageEle = document.getElementById(`page-${pageNum}`);
-      const top = pageEle.offsetTop;
-      const bottom = (pageEle.offsetTop + pageEle.offsetHeight);
-      const position: PagePosition = {
-        bottom: bottom,
-        pageNumber: pageNum,
-        top: top,
-      };
-      this.pagePositions.push(position);
+      this.addPageToPagePositions(pageNum);
       return pdfPage;
+    });
+  }
+
+  /**
+   * Add the page to the page positions array
+   *
+   * @param  pageNum The page number
+   * @return         void
+   */
+  private addPageToPagePositions(pageNum: number): PagePosition {
+    const pageEle = document.getElementById(`page-${pageNum}`);
+    const top = pageEle.offsetTop;
+    const bottom = (pageEle.offsetTop + pageEle.offsetHeight);
+    const position: PagePosition = {
+      bottom: bottom,
+      pageNumber: pageNum,
+      top: top,
+    };
+    this.pagePositions.push(position);
+    return position;
+  }
+
+  /**
+   * Are we doing work right now?
+   *
+   * @return yes|no
+   */
+  private doingWork(): boolean {
+    return (this.isAutoScrolling) && (this.isRefreshing);
+  }
+
+  /**
+   * Refresh and redraw the PDF
+   *
+   * @return void
+   */
+  private refreshPdf() {
+    if (this.doingWork()) {
+      return;
+    }
+    this.isRefreshing = true;
+    const current = this.pageState.current;
+    // empty the view
+    this.pagesContainer.clear();
+    // empty pagePositions
+    this.pagePositions = [];
+    const promises = [];
+    for (let i = 1; i <= current; i++) {
+      promises.push(this.loadPage(i));
+    }
+    // load pages up to current
+    Promise.all(promises).then(() => {
+      // reload page positions
+      for (let i = 1; i <= current; i++) {
+        this.addPageToPagePositions(i);
+      }
+      this.isRefreshing = false;
     });
   }
 
