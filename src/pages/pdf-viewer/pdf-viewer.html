@@ -6,6 +6,11 @@
         </button>
     </ion-buttons>
     <ion-title>{{ item?.title }}</ion-title>
+    <ion-buttons right>
+        <button ion-button icon-only (click)="downloadFile()">
+            <ion-icon name="download"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -20,6 +25,8 @@
         </div>
       </div>
     </div>
+    <!-- A special link for downloading files -->
+    <a #downloadLink class="hidden"></a>
 </ion-content>
 <ion-footer>
   <ion-toolbar>
@@ -31,7 +38,7 @@
         <ion-col col-2 text-center>
           <button icon-only ion-button clear color="primary" (click)="decreaseScale()" [disabled]="!canDecreaseScale()"><ion-icon name="remove"></ion-icon></button>
         </ion-col>
-        <ion-col col-2 text-center z>
+        <ion-col col-2 text-center>
           <p>{{ this.pageState.current }}/{{ this.pageState.total }}</p>
         </ion-col>
         <ion-col col-2 text-center>

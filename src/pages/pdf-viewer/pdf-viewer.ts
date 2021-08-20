@@ -5,6 +5,7 @@ import * as PDFJS from 'pdfjs-dist/webpack.js';
 import { PdfViewerItem } from './pdf-viewer-item.interface';
 import { PDFPageProxy, PDFPageViewport, PDFRenderTask } from 'pdfjs-dist';
 import { PageState } from './page-state.interface';
+import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
 
 /**
@@ -43,16 +44,6 @@ export class PdfViewerPage {
   PDFJSViewer = PDFJS;
 
   /**
-   * The PDF page container
-   */
-  @ViewChild('pageContainer') pageContainerRef: ElementRef;
-
-  /**
-   * The viewer
-   */
-  @ViewChild('viewer') viewerRef: ElementRef;
-
-  /**
    * The canvas where the PDF is drawn
    */
   @ViewChild('canvas') canvasRef: ElementRef;
@@ -63,9 +54,24 @@ export class PdfViewerPage {
   @ViewChild('canvasWrapper') canvasWrapperRef: ElementRef;
 
   /**
+   * A reference to the download link
+   */
+  @ViewChild('downloadLink') downloadLinkRef: ElementRef;
+
+  /**
+   * The PDF page container
+   */
+  @ViewChild('pageContainer') pageContainerRef: ElementRef;
+
+  /**
    * The text container for storing the text layer that enables copy and paste
    */
   @ViewChild('textContainer') textContainerRef: ElementRef;
+
+  /**
+   * The viewer
+   */
+  @ViewChild('viewer') viewerRef: ElementRef;
 
   /**
    * The PDF item
@@ -83,9 +89,10 @@ export class PdfViewerPage {
   private storageKey = 'pdf-viewer';
 
   constructor(
+    private dataStore: NavParamsDataStoreProvider,
+    private downloadFileProvider: DownloadFileProvider,
     private navController: NavController,
     private navParams: NavParams,
-    private dataStore: NavParamsDataStoreProvider,
     private viewController: ViewController,
     private zone: NgZone,
   ) {}
@@ -132,6 +139,24 @@ export class PdfViewerPage {
     this.pageState.scale = this.pageState.scale - this.pageState.scaleRate;
     this.pageState.alteredScale = true;
     this.loadPage(this.pageState.current);
+  }
+
+  /**
+   * Download the file.
+   *
+   * @return void
+   * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
+   */
+  downloadFile() {
+    const fileName = this.item.url.split('\\').pop().split('/').pop();
+    this.downloadFileProvider.download(this.item.url).pipe(take(1)).subscribe((blob: any) => {
+      const url = window.URL.createObjectURL(blob);
+      const link = this.downloadLinkRef.nativeElement;
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
   }
 
   /**
