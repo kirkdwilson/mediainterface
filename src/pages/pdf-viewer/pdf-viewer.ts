@@ -35,22 +35,11 @@ export class PdfViewerPage {
    * The proxy to the PDFDocument in the worker tread.
    */
   pdfDocument: PDFJS.PDFDocumentProxy;
+
   /**
    * The PDFJS instance
    */
   PDFJSViewer = PDFJS;
-
-  /**
-   * Stores elements used by the PDF viewer
-   */
-  pageContainerUnique = {
-      width: 0 as number,
-      height: 0 as number,
-      element: null as HTMLElement,
-      canvas: null as HTMLCanvasElement,
-      textContainer: null as HTMLElement,
-      canvasWrapper: null as HTMLElement,
-  };
 
   /**
    * The PDF page container
@@ -108,10 +97,6 @@ export class PdfViewerPage {
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
     this.slug = this.navParams.get('slug');
-    this.pageContainerUnique.element = this.pageContainerRef.nativeElement as HTMLElement;
-    this.pageContainerUnique.canvasWrapper = this.canvasWrapperRef.nativeElement as HTMLCanvasElement;
-    this.pageContainerUnique.canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
-    this.pageContainerUnique.textContainer = this.textContainerRef.nativeElement as HTMLCanvasElement;
     if (typeof this.item === 'undefined') {
       this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
         if (data === '') {
@@ -121,7 +106,7 @@ export class PdfViewerPage {
         this.loadPdf();
       });
     } else {
-      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadPdf())
+      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadPdf());
     }
   }
 
@@ -273,16 +258,12 @@ export class PdfViewerPage {
    * @return         void
    */
   private async renderOnePage(pdfPage: PDFPageProxy) {
-    let textContainer: HTMLElement;
-    let canvas: HTMLCanvasElement;
-    let wrapper: HTMLElement;
     let canvasContext: CanvasRenderingContext2D;
-    let page: HTMLElement
-
-    page = this.pageContainerUnique.element;
-    textContainer = this.pageContainerUnique.textContainer;
-    canvas = this.pageContainerUnique.canvas;
-    wrapper = this.pageContainerUnique.canvasWrapper;
+    const page = this.pageContainerRef.nativeElement as HTMLElement;
+    const textContainer = this.textContainerRef.nativeElement as HTMLCanvasElement;
+    const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
+    const wrapper = this.canvasWrapperRef.nativeElement as HTMLCanvasElement;
+    const viewer = this.viewerRef.nativeElement as HTMLCanvasElement;
 
     canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
     canvasContext.imageSmoothingEnabled = false;
@@ -290,7 +271,7 @@ export class PdfViewerPage {
     canvasContext.mozImageSmoothingEnabled = false;
     canvasContext.oImageSmoothingEnabled = false;
 
-    let viewport = pdfPage.getViewport({ scale: this.pageState.scale }) as PDFPageViewport;
+    const viewport = pdfPage.getViewport({ scale: this.pageState.scale }) as PDFPageViewport;
 
     canvas.width = viewport.width;
     canvas.height = viewport.height;
@@ -317,12 +298,12 @@ export class PdfViewerPage {
     // THIS RENDERS THE PAGE !!!!!!
     let renderTask: PDFRenderTask = pdfPage.render({
         canvasContext,
-        viewport
+        viewport,
     });
     let container = textContainer;
     return renderTask.promise.then(() => pdfPage.getTextContent()).then((textContent) => {
       let textLayer: HTMLElement;
-      textLayer = this.pageContainerUnique.textContainer;
+      textLayer = textContainer;
       while (textLayer.lastChild) {
           textLayer.removeChild(textLayer.lastChild);
       }
