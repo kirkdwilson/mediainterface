@@ -3,8 +3,9 @@ page-pdf-viewer {
          width: 100%;
          overflow: hidden;
          padding: 0 16px;
-         
+
          .viewer {
+             overflow: scroll;
              position: relative;
              width: 100%;
 

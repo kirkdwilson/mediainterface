@@ -3,6 +3,10 @@
  */
 export interface PageState {
   /**
+   * Did the user alter the scale? Bypass auto scale.
+   */
+  alteredScale: boolean;
+  /**
    * The current page
    */
   current: number;

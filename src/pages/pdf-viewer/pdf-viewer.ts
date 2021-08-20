@@ -25,6 +25,7 @@ export class PdfViewerPage {
    * Keep track of the paging
    */
   pageState: PageState = {
+    alteredScale: false,
     current: 1,
     scale: 1,
     scaleRate: .25,
@@ -128,7 +129,8 @@ export class PdfViewerPage {
     if (!this.canDecreaseScale()) {
         return;
     }
-    this.zone.run(() => this.pageState.scale = this.pageState.scale - this.pageState.scaleRate);
+    this.pageState.scale = this.pageState.scale - this.pageState.scaleRate;
+    this.pageState.alteredScale = true;
     this.loadPage(this.pageState.current);
   }
 
@@ -167,7 +169,8 @@ export class PdfViewerPage {
    * @return void
    */
   increaseScale() {
-    this.zone.run(() => this.pageState.scale = this.pageState.scale + this.pageState.scaleRate);
+    this.pageState.scale = this.pageState.scale + this.pageState.scaleRate;
+    this.pageState.alteredScale = true;
 
     this.loadPage(this.pageState.current);
   }
@@ -260,10 +263,10 @@ export class PdfViewerPage {
   private async renderOnePage(pdfPage: PDFPageProxy) {
     let canvasContext: CanvasRenderingContext2D;
     const page = this.pageContainerRef.nativeElement as HTMLElement;
-    const textContainer = this.textContainerRef.nativeElement as HTMLCanvasElement;
+    const textContainer = this.textContainerRef.nativeElement as HTMLElement;
     const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
-    const wrapper = this.canvasWrapperRef.nativeElement as HTMLCanvasElement;
-    const viewer = this.viewerRef.nativeElement as HTMLCanvasElement;
+    const wrapper = this.canvasWrapperRef.nativeElement as HTMLElement;
+    const viewer = this.viewerRef.nativeElement as HTMLElement;
 
     canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
     canvasContext.imageSmoothingEnabled = false;
@@ -271,7 +274,15 @@ export class PdfViewerPage {
     canvasContext.mozImageSmoothingEnabled = false;
     canvasContext.oImageSmoothingEnabled = false;
 
-    const viewport = pdfPage.getViewport({ scale: this.pageState.scale }) as PDFPageViewport;
+    let scale = this.pageState.scale;
+
+    if (!this.pageState.alteredScale) {
+      const unscaledViewport = pdfPage.getViewport({ scale: this.pageState.scale }) as PDFPageViewport;
+      scale = viewer.offsetWidth / unscaledViewport.width;
+      this.pageState.scale = scale;
+    }
+
+    const viewport = pdfPage.getViewport({ scale: scale }) as PDFPageViewport;
 
     canvas.width = viewport.width;
     canvas.height = viewport.height;
