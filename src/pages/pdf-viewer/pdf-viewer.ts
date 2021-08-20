@@ -23,6 +23,14 @@ import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav
 export class PdfViewerPage {
 
   /**
+   * The canvas size
+   */
+  canvasSize: any = {
+    height: 0,
+    width: 0,
+  };
+
+  /**
    * Keep track of the paging
    */
   pageState: PageState = {
@@ -49,19 +57,9 @@ export class PdfViewerPage {
   @ViewChild('canvas') canvasRef: ElementRef;
 
   /**
-   * The wrapper around the canvas
-   */
-  @ViewChild('canvasWrapper') canvasWrapperRef: ElementRef;
-
-  /**
    * A reference to the download link
    */
   @ViewChild('downloadLink') downloadLinkRef: ElementRef;
-
-  /**
-   * The PDF page container
-   */
-  @ViewChild('pageContainer') pageContainerRef: ElementRef;
 
   /**
    * The text container for storing the text layer that enables copy and paste
@@ -287,10 +285,8 @@ export class PdfViewerPage {
    */
   private async renderOnePage(pdfPage: PDFPageProxy) {
     let canvasContext: CanvasRenderingContext2D;
-    const page = this.pageContainerRef.nativeElement as HTMLElement;
     const textContainer = this.textContainerRef.nativeElement as HTMLElement;
     const canvas = this.canvasRef.nativeElement as HTMLCanvasElement;
-    const wrapper = this.canvasWrapperRef.nativeElement as HTMLElement;
     const viewer = this.viewerRef.nativeElement as HTMLElement;
 
     canvasContext = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -311,12 +307,8 @@ export class PdfViewerPage {
 
     canvas.width = viewport.width;
     canvas.height = viewport.height;
-    page.style.width = `${viewport.width}px`;
-    page.style.height = `${viewport.height}px`;
-    wrapper.style.width = `${viewport.width}px`;
-    wrapper.style.height = `${viewport.height}px`;
-    textContainer.style.width = `${viewport.width}px`;
-    textContainer.style.height = `${viewport.height}px`;
+    this.canvasSize.width = viewport.width;
+    this.canvasSize.height = viewport.height;
 
     //fix for 4K
     if (window.devicePixelRatio > 1) {

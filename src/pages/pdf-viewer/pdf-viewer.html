@@ -17,11 +17,11 @@
 <ion-content padding>
     <div #viewerContainer class="viewer-container">
       <div #viewer class="viewer">
-        <div #pageContainer class="page">
-          <div class="canvas-wrapper" #canvasWrapper>
+        <div class="page" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height">
+          <div class="canvas-wrapper" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height">
             <canvas class="page-canvas" #canvas></canvas>
           </div>
-          <div #textContainer class="text-layer selectable" [hidden]="true"></div>
+          <div #textContainer class="text-layer selectable" [hidden]="true" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height"></div>
         </div>
       </div>
     </div>
