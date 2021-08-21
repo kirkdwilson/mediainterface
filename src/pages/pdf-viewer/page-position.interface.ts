@@ -3,6 +3,7 @@
  */
 export interface PagePosition {
   bottom: number;
+  height: number;
   pageNumber: number;
   top: number;
 }

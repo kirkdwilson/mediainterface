@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
+import { Component, ElementRef, NgZone, TemplateRef, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { Content, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
@@ -119,7 +119,6 @@ export class PdfViewerPage {
     private navController: NavController,
     private navParams: NavParams,
     private zone: NgZone,
-    private renderer: Renderer2,
     private viewController: ViewController,
   ) {}
 
@@ -131,16 +130,33 @@ export class PdfViewerPage {
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
     this.slug = this.navParams.get('slug');
+    /**
+     * Check if the view is larger than the new PDF page.  If so, load additional pages
+     */
+    let callback: Function = () => {
+      const first = this.pagePositions[0];
+      const promises = [];
+      let height = first.height;
+      let pageNum = 2;
+      console.log('HERE');
+      while (height <= this.content.contentHeight) {
+        promises.push(this.loadPage(pageNum));
+        pageNum += 1;
+        // Every page should be same height
+        height += first.height;
+      }
+    };
+
     if (typeof this.item === 'undefined') {
       this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
         if (data === '') {
           this.goBack();
         }
         this.item = JSON.parse(data);
-        this.loadPdf();
+        this.loadPdf().then(() => callback());
       });
     } else {
-      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadPdf());
+      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadPdf().then(() => callback()));
     }
   }
 
@@ -392,6 +408,7 @@ export class PdfViewerPage {
     const bottom = (pageEle.offsetTop + pageEle.offsetHeight);
     const position: PagePosition = {
       bottom: bottom,
+      height: pageEle.offsetHeight,
       pageNumber: pageNum,
       top: top,
     };
