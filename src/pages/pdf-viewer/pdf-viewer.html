@@ -1,0 +1,61 @@
+<ng-template let-number="pageNum" #pageCanvasTemplate>
+  <div id="page-{{ number }}" class="page" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height">
+    <div class="canvas-wrapper" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height">
+      <canvas class="page-canvas"></canvas>
+    </div>
+    <div class="text-container text-layer selectable" [hidden]="true" [style.width.px]="canvasSize.width" [style.height.px]="canvasSize.height"></div>
+  </div>
+</ng-template>
+
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-buttons left>
+        <button ion-button icon-only (click)="goBack()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title>{{ item?.title }}</ion-title>
+    <ion-buttons right>
+        <button ion-button icon-only (click)="downloadFile()">
+            <ion-icon name="download"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div class="viewer-container">
+      <div #viewer class="viewer">
+        <!-- This is dynamically appended -->
+        <ng-container #pagesContainer></ng-container>
+      </div>
+    </div>
+    <!-- A special link for downloading files -->
+    <a #downloadLink class="hidden"></a>
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+     <ion-infinite-scroll-content></ion-infinite-scroll-content>
+   </ion-infinite-scroll>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2 offset-1 text-center>
+          <button icon-only ion-button clear color="primary" (click)="goToPreviousPage()" [disabled]="isFirstPage()"><ion-icon ios="ios-arrow-back" md="ios-arrow-back"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="decreaseScale()" [disabled]="!canDecreaseScale()"><ion-icon name="remove"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <p>{{ this.pageState.current }}/{{ this.pageState.total }}</p>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="increaseScale()"><ion-icon name="add"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="goToNextPage()" [disabled]="isLastPage()"><ion-icon ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

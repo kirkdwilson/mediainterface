@@ -169,7 +169,6 @@ export class AvPlayerPage {
           { slug: this.slug },
           {
             animate: true,
-            animation: 'ios-transition',
             direction: 'back',
           },
         ).then(() => {
@@ -180,7 +179,6 @@ export class AvPlayerPage {
       } else {
         this.navController.goToRoot({
           animate: true,
-          animation: 'ios-transition',
         });
       }
     }
