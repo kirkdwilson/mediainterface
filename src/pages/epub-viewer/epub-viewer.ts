@@ -50,6 +50,11 @@ export class EpubViewerPage {
   @ViewChild('downloadLink') downloadLinkRef: ElementRef;
 
   /**
+   * Do we want to show the toolbars?
+   */
+  showToolbars: boolean = true;
+
+  /**
    * The item to view
    */
   private item: EpubViewerItem = null;
@@ -94,6 +99,22 @@ export class EpubViewerPage {
       this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadFile());
     }
   }
+
+  /**
+   * Change the page on swipe
+   *
+   * @param  event The event that triggered it
+   * @return       void
+   */
+  changePage(event) {
+    if (event.velocityX < 0) {
+      this.next();
+    }
+    else {
+      this.prev();
+    }
+  }
+
 
   /**
    * Decrease the font size
@@ -199,6 +220,16 @@ export class EpubViewerPage {
     }
     this.currentPage -= 1;
     this.rendition.prev();
+  }
+
+  /**
+   * Toggle the toolbars.
+   *
+   * @return void
+   */
+  toggleToolbars()
+  {
+    this.showToolbars = !this.showToolbars;
   }
 
 }

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar hideBackButton>
+  <ion-navbar hideBackButton [hidden]="!showToolbars">
     <ion-buttons left>
         <button ion-button icon-only (click)="goBack()">
             <ion-icon name="arrow-back"></ion-icon>
@@ -15,11 +15,12 @@
 </ion-header>
 
 <ion-content padding>
+  <div id="touchlayer" (swipe)="changePage($event)" (tap)="toggleToolbars()"></div>
   <div id="book"></div>
   <!-- A special link for downloading files -->
   <a #downloadLink class="hidden"></a>
 </ion-content>
-<ion-footer>
+<ion-footer [hidden]="!showToolbars">
   <ion-toolbar>
     <ion-grid>
       <ion-row>
