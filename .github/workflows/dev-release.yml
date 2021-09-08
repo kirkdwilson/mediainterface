@@ -2,7 +2,7 @@ name: Build the Application
 on:
   push:
     branches:
-      - dev
+      - develop
 
 jobs:
   build:
