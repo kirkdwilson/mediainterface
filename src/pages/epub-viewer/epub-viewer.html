@@ -15,7 +15,30 @@
 </ion-header>
 
 <ion-content padding>
-
+  <div id="book"></div>
   <!-- A special link for downloading files -->
   <a #downloadLink class="hidden"></a>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2 offset-1 text-center>
+          <button icon-only ion-button clear color="primary" (click)="prev()" [disabled]="currentPage === 1"><ion-icon ios="ios-arrow-back" md="ios-arrow-back"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary"><ion-icon name="remove"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <p>{{ this.currentPage }}</p>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary"><ion-icon name="add"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="next()"><ion-icon ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
