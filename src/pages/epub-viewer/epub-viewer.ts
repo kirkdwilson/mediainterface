@@ -127,6 +127,10 @@ export class EpubViewerPage {
    * @return void
    */
   ionViewWillLeave() {
+    if (this.rendition) {
+      this.rendition.destroy();
+      this.rendition = null;
+    }
     if (this.tocStream$) {
       this.tocStream$.unsubscribe();
       this.tocStream$ = null;
