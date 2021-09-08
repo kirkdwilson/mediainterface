@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Events, IonicPage, NavController, NavParams, PopoverController, ViewController } from 'ionic-angular';
+import { Events, IonicPage, NavController, NavParams, Platform, PopoverController, ViewController } from 'ionic-angular';
 import { Book, Rendition } from 'epubjs';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
@@ -92,6 +92,7 @@ export class EpubViewerPage {
     private events: Events,
     private navController: NavController,
     private navParams: NavParams,
+    private platform: Platform,
     private popoverController: PopoverController,
     private viewController: ViewController,
   ) {
@@ -139,10 +140,13 @@ export class EpubViewerPage {
    * @return       void
    */
   changePage(event) {
-    if (event.velocityX < 0) {
+    if ((this.platform.isRTL) && (event.velocityX > 0)) {
       this.next();
-    }
-    else {
+    } else if ((this.platform.isRTL) && (event.velocityX < 0)) {
+      this.prev();
+    } else if(event.velocityX < 0) {
+      this.next();
+    } else {
       this.prev();
     }
   }
