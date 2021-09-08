@@ -30,6 +30,11 @@ export class EpubViewerPage {
   book: any = null;
 
   /**
+   * The current font size in percentage
+   */
+  fontSize: number = 100;
+
+  /**
    * The rendition of the book
    */
   rendition: any = null;
@@ -91,6 +96,19 @@ export class EpubViewerPage {
   }
 
   /**
+   * Decrease the font size
+   *
+   * @return void
+   */
+  decreaseFont() {
+      if (this.fontSize <= 20) {
+          return;
+      }
+      this.fontSize -= 10;
+      this.rendition.themes.fontSize(`${this.fontSize}%`);
+  }
+
+  /**
    * Download the file.
    *
    * @return void
@@ -138,6 +156,16 @@ export class EpubViewerPage {
   }
 
   /**
+   * Increase the font size
+   *
+   * @return void
+   */
+  increaseFont() {
+    this.fontSize += 10;
+    this.rendition.themes.fontSize(`${this.fontSize}%`);
+  }
+
+  /**
    * Load the file
    *
    * @return void
@@ -145,10 +173,19 @@ export class EpubViewerPage {
   loadFile() {
     this.book = new Book(this.item.url);
     this.rendition = this.book.renderTo('book', { width: '100%', height: '100%' });
+    this.rendition.themes.fontSize(`${this.fontSize}%`);
     this.rendition.display();
-    this.rendition.on('relocated', (location) => {
-      console.log(location);
-    });
+
+  }
+
+  /**
+   * Go to the next page.
+   *
+   * @return void
+   */
+  next() {
+    this.currentPage += 1;
+    this.rendition.next();
   }
 
   /**
@@ -162,16 +199,6 @@ export class EpubViewerPage {
     }
     this.currentPage -= 1;
     this.rendition.prev();
-  }
-
-  /**
-   * Go to the next page.
-   *
-   * @return void
-   */
-  next() {
-    this.currentPage += 1;
-    this.rendition.next();
   }
 
 }

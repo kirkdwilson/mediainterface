@@ -27,13 +27,13 @@
           <button icon-only ion-button clear color="primary" (click)="prev()" [disabled]="currentPage === 1"><ion-icon ios="ios-arrow-back" md="ios-arrow-back"></ion-icon></button>
         </ion-col>
         <ion-col col-2 text-center>
-          <button icon-only ion-button clear color="primary"><ion-icon name="remove"></ion-icon></button>
+          <button icon-only ion-button clear color="primary" (click)="decreaseFont()"><ion-icon name="remove"></ion-icon></button>
         </ion-col>
         <ion-col col-2 text-center>
           <p>{{ this.currentPage }}</p>
         </ion-col>
         <ion-col col-2 text-center>
-          <button icon-only ion-button clear color="primary"><ion-icon name="add"></ion-icon></button>
+          <button icon-only ion-button clear color="primary" (click)="increaseFont()"><ion-icon name="add"></ion-icon></button>
         </ion-col>
         <ion-col col-2 text-center>
           <button icon-only ion-button clear color="primary" (click)="next()"><ion-icon ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon></button>
