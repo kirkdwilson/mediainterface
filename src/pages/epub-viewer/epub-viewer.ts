@@ -1,10 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Events, IonicPage, NavController, NavParams, PopoverController, ViewController } from 'ionic-angular';
 import { Book, Rendition } from 'epubjs';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { EpubViewerItem } from './epub-viewer-item.interface';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
+import { TocItem } from '@components/toc-popover/toc-item.interface';
+import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
 
 /**
  * ePubjs is included in index.html
@@ -60,6 +62,11 @@ export class EpubViewerPage {
   private item: EpubViewerItem = null;
 
   /**
+   * The title for the current section
+   */
+  sectionTitle: string = '';
+
+  /**
    * The slug for the previous page
    */
   slug = '';
@@ -69,11 +76,23 @@ export class EpubViewerPage {
    */
   private storageKey = 'epub-viewer';
 
+  /**
+   * The table of contents
+   */
+  private toc: Array<TocItem> = [];
+
+  /**
+   * Listen to changes in the TOC component
+   */
+  private tocStream$: any = null;
+
   constructor(
     private dataStore: NavParamsDataStoreProvider,
     private downloadFileProvider: DownloadFileProvider,
+    private events: Events,
     private navController: NavController,
     private navParams: NavParams,
+    private popoverController: PopoverController,
     private viewController: ViewController,
   ) {
   }
@@ -97,6 +116,19 @@ export class EpubViewerPage {
         });
     } else {
       this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadFile());
+    }
+    this.tocStream$ = this.events.subscribe('toc-popover:change-page', (selected: TocItem) => this.rendition.display(selected.ref));
+  }
+
+  /**
+   * Ionic LifeCycle the view will leave
+   *
+   * @return void
+   */
+  ionViewWillLeave() {
+    if (this.tocStream$) {
+      this.tocStream$.unsubscribe();
+      this.tocStream$ = null;
     }
   }
 
@@ -187,6 +219,15 @@ export class EpubViewerPage {
   }
 
   /**
+   * A convience method for flatten our toc array
+   *
+   * @param  arr The array to flatten
+   * @return     The new array
+   */
+  flatten(arr: Array<any>) {
+    return [].concat(...arr.map(v => [v, ...this.flatten(v.subitems)]));
+  }
+  /**
    * Load the file
    *
    * @return void
@@ -196,7 +237,23 @@ export class EpubViewerPage {
     this.rendition = this.book.renderTo('book', { width: '100%', height: '100%' });
     this.rendition.themes.fontSize(`${this.fontSize}%`);
     this.rendition.display();
-
+    this.rendition.on('rendered', (location) => {
+      const titles = this.toc.filter((item: TocItem) => this.book.canonical(item.ref) == this.book.canonical(location.href));
+      this.sectionTitle = (titles.length === 1) ? titles[0].label : '';
+    });
+    /**
+     * Set up toc
+     */
+    this.book.loaded.navigation.then((toc) => {
+      this.toc = this.flatten(toc.toc).map((section: any) => {
+        const item: TocItem = {
+          id: String(section.id),
+          label:String(section.label).replace(/(\r\n|\n|\r)/gm, '').trim(),
+          ref: String(section.href),
+        };
+        return item;
+      });
+    });
   }
 
   /**
@@ -207,6 +264,17 @@ export class EpubViewerPage {
   next() {
     this.currentPage += 1;
     this.rendition.next();
+  }
+
+  /**
+   * Open the table of contents.
+   *
+   * @return void
+   */
+  openTocPopover() {
+    this.popoverController.config.set('mode', 'ios');
+    const popover = this.popoverController.create(TocPopoverComponent, { toc: this.toc });
+    popover.present({ ev: event });
   }
 
   /**
