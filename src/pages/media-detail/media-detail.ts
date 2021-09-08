@@ -10,6 +10,7 @@ import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 import { PdfViewerItem } from '@pages/pdf-viewer/pdf-viewer-item.interface';
+import { EpubViewerItem } from '@pages/epub-viewer/epub-viewer-item.interface';
 
 /**
  * The detail page for a specific piece of media.
@@ -136,6 +137,12 @@ export class MediaDetailPage {
         url: current.filePath,
       };
       this.navController.push('pdf-viewer', { item: item, slug: this.slug });
+    } else if (current.mediaType === 'epub') {
+      const item: EpubViewerItem = {
+        title: current.title,
+        url: current.filePath,
+      };
+      this.navController.push('epub-viewer', { item: item, slug: this.slug });
     }
   }
 
@@ -162,6 +169,12 @@ export class MediaDetailPage {
         url: this.media.filePath,
       };
       this.navController.push('pdf-viewer', { item: item, slug: this.slug });
+    } else if (this.media.mediaType === 'epub') {
+      const item: EpubViewerItem = {
+        title: this.media.title,
+        url: this.media.filePath,
+      };
+      this.navController.push('epub-viewer', { item: item, slug: this.slug });
     }
   }
 

@@ -1,0 +1,27 @@
+page-epub-viewer {
+    #touchlayer, #book {
+        width: 100%;
+        height: 100%;
+    }
+
+    #touchlayer{
+        z-index: 999;
+        position: absolute
+    }
+
+    #book {
+        z-index: 0;
+    }
+
+    #book iframe {
+        border: none;
+    }
+
+    .scroll-content {
+        overflow-y: hidden;
+    }
+
+    #more-button {
+        margin: 0 1.25em;
+    }
+}

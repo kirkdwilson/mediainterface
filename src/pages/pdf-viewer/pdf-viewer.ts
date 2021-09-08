@@ -138,7 +138,6 @@ export class PdfViewerPage {
       const promises = [];
       let height = first.height;
       let pageNum = 2;
-      console.log('HERE');
       while (height <= this.content.contentHeight) {
         promises.push(this.loadPage(pageNum));
         pageNum += 1;

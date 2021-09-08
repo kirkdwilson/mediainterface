@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar hideBackButton [hidden]="!showToolbars">
+    <ion-buttons left>
+        <button ion-button icon-only (click)="goBack()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title>{{ item?.title }}</ion-title>
+    <ion-buttons right>
+        <button ion-button icon-only (click)="downloadFile()">
+            <ion-icon name="download"></ion-icon>
+        </button>
+        <button ion-button icon-only (click)="openTocPopover()" id="more-button">
+            <ion-icon name="more"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div id="touchlayer" (swipe)="changePage($event)" (tap)="toggleToolbars()"></div>
+  <div id="book"></div>
+  <!-- A special link for downloading files -->
+  <a #downloadLink class="hidden"></a>
+</ion-content>
+<ion-footer [hidden]="!showToolbars">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-2 offset-1 text-center>
+          <button icon-only ion-button clear color="primary" (click)="prev()" [disabled]="currentPage === 1"><ion-icon ios="ios-arrow-back" md="ios-arrow-back"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="decreaseFont()"><ion-icon name="remove"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <p>{{ sectionTitle }}</p>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="increaseFont()"><ion-icon name="add"></ion-icon></button>
+        </ion-col>
+        <ion-col col-2 text-center>
+          <button icon-only ion-button clear color="primary" (click)="next()"><ion-icon ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

@@ -50,7 +50,6 @@ export class MyApp implements OnInit, OnDestroy {
       if ((this.currentLanguage) && (language.text !== this.currentLanguage.text)) {
         this.currentLanguage = language;
         this.translate.use(language.twoLetterCode);
-        console.log(language);
         if (language.isRtl) {
           this.platform.setDir('rtl', true);
         } else {
