@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@main
       - name: Install Dependencies
         run: npm install
+      - name: Create Environment File
+        run: cp src/environments/environment.example.ts environment.ts
       - name: Build
         run: npm run build
       - name: Package Release
