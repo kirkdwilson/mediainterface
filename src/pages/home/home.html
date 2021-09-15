@@ -13,7 +13,7 @@
 </ion-header>
 
 <ion-content padding>
-  <div class="category-list-wrapper">
+  <div class="category-list-wrapper" [hidden]="recommended.length === 0">
     <h2>{{ 'RECOMMENDED_TITLE' | translate }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of recommended">
@@ -45,7 +45,7 @@
       </ion-card>
     </ion-scroll>
   </div>
-  <div class="category-list-wrapper">
+  <div class="category-list-wrapper" [hidden]="others.length === 0">
     <h2>{{'OTHER_MEDIA_TITLE' | translate }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
       <ion-card *ngFor="let resource of others">

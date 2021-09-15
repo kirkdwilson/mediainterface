@@ -119,7 +119,11 @@ export class HomePage {
       take(1)
     ).subscribe((media: GroupedMedia) => {
       this.groups = media;
-      this.others = this.groups['other'].media;
+      if (this.groups.hasOwnProperty('other')) {
+        this.others = this.groups['other'].media;
+      } else {
+        this.others = [];
+      }
       this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
     });
   }
