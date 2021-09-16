@@ -140,7 +140,7 @@ export class MediaProvider {
             recommended,
             media.tags
           );
-        })
+        });
         return this.media;
       })
     );
