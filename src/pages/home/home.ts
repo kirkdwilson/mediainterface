@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, PopoverController } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
 import { LanguageProvider } from '@providers/language/language';
@@ -28,6 +29,11 @@ export class HomePage {
   groupKeys: Array<string> = [];
 
   /**
+   * The logo for the interface retrieved from the interface file.
+   */
+  logo: string = null;
+
+  /**
    * A list of recommended media
    */
   recommended: Array<Media> = [];
@@ -52,6 +58,7 @@ export class HomePage {
     private navController: NavController,
     private languageProvider: LanguageProvider,
     private popoverController: PopoverController,
+    private translateService: TranslateService,
   ) {}
 
   /**
@@ -126,6 +133,7 @@ export class HomePage {
       }
       this.groupKeys = Object.keys(media).filter((slug) => slug !== 'other');
     });
+    this.translateService.get('APP_LOGO').pipe(take(1)).subscribe((logo: string) => this.logo = logo);
   }
 
 }
