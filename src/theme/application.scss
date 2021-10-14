@@ -1,0 +1,48 @@
+.hidden {
+    display: none;
+}
+.media-type {
+    color: map-get($colors, secondary) !important;
+    font-size: .8em !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+.bar-button-default-ios {
+    color: #424242 !important;
+}
+h2 {
+    margin-top: .70em !important;
+    margin-bottom: .70em !important;
+}
+
+[dir="ltr"] .toolbar-md.with-logo, [dir="rtl"] .toolbar-md.with-logo,
+[dir="ltr"] .toolbar-ios.with-logo, [dir="rtl"] .toolbar-ios.with-logo {
+
+    .toolbar-content {
+        display: flex;
+        align-items: center !important;
+        justify-content: left !important;
+
+        .logo-wrapper {
+
+            img {
+                max-height: 60px;
+            }
+        }
+
+        ion-title {
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+            text-align: center;
+            width: 100% !important;
+        }
+    }
+}
+
+.toolbar-ios ion-title {
+    width: auto !important;
+}
+
+.toolbar-md, .toolbar-ios {
+    min-height: 60px !important;
+}

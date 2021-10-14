@@ -1,14 +1,64 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
+  <ion-navbar class="with-logo">
+    <div class="logo-wrapper" [hidden]="logo === ''">
+      <img src="assets/{{ logo }}" />
+    </div>
+    <ion-title>{{ 'APP_NAME' | translate }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-right (click)="openLanguagePopover($event)">
+        {{ 'LANGUAGE_BUTTON' | translate }} <ion-icon name="cog"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v3">docs</a> will be your guide.
-  </p>
+  <div class="category-list-wrapper" [hidden]="recommended.length === 0">
+    <h2>{{ 'RECOMMENDED_TITLE' | translate }}</h2>
+    <ion-scroll scrollX="true" direction="x" class="category-list">
+      <ion-card *ngFor="let resource of recommended">
+        <div class="feature-photo">
+          <a (click)="goToDetails(resource.slug)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
+        </div>
+        <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
+        <ion-card-content>
+          <p class="media-type" text-capitalize>
+            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ion-scroll>
+  </div>
+  <div *ngFor="let slug of groupKeys" class="category-list-wrapper">
+    <h2>{{ groups[slug].label }}</h2>
+    <ion-scroll scrollX="true" direction="x" class="category-list">
+      <ion-card *ngFor="let resource of groups[slug].media">
+        <div class="feature-photo">
+          <a (click)="goToDetails(resource.slug)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
+        </div>
+        <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
+        <ion-card-content>
+          <p class="media-type" text-capitalize>
+            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ion-scroll>
+  </div>
+  <div class="category-list-wrapper" [hidden]="others.length === 0">
+    <h2>{{'OTHER_MEDIA_TITLE' | translate }}</h2>
+    <ion-scroll scrollX="true" direction="x" class="category-list">
+      <ion-card *ngFor="let resource of others">
+        <div class="feature-photo">
+          <a (click)="goToDetails(resource.slug)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
+        </div>
+        <ion-card-header><a (click)="goToDetails(resource.slug)">{{ resource.title }}</a></ion-card-header>
+        <ion-card-content>
+          <p class="media-type" text-capitalize>
+            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ion-scroll>
+  </div>
 </ion-content>

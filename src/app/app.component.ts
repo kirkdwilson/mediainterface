@@ -1,22 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Platform } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
+import { take } from 'rxjs/operators/take';
+import { LanguageProvider } from '@providers/language/language';
+import { Language } from '@models/language';
 
-import { HomePage } from '../pages/home/home';
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
-  rootPage:any = HomePage;
+export class MyApp implements OnInit, OnDestroy {
+  /**
+   * The root page
+   */
+  rootPage: string = 'HomePage';
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
-      splashScreen.hide();
+  /**
+   * The current selected language
+   */
+  private currentLanguage: Language = null;
+
+  /**
+   * Our stream for tracking changes on the language
+   */
+  private languageOnChangeStream$: any = null;
+
+  constructor(
+    private languageProvider: LanguageProvider,
+    private platform: Platform,
+    private translate: TranslateService,
+  ) {}
+
+  /**
+   * The class is intialized
+   *
+   * @return void
+   */
+  ngOnInit() {
+    this.translate.setDefaultLang('en');
+    this.languageProvider.getLanguage().pipe(take(1)).subscribe((language: Language) => {
+      this.currentLanguage = language;
+      this.translate.use(language.twoLetterCode);
+      if (language.isRtl) {
+        this.platform.setDir('rtl', true);
+      } else {
+        this.platform.setDir('ltr', true);
+      }
+    });
+    this.languageOnChangeStream$ = this.languageProvider.onLanguageChange.subscribe((language: Language) => {
+      if ((this.currentLanguage) && (language.text !== this.currentLanguage.text)) {
+        this.currentLanguage = language;
+        this.translate.use(language.twoLetterCode);
+        if (language.isRtl) {
+          this.platform.setDir('rtl', true);
+        } else {
+          this.platform.setDir('ltr', true);
+        }
+      }
     });
   }
-}
 
+  /**
+   * The class will be destrroyed.
+   *
+   * @return void
+   */
+  ngOnDestroy() {
+    if (this.languageOnChangeStream$) {
+      this.languageOnChangeStream$.unsubscribe();
+      this.languageOnChangeStream$ = null;
+    }
+  }
+
+}
