@@ -1,0 +1,14 @@
+{
+	"itemName": "The Well",
+	"content": [
+		{
+			"categories": ["Books"],
+			"slug": "KingJamesBible",
+			"title": "The Holy Bible",
+			"desc": "Read the Holy Bible.",
+			"image": "KingJamesBible.jpeg",
+			"mediaType": "epub",
+			"tags": ["history", "drama", "The Bible", "Word of God"]
+		}
+	]
+}
