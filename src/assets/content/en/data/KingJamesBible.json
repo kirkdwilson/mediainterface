@@ -1,0 +1,11 @@
+{
+  "categories": ["Books"],
+  "slug": "KingJamesBible",
+  "title": "The Holy Bible",
+  "desc": "Read the Holy Bible.",
+	"filename": "KingJamesBible.epub",
+  "image": "KingJamesBible.jpeg",
+  "mimeType": "application/epub+zip",
+  "mediaType": "epub",
+  "tags": ["history", "drama", "The Bible", "Word of God"]
+}
