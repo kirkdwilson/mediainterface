@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar class="with-logo">
-    <div class="logo-wrapper">
+    <div class="logo-wrapper" [hidden]="logo === ''">
       <img src="assets/imgs/logo.png" />
     </div>
     <ion-title>{{ 'APP_NAME' | translate }}</ion-title>
