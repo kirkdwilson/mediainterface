@@ -11,5 +11,5 @@
 	".mpg": {"image":"video.png","mediaType":"video","Category":"Videos"},
 	".3gp": {"image":"video.png","mediaType":"video","Category":"Videos"},
 	".m4v": {"image":"video.png","mediaType":"video","Category":"Videos"},
-	".mp3": {"image":"audio.png","mediaType":"audio","Category":"Audios"},
+	".mp3": {"image":"audio.png","mediaType":"audio","Category":"Audios"}
 }
