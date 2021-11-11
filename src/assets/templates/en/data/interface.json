@@ -1,6 +1,6 @@
 {
-  "APP_NAME": "{{Brand}}",
-  "APP_LOGO": "{{Logo}}",
+  "APP_NAME": "",
+  "APP_LOGO": "",
   "CATEGORIES_TITLE": "Categories",
   "EPISODES_TEXT": "Episodes",
   "LANGUAGE_BUTTON": "Language",

@@ -1,0 +1,15 @@
+{
+	".pdf": {"image":"document.png","mediaType":"PDF","Category":"Documents"},
+	".epub": {"image":"document.png","mediaType":"epub","Category":"Documents"},
+	".mov": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".mp4": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".flv": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".mkv": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".avi": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".wmv": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".mpeg": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".mpg": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".3gp": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".m4v": {"image":"video.png","mediaType":"video","Category":"Videos"},
+	".mp3": {"image":"audio.png","mediaType":"audio","Category":"Audios"},
+}

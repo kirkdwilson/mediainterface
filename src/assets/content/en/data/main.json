@@ -1,14 +1,14 @@
 {
-	"itemName": "The Well",
-	"content": [
-		{
-			"categories": ["Books"],
-			"slug": "KingJamesBible",
-			"title": "The Holy Bible",
-			"desc": "Read the Holy Bible.",
-			"image": "KingJamesBible.jpeg",
-			"mediaType": "epub",
-			"tags": ["history", "drama", "The Bible", "Word of God"]
-		}
-	]
+	"itemName": "Start Up",
+	"content": [{
+		"categories": ["Books"],
+		"desc": "The Bible, King James Version, available in EPUB.",
+		"filename": "KingJamesBible.epub",
+		"image": "KingJamesBible.jpeg",
+		"mediaType": "epub",
+		"mimeType": "application\/epub+zip",
+		"slug": "the-holy-bible",
+		"tags": ["Bibles"],
+		"title": "The Holy Bible"
+	}]
 }
