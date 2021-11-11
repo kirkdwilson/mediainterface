@@ -1,0 +1,14 @@
+{
+	"itemName": "{{Brand}}",
+	"content": [
+		{
+			"categories": ["{{Category}}"],
+			"slug": "{{slug}}",
+			"title": "{{slug}}",
+			"desc": "",
+			"image": "{{Type}}.png",
+			"mediaType": "{{Type}}",
+			"tags": []
+		}
+	]
+}
