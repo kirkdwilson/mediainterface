@@ -1,15 +1,15 @@
 {
-	".pdf": {"image":"document.png","mediaType":"PDF","category":"Documents"},
-	".epub": {"image":"document.png","mediaType":"epub","category":"Documents"},
-	".mov": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".mp4": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".flv": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".mkv": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".avi": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".wmv": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".mpeg": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".mpg": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".3gp": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".m4v": {"image":"video.png","mediaType":"video","category":"Videos"},
-	".mp3": {"image":"audio.png","mediaType":"audio","category":"Audios"}
+	".pdf": {"image":"document.png","mediaType":"PDF","category":"Documents","mimeType":"application/pdf"},
+	".epub": {"image":"document.png","mediaType":"epub","category":"Documents", "mimeType":""},
+	".mov": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/mov"},
+	".mp4": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/mpeg"},
+	".flv": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/flv"},
+	".mkv": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/mkv"},
+	".avi": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/avi"},
+	".wmv": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/wmv"},
+	".mpeg": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/mpeg"},
+	".mpg": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/mpeg"},
+	".3gp": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/3gp"},
+	".m4v": {"image":"video.png","mediaType":"video","category":"Videos", "mimeType":"video/m4v"},
+	".mp3": {"image":"audio.png","mediaType":"audio","category":"Audios", "mimeType":"audio/mp3"}
 }
