@@ -3,7 +3,9 @@ on:
   push:
     branches:
       - main
-
+strategy:
+      matrix:
+        node-version: [12.x]
 jobs:
   build:
     name: Build Application
