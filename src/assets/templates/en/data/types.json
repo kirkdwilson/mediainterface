@@ -40,7 +40,6 @@
   ".m4p": {"image":"audio.png","mediaType":"audio","category":"Audios"},
   ".ogg": {"image":"audio.png","mediaType":"audio","category":"Audios"},
   ".wav": {"image":"audio.png","mediaType":"audio","category":"Audios"},
-  ".wma": {"image":"audio.png","mediaType":"audio","category":"Audios"},
   ".jpg": {"image":"image.png","mediaType":"image","category":"Images"},
   ".jpeg": {"image":"image.png","mediaType":"image","category":"Images"},
   ".png": {"image":"image.png","mediaType":"image","category":"Images"},
@@ -48,9 +47,3 @@
   ".bmp": {"image":"image.png","mediaType":"image","category":"Images"},
   ".gif": {"image":"image.png","mediaType":"image","category":"Images"}
 }
-
-
-
-
-
-
