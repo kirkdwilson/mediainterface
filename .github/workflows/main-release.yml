@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@main
+      - name: Check Version
+        run: node --version
       - name: Install Dependencies
         run: npm install
       - name: Create Environment File
