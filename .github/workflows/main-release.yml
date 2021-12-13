@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 12.x
       - name: Install Dependencies
-        run: npm install --only=prod
+        run: npm install
       - name: Create Environment File
         run: cp src/environments/environment.example.ts src/environments/environment.ts
       - name: Build
