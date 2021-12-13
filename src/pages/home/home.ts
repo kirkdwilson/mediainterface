@@ -31,7 +31,7 @@ export class HomePage {
   /**
    * The logo for the interface retrieved from the interface file.
    */
-  logo: string = null;
+  logo: string = "imgs/logo.png";
 
   /**
    * A list of recommended media

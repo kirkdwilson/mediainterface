@@ -14,7 +14,7 @@ describe('Landing Page:', () => {
 
     it('should have the correct title', () => {
       page.getTitle().then(title => {
-        expect(title).toEqual('MM Interface');
+        expect(title).toEqual('The OpenWell');
       });
     });
   })
