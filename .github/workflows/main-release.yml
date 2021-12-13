@@ -7,17 +7,13 @@ jobs:
   build:
     name: Build Application
     runs-on: ubuntu-latest
-    strategy:
-          matrix:
-            node-version: [12.x]
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@main
       - name: Set Up Node
         uses: actions/setup-node@v2
         with:
-          # The Node.js version to configure
-          node-version: ${{ matrix.node }}
-      - name: Checkout Repo
-        uses: actions/checkout@main
+          node-version: 12.x
       - name: Check Version
         run: node --version
       - name: Install Dependencies
