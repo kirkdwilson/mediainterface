@@ -11,22 +11,21 @@ jobs:
           matrix:
             node-version: [12.x]
     steps:
+      - name: Set Up Node
+      - uses: actions/setup-node@v2
+        with:
+          # The Node.js version to configure
+          node-version: ${{ matrix.node }}
       - name: Checkout Repo
         uses: actions/checkout@main
       - name: Check Version
         run: node --version
-        with:
-          node-version: 12.x
       - name: Install Dependencies
         run: npm install
-        with:
-          node-version: 12.x
       - name: Create Environment File
         run: cp src/environments/environment.example.ts src/environments/environment.ts
       - name: Build
         run: npm run build
-        with:
-          node-version: 12.x
       - name: Package Release
         run: zip -r latest.zip www
       - name: Complete Release
