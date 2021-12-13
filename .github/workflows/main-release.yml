@@ -12,7 +12,7 @@ jobs:
             node-version: [12.x]
     steps:
       - name: Set Up Node
-      - uses: actions/setup-node@v2
+        uses: actions/setup-node@v2
         with:
           # The Node.js version to configure
           node-version: ${{ matrix.node }}
