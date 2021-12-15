@@ -20,7 +20,7 @@
         <div class="feature-photo">
           <a (click)="goToDetails(resource)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
         </div>
-        <ion-card-header><a (click)="goToDetails(resource)">{{ resource.title }}</a></ion-card-header>
+        <ion-card-header><a (click)="goToDetails(resource.slug,resource.webPath)">{{ resource.title }}</a></ion-card-header>
         <ion-card-content>
           <p class="media-type" text-capitalize>
             <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
