@@ -91,7 +91,7 @@ export class HomePage {
    */
   goToDetails(resource: Media) {
     if (resource.mediaType === 'HTML') {
-      this.navController.navigateForward(resource.webPath);
+      this.navController.push(resource.webPath);
     }
     else {
       this.navController.push('media-details', { slug: resource.slug });
