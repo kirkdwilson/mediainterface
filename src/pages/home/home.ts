@@ -89,15 +89,15 @@ export class HomePage {
    * @param  resource -- the object of metadata
    * @return      void
    */
-  goToDetails(slug: string, webPath: string) {
-console.log(slug,webPath);
-    if (webPath) {
+  goToDetails(resource: Media) {
+console.log(resource);
+    if (resource.mediaType === 'HTML') {
 console.log('HTML');
-      this.navController.push(webPath);
+      this.navController.push(resource.webPath);
     }
     else {
 console.log('slug');
-      this.navController.push('media-details', { slug: slug });
+      this.navController.push('media-details', { slug: resource.slug });
     }
   }
 
