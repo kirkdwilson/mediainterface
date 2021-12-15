@@ -90,10 +90,13 @@ export class HomePage {
    * @return      void
    */
   goToDetails(resource: Media) {
+console.log(resource);
     if (resource.mediaType === 'HTML') {
+console.log('HTML');
       this.navController.push(resource.webPath);
     }
     else {
+console.log('slug');
       this.navController.push('media-details', { slug: resource.slug });
     }
   }
