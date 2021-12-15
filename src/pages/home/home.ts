@@ -91,7 +91,7 @@ export class HomePage {
    */
   goToDetails(resource: Media) {
 console.log(resource);
-    if (resource.mediaType === 'HTML') {
+    if (resource.webPath) {
 console.log('HTML');
       this.navController.push(resource.webPath);
     }
