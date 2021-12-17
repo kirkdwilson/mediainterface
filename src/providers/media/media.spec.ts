@@ -42,6 +42,16 @@ describe('MediaProvider', () => {
               image: 'ice-cream.jpg',
               mediaType: 'video',
               tags: ['desserts', 'sweets'],
+            },
+            {
+              categories: ['Specials'],
+              slug: 'web-site-example',
+              title: 'Ice Cream Web Site',
+              desc: 'Everything Your Could Know',
+              webPath: '/somepath/index.html',
+              image: 'chocolate.jpg',
+              mediaType: 'HTML',
+              tags: ['desserts', 'sweets']
             }
           ]
         };

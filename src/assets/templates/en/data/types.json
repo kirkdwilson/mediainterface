@@ -1,4 +1,5 @@
 {
+  ".html": {"image":"document.png","mediaType":"HTML","category":"WWW"},
   ".pdf": {"image":"document.png","mediaType":"PDF","category":"Documents"},
   ".epub": {"image":"document.png","mediaType":"epub","category":"Documents"},
   ".txt": {"image":"document.png","mediaType":"document","category":"Documents"},
@@ -10,6 +11,8 @@
   ".exe": {"image":"files.png","mediaType":"application","category":"Apps"},
   ".jar": {"image":"files.png","mediaType":"application","category":"Apps"},
   ".gzip": {"image":"files.png","mediaType":"application","category":"Apps"},
+  ".zip": {"image":"files.png","mediaType":"application","category":"Apps"},
+  ".tar": {"image":"files.png","mediaType":"application","category":"Apps"},
   ".paf": {"image":"files.png","mediaType":"application","category":"Apps"},
   ".sis": {"image":"files.png","mediaType":"application","category":"Apps"},
   ".sisx": {"image":"files.png","mediaType":"application","category":"Apps"},

@@ -51,6 +51,14 @@ describe('MediaDetailProvider', () => {
               image: 'vanilla.jpg',
               mediaType: 'video',
               order: 3
+            },
+            {
+              title: 'Ice Cream Web Site',
+              desc: 'Everything Your Could Know',
+              webPath: '/somepath/index.html',
+              image: 'chocolate.jpg',
+              mediaType: 'HTML',
+              order: 4
             }
           ]
         };

@@ -35,6 +35,7 @@ export class Media {
     public slug: string,
     public title: string,
     public fileName = '',
+    public webPath = '',
     public language = 'en',
     public mimeType = '',
     public recommended = false,
