@@ -1,6 +1,6 @@
 {
-  ".html": {"image":"document.png","mediaType":"HTML","category":"WWW"},
-  ".pdf": {"image":"document.png","mediaType":"PDF","category":"Documents"},
+  ".html": {"image":"document.png","mediaType":"html","category":"WWW"},
+  ".pdf": {"image":"document.png","mediaType":"pdf","category":"Documents"},
   ".epub": {"image":"document.png","mediaType":"epub","category":"Documents"},
   ".txt": {"image":"document.png","mediaType":"document","category":"Documents"},
   ".doc": {"image":"document.png","mediaType":"document","category":"Documents"},
