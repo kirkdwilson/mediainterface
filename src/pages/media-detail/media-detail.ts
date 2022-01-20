@@ -114,6 +114,29 @@ export class MediaDetailPage {
   }
 
   /**
+   * Has a player?
+   *
+   * @param  mediaType The type of media
+   * @return           yes|no
+   */
+  hasPlayer(mediaType: string): boolean {
+    return (['pdf', 'epub', 'video', 'audio'].indexOf(mediaType) !== -1);
+  }
+
+
+  /**
+   * Get the play icon based on the media type
+   * @param  mediaType The type of media
+   * @return           The icon name
+   */
+  playIcon(mediaType: string): string {
+    if (this.isBook(mediaType)) {
+        return 'book';
+    }
+    return 'play';
+  }
+
+  /**
    * Play the provided episode
    *
    * @param  episode The episode to play

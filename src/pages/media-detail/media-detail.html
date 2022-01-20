@@ -43,8 +43,8 @@
           <button ion-button clear icon-only (click)="downloadFile(media?.filePath, media?.fileName)">
             <ion-icon name="download" color="primary"></ion-icon>
           </button>
-          <button ion-button clear icon-only (click)="playMedia()">
-            <ion-icon [name]="isBook(media?.mediaType) ? 'book' : 'play'" color="primary"></ion-icon>
+          <button ion-button clear icon-only (click)="playMedia()" [hidden]="!hasPlayer(media?.mediaType)">
+            <ion-icon [name]="playIcon(media?.mediaType)" color="primary"></ion-icon>
           </button>
         </ion-buttons>
       </div>
@@ -70,8 +70,8 @@
                   <button ion-button clear icon-only (click)="downloadFile(episode.filePath, episode.fileName)">
                     <ion-icon name="download" color="primary"></ion-icon>
                   </button>
-                  <button ion-button clear icon-only (click)="playEpisode(episode)">
-                    <ion-icon [name]="isBook(media?.mediaType) ? 'book' : 'play'" color="primary"></ion-icon>
+                  <button ion-button clear icon-only (click)="playEpisode(episode)" [hidden]="!hasPlayer(media?.mediaType)">
+                    <ion-icon [name]="playIcon(media?.mediaType)" color="primary"></ion-icon>
                   </button>
                 </ion-buttons>
               </ion-col>
