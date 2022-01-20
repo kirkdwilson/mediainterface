@@ -9,6 +9,7 @@
     "AUDIO": "Audio",
     "DOCUMENT": "Document",
     "EPUB": "EPUB",
+    "HTML": "Web Document",
     "PDF": "PDF",
     "VIDEO": "Video"
   },

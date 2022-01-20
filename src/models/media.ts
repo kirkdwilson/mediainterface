@@ -68,7 +68,8 @@ export class Media {
     if (this.fileName === '') {
       return '';
     }
-    return `${environment.assetPath.replace('{LANG}', this.language)}media/${this.fileName}`;
+    const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
+    return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${this.fileName}`;
   }
 
   /**
