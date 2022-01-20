@@ -58,7 +58,7 @@ describe('MediaProvider', () => {
 
         mediaProvider.all().pipe(take(1)).subscribe((data: Array<Media>) => {
           expect(data).not.toBeNull();
-          expect(data.length).toEqual(2);
+          expect(data.length).toEqual(3);
           const slugs = data.map((media) => media.slug);
           const glenn = data.find((media) => media.slug === 'glenn-ivy');
           const cream = data.find((media) => media.slug === 'ice-cream-special');
