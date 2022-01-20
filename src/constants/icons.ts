@@ -6,5 +6,6 @@ export const MEDIA_TYPE_ICONS = {
   audio: 'microphone',
   document: 'document',
   epub: 'document',
+  html: 'globe',
   video: 'film',
 };

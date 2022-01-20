@@ -57,7 +57,7 @@ describe('MediaDetailProvider', () => {
               desc: 'Everything Your Could Know',
               webPath: '/somepath/index.html',
               image: 'chocolate.jpg',
-              mediaType: 'HTML',
+              mediaType: 'html',
               order: 4
             }
           ]
@@ -70,9 +70,9 @@ describe('MediaDetailProvider', () => {
           expect(media.image).toEqual('ice-cream.jpg');
           expect(media.categories).toEqual([new Category('Freedom'), new Category('Originals')]);
           expect(media.tags).toEqual(['ice cream', 'episodic']);
-          expect(media.episodes.length).toEqual(3);
+          expect(media.episodes.length).toEqual(4);
           const titles = media.episodes.map((ep) => ep.title);
-          expect(titles).toEqual(['Sweet Cream', 'Velvet Chocolate', 'Vivacious Vanilla']);
+          expect(titles).toEqual(['Sweet Cream', 'Velvet Chocolate', 'Vivacious Vanilla', 'Ice Cream Web Site']);
           const sweet = media.episodes.find((ep) => ep.title === 'Sweet Cream');
           expect(sweet.desc).toEqual('The sweetest dessert!');
           expect(sweet.fileName).toEqual('sweet-cream.mp4');

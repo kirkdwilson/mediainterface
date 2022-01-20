@@ -93,6 +93,7 @@ export class MediaDetailPage {
    * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
    */
   downloadFile(fileToDownload: string, fileName: string) {
+    console.log(fileToDownload);
     this.downloadFileProvider.download(fileToDownload).pipe(take(1)).subscribe((blob: any) => {
       const url = window.URL.createObjectURL(blob);
       const link = this.downloadLink.nativeElement;
@@ -111,6 +112,36 @@ export class MediaDetailPage {
    */
   isBook(mediaType: string): boolean {
     return (['pdf', 'epub'].indexOf(mediaType) !== -1);
+  }
+
+  /**
+   * Has a player?
+   *
+   * @param  mediaType The type of media
+   * @return           yes|no
+   */
+  hasPlayer(mediaType: string, isEpisode: boolean = false): boolean {
+    if (isEpisode) {
+      return (['pdf', 'epub', 'video', 'audio'].indexOf(mediaType) !== -1);
+    } else {
+      return (['pdf', 'epub', 'video', 'audio', 'html'].indexOf(mediaType) !== -1);
+    }
+  }
+
+
+  /**
+   * Get the play icon based on the media type
+   * @param  mediaType The type of media
+   * @return           The icon name
+   */
+  playIcon(mediaType: string): string {
+    if (this.isBook(mediaType)) {
+      return 'book';
+    }
+    if (mediaType === 'html') {
+      return 'exit';
+    }
+    return 'play';
   }
 
   /**
@@ -175,6 +206,8 @@ export class MediaDetailPage {
         url: this.media.filePath,
       };
       this.navController.push('epub-viewer', { item: item, slug: this.slug });
+    } else if (this.media.mediaType === 'html') {
+      window.open(`/assets/content/${this.currentLanguage.twoLetterCode}/html/${this.media.slug}/`);
     }
   }
 
@@ -200,6 +233,7 @@ export class MediaDetailPage {
     if ((this.currentLanguage) && (language.text === this.currentLanguage.text)) {
       return;
     }
+    this.currentLanguage = language;
     this.mediaDetailProvider.setLanguage(language.twoLetterCode);
     this.mediaDetailProvider.get(this.slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
   }

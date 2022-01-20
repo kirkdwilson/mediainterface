@@ -11,9 +11,10 @@ describe('Media', () => {
         [new Category('Originals'), new Category('Special')],
         'A new original series',
         'special-episode.jpg',
-        'video',
+        'VIDEO',
         'original-series',
         'Original Series',
+        '',
         '',
         'zh',
         '',
@@ -22,6 +23,8 @@ describe('Media', () => {
       );
       expect(media.imagePath).toContain('/zh/');
       expect(media.imagePath).toContain('special-episode.jpg');
+      // It should lowercase it.
+      expect(media.mediaType).toContain('video');
     });
 
   });
@@ -37,6 +40,7 @@ describe('Media', () => {
         'really-free',
         'Really Free',
         'really-free.mp4',
+        '',
         'ch',
         'video/mp4',
         false,
@@ -54,6 +58,7 @@ describe('Media', () => {
         'video',
         'the-best',
         'The Best',
+        '',
         '',
         'ch',
         '',
