@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams, Platform, PopoverController, ViewController } from 'ionic-angular';
-import { Book, Rendition } from 'epubjs';
+import { Book } from 'epubjs';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { EpubViewerItem } from './epub-viewer-item.interface';

@@ -6,7 +6,6 @@ import { take } from 'rxjs/operators/take';
 import { LanguageProvider } from '@providers/language/language';
 import { MediaProvider } from '@providers/media/media';
 import { GroupedMedia } from '@providers/media/grouped-media.interface';
-import { Category } from '@models/category';
 import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
