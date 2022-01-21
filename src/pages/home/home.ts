@@ -89,15 +89,7 @@ export class HomePage {
    * @return      void
    */
   goToDetails(resource: Media) {
-console.log(resource);
-    if (resource.webPath) {
-console.log('HTML');
-      this.navController.push(resource.webPath);
-    }
-    else {
-console.log('slug');
-      this.navController.push('media-details', { slug: resource.slug });
-    }
+    this.navController.push('media-details', { slug: resource.slug });
   }
 
   /**

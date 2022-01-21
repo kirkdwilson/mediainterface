@@ -1,5 +1,5 @@
 {
-  ".html": {"image":"document.png","mediaType":"html","category":"WWW"},
+  ".html": {"image":"document.png","mediaType":"html","category":"WWW","mimeType":"application/zip"},
   ".pdf": {"image":"document.png","mediaType":"pdf","category":"Documents"},
   ".epub": {"image":"document.png","mediaType":"epub","category":"Documents"},
   ".txt": {"image":"document.png","mediaType":"document","category":"Documents"},
