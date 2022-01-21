@@ -1,7 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { of } from 'rxjs/observable/of';
 import { take } from 'rxjs/operators/take';
+import { switchMap } from 'rxjs/operators/switchMap';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
+import { FileUtilityProvider } from '@providers/file-utility/file-utility';
 import { LanguageProvider } from '@providers/language/language';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
@@ -32,6 +35,13 @@ export class MediaDetailPage {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   /**
+   * Can the user download the media file?  Specifically for HTML archives,
+   * we need to verify it is on the device.  All other media should be there,
+   * or play will also fail.
+   */
+  canDownloadMedia = true;
+
+  /**
    * The current media
    */
   media: Media = null;
@@ -53,6 +63,7 @@ export class MediaDetailPage {
 
   constructor(
     private downloadFileProvider: DownloadFileProvider,
+    private fileUtilityProvider: FileUtilityProvider,
     private languageProvider: LanguageProvider,
     private mediaDetailProvider: MediaDetailProvider,
     private navController: NavController,
@@ -93,7 +104,6 @@ export class MediaDetailPage {
    * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
    */
   downloadFile(fileToDownload: string, fileName: string) {
-    console.log(fileToDownload);
     this.downloadFileProvider.download(fileToDownload).pipe(take(1)).subscribe((blob: any) => {
       const url = window.URL.createObjectURL(blob);
       const link = this.downloadLink.nativeElement;
@@ -235,7 +245,17 @@ export class MediaDetailPage {
     }
     this.currentLanguage = language;
     this.mediaDetailProvider.setLanguage(language.twoLetterCode);
-    this.mediaDetailProvider.get(this.slug).pipe(take(1)).subscribe((media: Media) => this.media = media);
+    this.mediaDetailProvider
+      .get(this.slug)
+      .pipe(switchMap((media: Media)  =>  {
+        this.media = media;
+        if (media.mediaType === 'html') {
+          return this.fileUtilityProvider.exists(media.filePath);
+        }
+        return of(true);
+      }))
+      .pipe(take(1))
+      .subscribe((exists: boolean) => this.canDownloadMedia = exists);
   }
 
 }
