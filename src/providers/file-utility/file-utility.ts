@@ -6,13 +6,19 @@ import { of } from 'rxjs/observable/of';
 import { map } from 'rxjs/operators/map';
 
 /**
- * A provider for setting and tracking available languages
+ * A provider for doing various file utilities
  */
 @Injectable()
 export class FileUtilityProvider {
 
   constructor(private http: HttpClient) {}
 
+  /**
+   * Check if a file exists.
+   *
+   * @param  filePath The path to check
+   * @return          yes|no
+   */
   exists(filePath: string): Observable<boolean> {
     return this.http.get(
       filePath,
