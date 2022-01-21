@@ -70,7 +70,8 @@ export class Media {
       return '';
     }
     const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
-    return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${this.fileName}`;
+    const file = (['html'].indexOf(this.mediaType) !== -1) ? `${this.slug}.zip` : this.fileName;
+    return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${file}`;
   }
 
   /**
