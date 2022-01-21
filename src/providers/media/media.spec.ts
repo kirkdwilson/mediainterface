@@ -48,7 +48,6 @@ describe('MediaProvider', () => {
               slug: 'web-site-example',
               title: 'Ice Cream Web Site',
               desc: 'Everything Your Could Know',
-              webPath: '/somepath/index.html',
               image: 'chocolate.jpg',
               mediaType: 'HTML',
               tags: ['desserts', 'sweets']
