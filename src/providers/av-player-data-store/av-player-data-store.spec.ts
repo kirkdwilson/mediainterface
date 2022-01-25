@@ -6,7 +6,7 @@ import { zip } from 'rxjs/observable/zip';
 import { StorageMock } from '@mocks/ionic/storage';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { AvPlayerDataStoreProvider } from './av-player-data-store';
-import { AvPlayerItem } from './av-player-item.interface';
+import { AvPlayerItem } from '@interfaces/av-player-item.interface';
 
 describe('AvPlayerDataStoreProvider', () => {
   let app: AppTestingModule;

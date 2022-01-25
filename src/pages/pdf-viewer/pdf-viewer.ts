@@ -3,9 +3,9 @@ import { Content, IonicPage, NavController, NavParams, ViewController } from 'io
 import * as PDFJS from 'pdfjs-dist/webpack.js';
 import { PDFPageProxy, PDFPageViewport, PDFRenderTask } from 'pdfjs-dist';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
-import { BaseViewerPageInterface } from '@pages/base-viewer/base-viewer.interface';
-import { PagePosition } from './page-position.interface';
-import { PageState } from './page-state.interface';
+import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
+import { PagePosition } from '@interfaces/page-position.interface';
+import { PageState } from '@interfaces/page-state.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
 

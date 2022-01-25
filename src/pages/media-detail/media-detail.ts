@@ -10,7 +10,7 @@ import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
 import { Language } from '@models/language';
 import { Media } from '@models/media';
-import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
+import { AvPlayerItem } from '@interfaces/av-player-item.interface';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
 

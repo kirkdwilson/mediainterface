@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams, Platform, PopoverController, ViewController } from 'ionic-angular';
 import { Book } from 'epubjs';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
-import { BaseViewerPageInterface } from '@pages/base-viewer/base-viewer.interface';
+import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
-import { TocItem } from '@components/toc-popover/toc-item.interface';
+import { TocItem } from '@interfaces/toc-item.interface';
 import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
 
 /**
