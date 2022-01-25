@@ -28,6 +28,9 @@
       "@helpers/*":[
         "helpers/*"
       ],
+      "@interfaces/*":[
+        "interfaces/*"
+      ],
       "@mocks/*": [
         "mocks/*"
       ],
