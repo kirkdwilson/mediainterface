@@ -7,5 +7,6 @@ export const MEDIA_TYPE_ICONS = {
   document: 'document',
   epub: 'document',
   html: 'globe',
+  text: 'document',
   video: 'film',
 };
