@@ -13,7 +13,6 @@ import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
-import { PdfViewerItem } from '@pages/pdf-viewer/pdf-viewer-item.interface';
 
 /**
  * The detail page for a specific piece of media.
@@ -177,11 +176,7 @@ export class MediaDetailPage {
       });
       this.navController.push('av-player', { items: items, slug: this.slug });
     } else if (current.mediaType === 'pdf') {
-      const item: PdfViewerItem = {
-        title: current.title,
-        url: current.filePath,
-      };
-      this.navController.push('pdf-viewer', { item: item, slug: this.slug });
+      viewer = 'pdf-viewer';
     } else if (current.mediaType === 'epub') {
       viewer = 'epub-viewer';
     } else if (current.mediaType === 'text') {
@@ -214,14 +209,10 @@ export class MediaDetailPage {
         type: this.media.mediaType,
       };
       this.navController.push('av-player', { items: [item], slug: this.slug });
-    } else if (this.media.mediaType === 'pdf') {
-      const item: PdfViewerItem = {
-        title: this.media.title,
-        url: this.media.filePath,
-      };
-      this.navController.push('pdf-viewer', { item: item, slug: this.slug });
-    }else if (this.media.mediaType === 'html') {
+    } else if (this.media.mediaType === 'html') {
       window.open(`/assets/content/${this.currentLanguage.twoLetterCode}/html/${this.media.slug}/`);
+    } else if (this.media.mediaType === 'pdf') {
+      viewer = 'pdf-viewer';
     } else if (this.media.mediaType === 'epub') {
       viewer = 'epub-viewer';
     } else if (this.media.mediaType === 'text') {

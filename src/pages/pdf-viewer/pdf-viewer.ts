@@ -1,9 +1,9 @@
 import { Component, ElementRef, NgZone, TemplateRef, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { Content, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
-import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
-import { PdfViewerItem } from './pdf-viewer-item.interface';
 import { PDFPageProxy, PDFPageViewport, PDFRenderTask } from 'pdfjs-dist';
+import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
+import { BaseViewerPageInterface } from '@pages/base-viewer/base-viewer.interface';
 import { PagePosition } from './page-position.interface';
 import { PageState } from './page-state.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
@@ -21,7 +21,7 @@ import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav
   selector: 'page-pdf-viewer',
   templateUrl: 'pdf-viewer.html',
 })
-export class PdfViewerPage {
+export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInterface {
 
   /**
    * The canvas size
@@ -59,11 +59,6 @@ export class PdfViewerPage {
   @ViewChild(Content) content: Content;
 
   /**
-   * A reference to the download link
-   */
-  @ViewChild('downloadLink') downloadLinkRef: ElementRef;
-
-  /**
    * The template for each page of the PDF
    */
   @ViewChild('pageCanvasTemplate') pageCanvasTemplate: TemplateRef<any>;
@@ -77,11 +72,6 @@ export class PdfViewerPage {
    * The viewer
    */
   @ViewChild('viewer') viewerRef: ElementRef;
-
-  /**
-   * The PDF item
-   */
-  item: PdfViewerItem = null;
 
   /**
    * The slug for the previous page
@@ -108,19 +98,22 @@ export class PdfViewerPage {
    */
   private scrollStream$: any = null;
 
-  /**
-   * Our storage key
-   */
-  private storageKey = 'pdf-viewer';
-
   constructor(
-    private dataStore: NavParamsDataStoreProvider,
-    private downloadFileProvider: DownloadFileProvider,
-    private navController: NavController,
-    private navParams: NavParams,
-    private zone: NgZone,
-    private viewController: ViewController,
-  ) {}
+    protected dataStore: NavParamsDataStoreProvider,
+    protected downloadFileProvider: DownloadFileProvider,
+    protected navController: NavController,
+    protected navParams: NavParams,
+    protected zone: NgZone,
+    protected viewController: ViewController,
+  ) {
+    super(
+      dataStore,
+      downloadFileProvider,
+      navController,
+      navParams,
+      viewController
+    );
+  }
 
   /**
    * Ionic view lifecycle
@@ -128,12 +121,19 @@ export class PdfViewerPage {
    * @return void
    */
   ionViewDidLoad() {
-    this.item = this.navParams.get('item');
-    this.slug = this.navParams.get('slug');
+    super.ionViewDidLoad();
+  }
+
+  /**
+   * Load the requested file
+   *
+   * @return void
+   */
+  loadFile() {
     /**
      * Check if the view is larger than the new PDF page.  If so, load additional pages
      */
-    let callback: Function = () => {
+    this.loadPdf().then(() => {
       const first = this.pagePositions[0];
       const promises = [];
       let height = first.height;
@@ -144,19 +144,7 @@ export class PdfViewerPage {
         // Every page should be same height
         height += first.height;
       }
-    };
-
-    if (typeof this.item === 'undefined') {
-      this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
-        if (data === '') {
-          this.goBack();
-        }
-        this.item = JSON.parse(data);
-        this.loadPdf().then(() => callback());
-      });
-    } else {
-      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadPdf().then(() => callback()));
-    }
+    });
   }
 
   /**
@@ -228,53 +216,6 @@ export class PdfViewerPage {
     }
     const next = this.pageState.lastLoaded + 1;
     this.loadPage(next).then(() => infiniteScroll.complete());
-  }
-
-  /**
-   * Download the file.
-   *
-   * @return void
-   * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
-   */
-  downloadFile() {
-    const fileName = this.item.url.split('\\').pop().split('/').pop();
-    this.downloadFileProvider.download(this.item.url).pipe(take(1)).subscribe((blob: any) => {
-      const url = window.URL.createObjectURL(blob);
-      const link = this.downloadLinkRef.nativeElement;
-      link.href = url;
-      link.download = fileName;
-      link.click();
-      window.URL.revokeObjectURL(url);
-    });
-  }
-
-  /**
-   * Go back to the previous page
-   *
-   * @return void
-   */
-  goBack() {
-    this.dataStore.remove(this.storageKey);
-    if (this.navController.canGoBack()) {
-      this.navController.pop();
-    } else if (this.slug !== '') {
-      this.navController.push(
-        'media-details',
-        { slug: this.slug },
-        {
-          animate: true,
-          direction: 'back',
-        },
-      ).then(() => {
-        // Remove us from backstack
-        this.navController.remove(this.viewController.index);
-        this.navController.insert(0, 'HomePage');
-      });
-    } else {
-      this.navController.goToRoot({
-        animate: true,
-      });
-    }
   }
 
   /**
@@ -363,7 +304,7 @@ export class PdfViewerPage {
    * @return The promise and whethe it loaded
    */
   loadPdf(): Promise<boolean> {
-    return this.PDFJSViewer.getDocument(this.item.url)
+    return this.PDFJSViewer.getDocument(this.item.path)
       .promise.then(pdf => {
         this.pdfDocument = pdf;
         this.zone.run(() => this.pageState.total = pdf.numPages);
