@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { BaseViewerPageModule } from '@pages/base-viewer/base-viewer.module';
+import { FileUtilityProvider } from '@providers/file-utility/file-utility';
 import { TextViewerPage } from './text-viewer';
 
 @NgModule({
@@ -12,6 +13,8 @@ import { TextViewerPage } from './text-viewer';
     BaseViewerPageModule,
     IonicPageModule.forChild(TextViewerPage),
   ],
-  providers: [],
+  providers: [
+    FileUtilityProvider,
+  ],
 })
 export class TextViewerPageModule {}
