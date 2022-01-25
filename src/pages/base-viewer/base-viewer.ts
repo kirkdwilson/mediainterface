@@ -7,6 +7,7 @@ import { ViewerItem } from '@interfaces/viewer-item.interface';
 
 /**
  * A base viewer for the viewers to inherit from.  Stores common code.
+ * Children of this class MUST implement BaseViewerPageInterface.
  */
 @Component({
   template: ''
@@ -28,6 +29,11 @@ export class BaseViewerPage {
    */
   protected slug = '';
 
+  /**
+   * The key to use for our storage
+   */
+  protected storageKey = 'viewer-item';
+
   constructor(
     protected dataStore: NavParamsDataStoreProvider,
     protected downloadFileProvider: DownloadFileProvider,
@@ -47,7 +53,6 @@ export class BaseViewerPage {
     this.item = this.navParams.get('item');
     if (typeof this.item === 'undefined') {
         // They refreshed the page. Get the data from the store.
-        // @ts-ignore It needs to be implemented by child class
         this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
           if (data === '') {
             this.goBack();
@@ -57,7 +62,6 @@ export class BaseViewerPage {
           this.loadFile();
         });
     } else {
-      // @ts-ignore It needs to be implemented by child class
       this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => {
         // @ts-ignore It needs to be implemented by child class
         this.loadFile();
@@ -93,6 +97,7 @@ export class BaseViewerPage {
    * @return void
    */
   goBack() {
+    this.dataStore.remove(this.storageKey);
     if (this.navController.canGoBack()) {
       this.navController.pop();
     } else if (this.slug !== '') {

@@ -12,8 +12,8 @@ import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
+import { ViewerItem } from '@interfaces/viewer-item.interface';
 import { PdfViewerItem } from '@pages/pdf-viewer/pdf-viewer-item.interface';
-import { EpubViewerItem } from '@pages/epub-viewer/epub-viewer-item.interface';
 
 /**
  * The detail page for a specific piece of media.
@@ -132,9 +132,9 @@ export class MediaDetailPage {
    */
   hasPlayer(mediaType: string, isEpisode: boolean = false): boolean {
     if (isEpisode) {
-      return (['pdf', 'epub', 'video', 'audio'].indexOf(mediaType) !== -1);
+      return (['pdf', 'epub', 'video', 'audio', 'text'].indexOf(mediaType) !== -1);
     } else {
-      return (['pdf', 'epub', 'video', 'audio', 'html'].indexOf(mediaType) !== -1);
+      return (['pdf', 'epub', 'video', 'audio', 'html', 'text'].indexOf(mediaType) !== -1);
     }
   }
 
@@ -151,6 +151,9 @@ export class MediaDetailPage {
     if (mediaType === 'html') {
       return 'exit';
     }
+    if (mediaType === 'text') {
+      return 'document';
+    }
     return 'play';
   }
 
@@ -161,6 +164,7 @@ export class MediaDetailPage {
    * @return         void
    */
   playEpisode(current: Episode) {
+    let viewer = '';
     if ((current.mediaType === 'video') || (current.mediaType === 'audio')) {
       const items = this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
@@ -179,11 +183,16 @@ export class MediaDetailPage {
       };
       this.navController.push('pdf-viewer', { item: item, slug: this.slug });
     } else if (current.mediaType === 'epub') {
-      const item: EpubViewerItem = {
+      viewer = 'epub-viewer';
+    } else if (current.mediaType === 'text') {
+      viewer = 'text-viewer';
+    }
+    if (viewer !== '') {
+      const item: ViewerItem = {
         title: current.title,
-        url: current.filePath,
+        path: current.filePath,
       };
-      this.navController.push('epub-viewer', { item: item, slug: this.slug });
+      this.navController.push(viewer, { item: item, slug: this.slug });
     }
   }
 
@@ -196,6 +205,7 @@ export class MediaDetailPage {
     if (!this.media) {
       return;
     }
+    let viewer = '';
     if ((this.media.mediaType === 'video') || (this.media.mediaType === 'audio')) {
       const item: AvPlayerItem = {
         url: this.media.filePath,
@@ -210,14 +220,19 @@ export class MediaDetailPage {
         url: this.media.filePath,
       };
       this.navController.push('pdf-viewer', { item: item, slug: this.slug });
-    } else if (this.media.mediaType === 'epub') {
-      const item: EpubViewerItem = {
-        title: this.media.title,
-        url: this.media.filePath,
-      };
-      this.navController.push('epub-viewer', { item: item, slug: this.slug });
-    } else if (this.media.mediaType === 'html') {
+    }else if (this.media.mediaType === 'html') {
       window.open(`/assets/content/${this.currentLanguage.twoLetterCode}/html/${this.media.slug}/`);
+    } else if (this.media.mediaType === 'epub') {
+      viewer = 'epub-viewer';
+    } else if (this.media.mediaType === 'text') {
+      viewer = 'text-viewer';
+    }
+    if (viewer !== '') {
+      const item: ViewerItem = {
+        title: this.media.title,
+        path: this.media.filePath,
+      };
+      this.navController.push(viewer, { item: item, slug: this.slug });
     }
   }
 

@@ -1,9 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams, Platform, PopoverController, ViewController } from 'ionic-angular';
 import { Book } from 'epubjs';
-import { take } from 'rxjs/operators/take';
+import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
+import { BaseViewerPageInterface } from '@pages/base-viewer/base-viewer.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
-import { EpubViewerItem } from './epub-viewer-item.interface';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
 import { TocItem } from '@components/toc-popover/toc-item.interface';
 import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
@@ -24,7 +24,7 @@ import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
   selector: 'page-epub-viewer',
   templateUrl: 'epub-viewer.html',
 })
-export class EpubViewerPage {
+export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInterface {
 
   /**
    * The book we are viewing
@@ -47,19 +47,9 @@ export class EpubViewerPage {
   currentPage: number = 1;
 
   /**
-   * A reference to the download link
-   */
-  @ViewChild('downloadLink') downloadLinkRef: ElementRef;
-
-  /**
    * Do we want to show the toolbars?
    */
   showToolbars: boolean = true;
-
-  /**
-   * The item to view
-   */
-  private item: EpubViewerItem = null;
 
   /**
    * The title for the current section
@@ -72,11 +62,6 @@ export class EpubViewerPage {
   slug = '';
 
   /**
-   * Our storage key
-   */
-  private storageKey = 'epub-viewer';
-
-  /**
    * The table of contents
    */
   private toc: Array<TocItem> = [];
@@ -87,15 +72,22 @@ export class EpubViewerPage {
   private tocStream$: any = null;
 
   constructor(
-    private dataStore: NavParamsDataStoreProvider,
-    private downloadFileProvider: DownloadFileProvider,
-    private events: Events,
-    private navController: NavController,
-    private navParams: NavParams,
-    private platform: Platform,
-    private popoverController: PopoverController,
-    private viewController: ViewController,
+    protected dataStore: NavParamsDataStoreProvider,
+    protected downloadFileProvider: DownloadFileProvider,
+    protected events: Events,
+    protected navController: NavController,
+    protected navParams: NavParams,
+    protected platform: Platform,
+    protected popoverController: PopoverController,
+    protected viewController: ViewController,
   ) {
+    super(
+      dataStore,
+      downloadFileProvider,
+      navController,
+      navParams,
+      viewController
+    );
   }
 
   /**
@@ -104,20 +96,7 @@ export class EpubViewerPage {
    * @return void
    */
   ionViewDidLoad() {
-    this.item = this.navParams.get('item');
-    this.slug = this.navParams.get('slug');
-    if (typeof this.item === 'undefined') {
-        // They refreshed the page. Get the data from the store.
-        this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
-          if (data === '') {
-            this.goBack();
-          }
-          this.item = JSON.parse(data);
-          this.loadFile();
-        });
-    } else {
-      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => this.loadFile());
-    }
+    super.ionViewDidLoad();
     this.tocStream$ = this.events.subscribe('toc-popover:change-page', (selected: TocItem) => this.rendition.display(selected.ref));
   }
 
@@ -170,53 +149,6 @@ export class EpubViewerPage {
   }
 
   /**
-   * Download the file.
-   *
-   * @return void
-   * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
-   */
-  downloadFile() {
-    const fileName = this.item.url.split('\\').pop().split('/').pop();
-    this.downloadFileProvider.download(this.item.url).pipe(take(1)).subscribe((blob: any) => {
-      const url = window.URL.createObjectURL(blob);
-      const link = this.downloadLinkRef.nativeElement;
-      link.href = url;
-      link.download = fileName;
-      link.click();
-      window.URL.revokeObjectURL(url);
-    });
-  }
-
-  /**
-   * Go back to the previous page
-   *
-   * @return void
-   */
-  goBack() {
-    this.dataStore.remove(this.storageKey);
-    if (this.navController.canGoBack()) {
-      this.navController.pop();
-    } else if (this.slug !== '') {
-      this.navController.push(
-        'media-details',
-        { slug: this.slug },
-        {
-          animate: true,
-          direction: 'back',
-        },
-      ).then(() => {
-        // Remove us from backstack
-        this.navController.remove(this.viewController.index);
-        this.navController.insert(0, 'HomePage');
-      });
-    } else {
-      this.navController.goToRoot({
-        animate: true,
-      });
-    }
-  }
-
-  /**
    * Increase the font size
    *
    * @return void
@@ -241,7 +173,7 @@ export class EpubViewerPage {
    * @return void
    */
   loadFile() {
-    this.book = new Book(this.item.url);
+    this.book = new Book(this.item.path);
     this.rendition = this.book.renderTo('book', { width: '100%', height: '100%' });
     this.rendition.themes.fontSize(`${this.fontSize}%`);
     this.rendition.display();
