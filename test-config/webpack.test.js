@@ -21,6 +21,7 @@ module.exports = {
       "@components": path.resolve('./src/components/'),
       "@env": path.resolve('./src/environments/environment.ts'),
       "@helpers": path.resolve('./src/helpers/'),
+      "@interfaces": path.resolve('./src/interfaces/'),
       "@mocks": path.resolve('./src/mocks/'),
       "@models": path.resolve('./src/models/'),
       "@pages": path.resolve('./src/pages/'),

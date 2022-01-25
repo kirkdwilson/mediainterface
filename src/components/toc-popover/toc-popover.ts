@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Events, NavParams, ViewController } from 'ionic-angular';
-import { TocItem } from './toc-item.interface';
+import { TocItem } from '@interfaces/toc-item.interface';
 
 /**
  * Displays the table of contents for an ebook.
