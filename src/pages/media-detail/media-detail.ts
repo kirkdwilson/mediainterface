@@ -185,7 +185,7 @@ export class MediaDetailPage {
         title: current.title,
         path: current.filePath,
       };
-      this.navController.push(viewer, { item: item, slug: this.slug });
+      this.navController.push(viewer, { items: [item], slug: this.slug });
     }
   }
 
@@ -214,7 +214,7 @@ export class MediaDetailPage {
         title: this.media.title,
         path: this.media.filePath,
       };
-      this.navController.push(viewer, { item: item, slug: this.slug });
+      this.navController.push(viewer, { items: [item], slug: this.slug });
     }
   }
 

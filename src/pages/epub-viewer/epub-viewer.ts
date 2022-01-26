@@ -6,6 +6,7 @@ import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
 import { TocItem } from '@interfaces/toc-item.interface';
+import { ViewerItem } from '@interfaces/viewer-item.interface';
 import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
 
 /**
@@ -35,6 +36,11 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
    * The current font size in percentage
    */
   fontSize: number = 100;
+
+  /**
+   * The item we are viewing
+   */
+  item: ViewerItem = null;
 
   /**
    * The rendition of the book
@@ -173,6 +179,7 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
    * @return void
    */
   loadFile() {
+    this.item = this.items[0];
     this.book = new Book(this.item.path);
     this.rendition = this.book.renderTo('book', { width: '100%', height: '100%' });
     this.rendition.themes.fontSize(`${this.fontSize}%`);

@@ -8,6 +8,7 @@ import { PagePosition } from '@interfaces/page-position.interface';
 import { PageState } from '@interfaces/page-state.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
+import { ViewerItem } from '@interfaces/viewer-item.interface';
 
 /**
  * A PDF viewer
@@ -30,6 +31,11 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
     height: 0,
     width: 0,
   };
+
+  /**
+   * The item we are viewing
+   */
+  item: ViewerItem = null;
 
   /**
    * Keep track of the paging
@@ -130,6 +136,7 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
    * @return void
    */
   loadFile() {
+    this.item = this.items[0];
     /**
      * Check if the view is larger than the new PDF page.  If so, load additional pages
      */
