@@ -53,7 +53,7 @@ export class MediaDetailPage {
   /**
    * A list of available viewers. (av-player does not get added)
    */
-  private availableViewers = ['epub-viewer', 'pdf-viewer', 'text-viewer'];
+  private availableViewers = ['epub-viewer', 'image-viewer', 'pdf-viewer', 'text-viewer'];
 
   /**
    * The current language
@@ -136,9 +136,9 @@ export class MediaDetailPage {
    */
   hasPlayer(mediaType: string, isEpisode: boolean = false): boolean {
     if (isEpisode) {
-      return (['pdf', 'epub', 'video', 'audio', 'text'].indexOf(mediaType) !== -1);
+      return (['pdf', 'epub', 'video', 'audio', 'text', 'image'].indexOf(mediaType) !== -1);
     } else {
-      return (['pdf', 'epub', 'video', 'audio', 'html', 'text'].indexOf(mediaType) !== -1);
+      return (['pdf', 'epub', 'video', 'audio', 'html', 'text', 'image'].indexOf(mediaType) !== -1);
     }
   }
 
@@ -199,7 +199,6 @@ export class MediaDetailPage {
       return;
     }
     const viewer = this.getViewer(this.media.mediaType);
-    console.log(viewer);
     if ((this.media.mediaType === 'video') || (this.media.mediaType === 'audio')) {
       const item: AvPlayerItem = {
         url: this.media.filePath,
