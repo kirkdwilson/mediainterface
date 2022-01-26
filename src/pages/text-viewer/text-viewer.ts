@@ -54,7 +54,7 @@ export class TextViewerPage extends BaseViewerPage implements BaseViewerPageInte
    * @return void
    */
   loadFile() {
-    this.item = this.items[0];
+    this.item = this.firstItem;
     this.fileUtilityProvider.read(this.item.path).pipe(take(1)).subscribe((content: string) =>  this.content = content.replace(/(?:\r\n|\r|\n)/g, '<br>'));
   }
 

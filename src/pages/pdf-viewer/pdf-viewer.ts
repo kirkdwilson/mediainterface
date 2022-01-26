@@ -136,7 +136,7 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
    * @return void
    */
   loadFile() {
-    this.item = this.items[0];
+    this.item = this.firstItem;
     /**
      * Check if the view is larger than the new PDF page.  If so, load additional pages
      */

@@ -20,6 +20,11 @@ export class BaseViewerPage {
   @ViewChild('downloadLink') downloadLinkRef: ElementRef;
 
   /**
+   * The first item to display.
+   */
+  protected firstItem: ViewerItem = null;
+
+  /**
    * The items being viewed
    */
   protected items: Array<ViewerItem> = null;
@@ -58,10 +63,12 @@ export class BaseViewerPage {
             this.goBack();
           }
           this.items = JSON.parse(data);
+          this.firstItem = this.items.find((item: ViewerItem) =>  item.isFirst);
           // @ts-ignore It needs to be implemented by child class
           this.loadFile();
         });
     } else {
+      this.firstItem = this.items.find((item: ViewerItem) =>  item.isFirst);
       this.dataStore.store(this.storageKey, JSON.stringify(this.items)).pipe(take(1)).subscribe(() => {
         // @ts-ignore It needs to be implemented by child class
         this.loadFile();

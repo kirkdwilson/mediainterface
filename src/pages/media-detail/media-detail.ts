@@ -181,11 +181,15 @@ export class MediaDetailPage {
       });
       this.navController.push('av-player', { items: items, slug: this.slug });
     } else if (viewer !== '') {
-      const item: ViewerItem = {
-        title: current.title,
-        path: current.filePath,
-      };
-      this.navController.push(viewer, { items: [item], slug: this.slug });
+      const items: Array<ViewerItem> = this.media.episodes.map((episode: Episode) => {
+        const playFirst = (episode.title === current.title);
+        return {
+          path: episode.filePath,
+          isFirst: playFirst,
+          title: episode.title,
+        };
+      });
+      this.navController.push(viewer, { items: items, slug: this.slug });
     }
   }
 
@@ -211,6 +215,7 @@ export class MediaDetailPage {
       window.open(`/assets/content/${this.currentLanguage.twoLetterCode}/html/${this.media.slug}/`);
     } else if (viewer !== '') {
       const item: ViewerItem = {
+        isFirst: true,
         title: this.media.title,
         path: this.media.filePath,
       };
