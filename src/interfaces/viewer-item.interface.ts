@@ -3,11 +3,15 @@
  */
 export interface ViewerItem {
   /**
-   * The title of the item
+   * Is the first item that should be viewed?
    */
-  title: string;
+  isFirst: boolean;
   /**
    * The path to the item
    */
   path: string;
+  /**
+   * The title of the item
+   */
+  title: string;
 }
