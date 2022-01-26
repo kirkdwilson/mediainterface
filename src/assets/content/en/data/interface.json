@@ -11,6 +11,7 @@
     "EPUB": "EPUB",
     "HTML": "Web Document",
     "PDF": "PDF",
+    "TEXT": "Text File",
     "VIDEO": "Video"
   },
   "MISSING_MEDIA_TITLE": "Media is missing!",

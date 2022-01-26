@@ -3,7 +3,7 @@ import {} from 'jasmine';
 import { take } from 'rxjs/operators/take';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { MediaProvider } from './media';
-import { GroupedMedia } from './grouped-media.interface';
+import { GroupedMedia } from '@interfaces/grouped-media.interface';
 import { hashify } from '@helpers/utilities';
 import { Category } from '@models/category';
 import { Media } from '@models/media';

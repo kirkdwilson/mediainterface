@@ -29,4 +29,19 @@ export class FileUtilityProvider {
       catchError((response) =>  of(false))
     );
   }
+
+  /**
+   * Read the contents of a file
+   *
+   * @param  filePath The path to the file to read
+   * @return          The contents of the file
+   */
+  read(filePath: string): Observable<string> {
+    return this.http.get(
+      filePath,
+      { responseType: 'text' }
+    ).pipe(
+      map((response)  =>  response)
+    );
+  }
 }
