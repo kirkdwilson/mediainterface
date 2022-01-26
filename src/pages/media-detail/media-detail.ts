@@ -53,7 +53,7 @@ export class MediaDetailPage {
   /**
    * A list of available viewers. (av-player does not get added)
    */
-  private availableViewers = ['epub-viewer', 'image-viewer', 'pdf-viewer', 'text-viewer'];
+  private availableViewers = ['epub-viewer', 'h5p-viewer', 'image-viewer', 'pdf-viewer', 'text-viewer'];
 
   /**
    * The current language
@@ -135,11 +135,11 @@ export class MediaDetailPage {
    * @return           yes|no
    */
   hasPlayer(mediaType: string, isEpisode: boolean = false): boolean {
-    if (isEpisode) {
-      return (['pdf', 'epub', 'video', 'audio', 'text', 'image'].indexOf(mediaType) !== -1);
-    } else {
-      return (['pdf', 'epub', 'video', 'audio', 'html', 'text', 'image'].indexOf(mediaType) !== -1);
+    const mediaTypesWithPlayers = ['pdf', 'epub', 'video', 'audio', 'text', 'image', 'h5p'];
+    if (!isEpisode) {
+      mediaTypesWithPlayers.push('html');
     }
+    return (mediaTypesWithPlayers.indexOf(mediaType) !== -1);
   }
 
 
