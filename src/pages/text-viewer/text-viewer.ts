@@ -6,6 +6,7 @@ import { FileUtilityProvider } from '@providers/file-utility/file-utility';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
 import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
+import { ViewerItem } from '@interfaces/viewer-item.interface';
 
 /**
  * A viewer for text files.
@@ -24,6 +25,11 @@ export class TextViewerPage extends BaseViewerPage implements BaseViewerPageInte
    * The content of the text file
    */
   content = 'Loading..';
+
+  /**
+   * The item we are viewing
+   */
+  item: ViewerItem = null;
 
   constructor(
     protected dataStore: NavParamsDataStoreProvider,
@@ -48,6 +54,7 @@ export class TextViewerPage extends BaseViewerPage implements BaseViewerPageInte
    * @return void
    */
   loadFile() {
+    this.item = this.firstItem;
     this.fileUtilityProvider.read(this.item.path).pipe(take(1)).subscribe((content: string) =>  this.content = content.replace(/(?:\r\n|\r|\n)/g, '<br>'));
   }
 

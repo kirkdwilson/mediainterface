@@ -51,6 +51,11 @@ export class MediaDetailPage {
   slug = '';
 
   /**
+   * A list of available viewers. (av-player does not get added)
+   */
+  private availableViewers = ['epub-viewer', 'image-viewer', 'pdf-viewer', 'text-viewer'];
+
+  /**
    * The current language
    */
   private currentLanguage: Language = null;
@@ -131,9 +136,9 @@ export class MediaDetailPage {
    */
   hasPlayer(mediaType: string, isEpisode: boolean = false): boolean {
     if (isEpisode) {
-      return (['pdf', 'epub', 'video', 'audio', 'text'].indexOf(mediaType) !== -1);
+      return (['pdf', 'epub', 'video', 'audio', 'text', 'image'].indexOf(mediaType) !== -1);
     } else {
-      return (['pdf', 'epub', 'video', 'audio', 'html', 'text'].indexOf(mediaType) !== -1);
+      return (['pdf', 'epub', 'video', 'audio', 'html', 'text', 'image'].indexOf(mediaType) !== -1);
     }
   }
 
@@ -163,7 +168,7 @@ export class MediaDetailPage {
    * @return         void
    */
   playEpisode(current: Episode) {
-    let viewer = '';
+    const viewer = this.getViewer(current.mediaType);
     if ((current.mediaType === 'video') || (current.mediaType === 'audio')) {
       const items = this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
@@ -175,19 +180,16 @@ export class MediaDetailPage {
         };
       });
       this.navController.push('av-player', { items: items, slug: this.slug });
-    } else if (current.mediaType === 'pdf') {
-      viewer = 'pdf-viewer';
-    } else if (current.mediaType === 'epub') {
-      viewer = 'epub-viewer';
-    } else if (current.mediaType === 'text') {
-      viewer = 'text-viewer';
-    }
-    if (viewer !== '') {
-      const item: ViewerItem = {
-        title: current.title,
-        path: current.filePath,
-      };
-      this.navController.push(viewer, { item: item, slug: this.slug });
+    } else if (viewer !== '') {
+      const items: Array<ViewerItem> = this.media.episodes.map((episode: Episode) => {
+        const playFirst = (episode.title === current.title);
+        return {
+          path: episode.filePath,
+          isFirst: playFirst,
+          title: episode.title,
+        };
+      });
+      this.navController.push(viewer, { items: items, slug: this.slug });
     }
   }
 
@@ -200,7 +202,7 @@ export class MediaDetailPage {
     if (!this.media) {
       return;
     }
-    let viewer = '';
+    const viewer = this.getViewer(this.media.mediaType);
     if ((this.media.mediaType === 'video') || (this.media.mediaType === 'audio')) {
       const item: AvPlayerItem = {
         url: this.media.filePath,
@@ -211,19 +213,13 @@ export class MediaDetailPage {
       this.navController.push('av-player', { items: [item], slug: this.slug });
     } else if (this.media.mediaType === 'html') {
       window.open(`/assets/content/${this.currentLanguage.twoLetterCode}/html/${this.media.slug}/`);
-    } else if (this.media.mediaType === 'pdf') {
-      viewer = 'pdf-viewer';
-    } else if (this.media.mediaType === 'epub') {
-      viewer = 'epub-viewer';
-    } else if (this.media.mediaType === 'text') {
-      viewer = 'text-viewer';
-    }
-    if (viewer !== '') {
+    } else if (viewer !== '') {
       const item: ViewerItem = {
+        isFirst: true,
         title: this.media.title,
         path: this.media.filePath,
       };
-      this.navController.push(viewer, { item: item, slug: this.slug });
+      this.navController.push(viewer, { items: [item], slug: this.slug });
     }
   }
 
@@ -237,6 +233,17 @@ export class MediaDetailPage {
     this.popoverController.config.set('mode', 'ios');
     const popover = this.popoverController.create(LanguagePopoverComponent);
     popover.present({ ev: event });
+  }
+
+  /**
+   * Determine which viewer to use
+   *
+   * @param  mediaType The media type of the resource
+   * @return           The viewer name or empty string
+   */
+  private getViewer(mediaType: string): string {
+    const viewer = `${mediaType}-viewer`;
+    return (this.availableViewers.indexOf(viewer) !== -1) ? viewer : '';
   }
 
   /**

@@ -20,9 +20,14 @@ export class BaseViewerPage {
   @ViewChild('downloadLink') downloadLinkRef: ElementRef;
 
   /**
-   * The item being viewed
+   * The first item to display.
    */
-  protected item: ViewerItem = null;
+  protected firstItem: ViewerItem = null;
+
+  /**
+   * The items being viewed
+   */
+  protected items: Array<ViewerItem> = null;
 
   /**
    * The slug for the previous page
@@ -50,19 +55,21 @@ export class BaseViewerPage {
    */
   ionViewDidLoad() {
     this.slug = this.navParams.get('slug');
-    this.item = this.navParams.get('item');
-    if (typeof this.item === 'undefined') {
+    this.items = this.navParams.get('items');
+    if (typeof this.items === 'undefined') {
         // They refreshed the page. Get the data from the store.
         this.dataStore.get(this.storageKey).pipe(take(1)).subscribe((data: string) => {
           if (data === '') {
             this.goBack();
           }
-          this.item = JSON.parse(data);
+          this.items = JSON.parse(data);
+          this.firstItem = this.items.find((item: ViewerItem) =>  item.isFirst);
           // @ts-ignore It needs to be implemented by child class
           this.loadFile();
         });
     } else {
-      this.dataStore.store(this.storageKey, JSON.stringify(this.item)).pipe(take(1)).subscribe(() => {
+      this.firstItem = this.items.find((item: ViewerItem) =>  item.isFirst);
+      this.dataStore.store(this.storageKey, JSON.stringify(this.items)).pipe(take(1)).subscribe(() => {
         // @ts-ignore It needs to be implemented by child class
         this.loadFile();
       });
@@ -79,9 +86,9 @@ export class BaseViewerPage {
    * @return void
    * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
    */
-  downloadFile() {
-    const fileName = this.item.path.split('\\').pop().split('/').pop();
-    this.downloadFileProvider.download(this.item.path).pipe(take(1)).subscribe((blob: any) => {
+  downloadFile(filePath: string) {
+    const fileName = filePath.split('\\').pop().split('/').pop();
+    this.downloadFileProvider.download(filePath).pipe(take(1)).subscribe((blob: any) => {
       const url = window.URL.createObjectURL(blob);
       const link = this.downloadLinkRef.nativeElement;
       link.href = url;
