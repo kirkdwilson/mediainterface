@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
+import { H5P } from 'h5p-standalone';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
 import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
@@ -16,6 +17,12 @@ import { ViewerItem } from '@interfaces/viewer-item.interface';
   templateUrl: 'h5p-viewer.html',
 })
 export class H5pViewerPage extends BaseViewerPage implements BaseViewerPageInterface {
+
+  /**
+   * The h5p viewer
+   */
+  @ViewChild('viewer') viewer: ElementRef;
+
   /**
    * The currently selected item
    */
@@ -28,6 +35,13 @@ export class H5pViewerPage extends BaseViewerPage implements BaseViewerPageInter
    */
   loadFile() {
     this.item = this.firstItem;
-    console.log(this.item);
+    const options = {
+      h5pJsonPath: this.item.filePath,
+      frameJs: 'assets/h5p/frame.bundle.js',
+      frameCss: '/assets/h5p/h5p.css',
+      fullScreen: false,
+    };
+    new H5P(this.viewer.nativeElement, options);
   }
+
 }

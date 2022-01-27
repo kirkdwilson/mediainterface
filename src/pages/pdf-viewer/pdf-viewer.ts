@@ -311,7 +311,7 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
    * @return The promise and whethe it loaded
    */
   loadPdf(): Promise<boolean> {
-    return this.PDFJSViewer.getDocument(this.item.path)
+    return this.PDFJSViewer.getDocument(this.item.filePath)
       .promise.then(pdf => {
         this.pdfDocument = pdf;
         this.zone.run(() => this.pageState.total = pdf.numPages);

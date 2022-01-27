@@ -184,7 +184,8 @@ export class MediaDetailPage {
       const items: Array<ViewerItem> = this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
         return {
-          path: episode.filePath,
+          downloadPath: episode.downloadPath,
+          filePath: episode.filePath,
           isFirst: playFirst,
           title: episode.title,
         };
@@ -212,12 +213,13 @@ export class MediaDetailPage {
       };
       this.navController.push('av-player', { items: [item], slug: this.slug });
     } else if (this.media.mediaType === 'html') {
-      window.open(`/assets/content/${this.currentLanguage.twoLetterCode}/html/${this.media.slug}/`);
+      window.open(this.media.filePath);
     } else if (viewer !== '') {
       const item: ViewerItem = {
+        downloadPath: this.media.downloadPath,
+        filePath: this.media.filePath,
         isFirst: true,
         title: this.media.title,
-        path: this.media.filePath,
       };
       this.navController.push(viewer, { items: [item], slug: this.slug });
     }
