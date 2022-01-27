@@ -14,7 +14,7 @@
     "e2e": "webdriver-manager update --standalone false --gecko false; protractor ./test-config/protractor.conf.js"
   },
   "dependencies": {
-    "@angular/animations": "5.2.11",
+    "@angular/animations": "^5.2.11",
     "@angular/common": "5.2.11",
     "@angular/compiler": "5.2.11",
     "@angular/compiler-cli": "5.2.11",
@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.2.4",
+    "@ionic/lab": "3.2.10",
     "@types/jasmine": "2.8.6",
     "@types/pdfjs-dist": "^2.7.4",
     "angular2-template-loader": "^0.6.2",

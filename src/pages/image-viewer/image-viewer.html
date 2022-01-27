@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-buttons left>
+        <button ion-button icon-only (click)="goBack()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title>{{ item?.title }}</ion-title>
+    <ion-buttons right>
+        <button ion-button icon-only (click)="downloadFile(item?.path)">
+            <ion-icon name="download"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content padding text-center>
+  <ion-slides zoom loop pager (ionSlideDidChange)="slideChanged()">
+    <ion-slide *ngFor="let image of images">
+      <div class="swiper-zoom-container" >
+        <img [src]="image.path" [alt]="image.title">
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <!-- A special link for downloading files -->
+  <a #downloadLink class="hidden"></a>
+</ion-content>

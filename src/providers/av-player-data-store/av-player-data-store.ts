@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
 import { from } from 'rxjs/observable/from';
 import { of } from 'rxjs/observable/of';
-import { AvPlayerItem } from './av-player-item.interface';
+import { AvPlayerItem } from '@interfaces/av-player-item.interface';
 
 /**
  * This data store handles the audio and video files to be played in the AV Player.

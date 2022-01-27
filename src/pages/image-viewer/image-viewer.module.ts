@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { BaseViewerPageModule } from '@pages/base-viewer/base-viewer.module';
-import { EpubViewerPage } from './epub-viewer';
+import { ImageViewerPage } from './image-viewer';
 
 @NgModule({
   declarations: [
-    EpubViewerPage,
+    ImageViewerPage,
   ],
   exports: [BaseViewerPageModule],
   imports: [
     BaseViewerPageModule,
-    IonicPageModule.forChild(EpubViewerPage),
+    IonicPageModule.forChild(ImageViewerPage),
   ],
-  providers: []
 })
-export class EpubViewerPageModule {}
+export class ImageViewerPageModule {}

@@ -3,6 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MediaDetailPage } from './media-detail';
 import { IonicPageModule } from 'ionic-angular';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
+import { FileUtilityProvider } from '@providers/file-utility/file-utility';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 
 /**
@@ -19,6 +20,7 @@ import { MediaDetailProvider } from '@providers/media-detail/media-detail';
     declarations: [MediaDetailPage],
     providers: [
       DownloadFileProvider,
+      FileUtilityProvider,
       MediaDetailProvider,
     ],
 })

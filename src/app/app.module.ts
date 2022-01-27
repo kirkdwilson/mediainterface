@@ -20,7 +20,9 @@ import { LanguageProvider } from '@providers/language/language';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      backButtonText: '',
+    }),
     IonicStorageModule.forRoot(),
     TranslateModule.forRoot({
       loader: {

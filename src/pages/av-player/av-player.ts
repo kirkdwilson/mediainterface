@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-player-data-store';
-import { AvPlayerItem } from '@providers/av-player-data-store/av-player-item.interface';
+import { AvPlayerItem } from '@interfaces/av-player-item.interface';
 
 /**
  * An audio and video player.

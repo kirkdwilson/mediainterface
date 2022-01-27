@@ -9,8 +9,10 @@
     "AUDIO": "Audio",
     "DOCUMENT": "Document",
     "EPUB": "EPUB",
+    "IMAGE": "Image",
     "HTML": "Web Document",
     "PDF": "PDF",
+    "TEXT": "Text File",
     "VIDEO": "Video"
   },
   "MISSING_MEDIA_TITLE": "Media is missing!",

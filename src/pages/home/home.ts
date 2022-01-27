@@ -5,7 +5,7 @@ import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
 import { LanguageProvider } from '@providers/language/language';
 import { MediaProvider } from '@providers/media/media';
-import { GroupedMedia } from '@providers/media/grouped-media.interface';
+import { GroupedMedia } from '@interfaces/grouped-media.interface';
 import { Language } from '@models/language';
 import { Media } from '@models/media';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
@@ -89,15 +89,7 @@ export class HomePage {
    * @return      void
    */
   goToDetails(resource: Media) {
-console.log(resource);
-    if (resource.webPath) {
-console.log('HTML');
-      this.navController.push(resource.webPath);
-    }
-    else {
-console.log('slug');
-      this.navController.push('media-details', { slug: resource.slug });
-    }
+    this.navController.push('media-details', { slug: resource.slug });
   }
 
   /**

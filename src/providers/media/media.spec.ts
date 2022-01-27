@@ -3,7 +3,7 @@ import {} from 'jasmine';
 import { take } from 'rxjs/operators/take';
 import { AppTestingModule } from '../../../test-config/app-testing-module';
 import { MediaProvider } from './media';
-import { GroupedMedia } from './grouped-media.interface';
+import { GroupedMedia } from '@interfaces/grouped-media.interface';
 import { hashify } from '@helpers/utilities';
 import { Category } from '@models/category';
 import { Media } from '@models/media';
@@ -48,7 +48,6 @@ describe('MediaProvider', () => {
               slug: 'web-site-example',
               title: 'Ice Cream Web Site',
               desc: 'Everything Your Could Know',
-              webPath: '/somepath/index.html',
               image: 'chocolate.jpg',
               mediaType: 'HTML',
               tags: ['desserts', 'sweets']

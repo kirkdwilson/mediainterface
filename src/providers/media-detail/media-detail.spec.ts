@@ -55,7 +55,6 @@ describe('MediaDetailProvider', () => {
             {
               title: 'Ice Cream Web Site',
               desc: 'Everything Your Could Know',
-              webPath: '/somepath/index.html',
               image: 'chocolate.jpg',
               mediaType: 'html',
               order: 4
