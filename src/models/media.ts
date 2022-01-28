@@ -61,16 +61,37 @@ export class Media {
   }
 
   /**
-   * Get the path for the file
+   * Get the path of the download object
+   *
+   * @return The file path
+   */
+  get downloadPath(): string {
+    const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
+    let file = '';
+    if (['html'].indexOf(this.mediaType) !== -1) {
+      file = `${this.slug}.zip`;
+    } else if (this.mediaType === 'h5p') {
+      file = `${this.slug}.h5p`;
+    } else {
+      file = this.fileName;
+    }
+    if (file === '') {
+      return '';
+    }
+    return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${file}`;
+  }
+
+  /**
+   * Get the path for the file/files
    *
    * @return The file path
    */
   get filePath(): string {
-    if (this.fileName === '') {
+    const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
+    const file = (['html', 'h5p'].indexOf(this.mediaType) !== -1) ? `${this.slug}` : this.fileName;
+    if (file === '') {
       return '';
     }
-    const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
-    const file = (['html'].indexOf(this.mediaType) !== -1) ? `${this.slug}.zip` : this.fileName;
     return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${file}`;
   }
 

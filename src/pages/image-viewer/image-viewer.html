@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>{{ item?.title }}</ion-title>
     <ion-buttons right>
-        <button ion-button icon-only (click)="downloadFile(item?.path)">
+        <button ion-button icon-only (click)="downloadFile(item?.downloadPath)">
             <ion-icon name="download"></ion-icon>
         </button>
     </ion-buttons>
@@ -17,7 +17,7 @@
   <ion-slides zoom loop pager (ionSlideDidChange)="slideChanged()">
     <ion-slide *ngFor="let image of images">
       <div class="swiper-zoom-container" >
-        <img [src]="image.path" [alt]="image.title">
+        <img [src]="image.filePath" [alt]="image.title">
       </div>
     </ion-slide>
   </ion-slides>

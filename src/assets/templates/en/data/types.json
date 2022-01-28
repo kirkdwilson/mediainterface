@@ -48,5 +48,6 @@
   ".png": {"image":"image.png","mediaType":"image","category":"Images"},
   ".tiff": {"image":"image.png","mediaType":"image","category":"Images"},
   ".bmp": {"image":"image.png","mediaType":"image","category":"Images"},
-  ".gif": {"image":"image.png","mediaType":"image","category":"Images"}
+  ".gif": {"image":"image.png","mediaType":"image","category":"Images"},
+  ".h5p": {"image":"image.png","mediaType":"h5p","category":"Documents"}
 }

@@ -7,6 +7,7 @@ export const MEDIA_TYPE_ICONS = {
   document: 'document',
   epub: 'document',
   image: 'image',
+  h5p: 'easel',
   html: 'globe',
   text: 'document',
   video: 'film',
