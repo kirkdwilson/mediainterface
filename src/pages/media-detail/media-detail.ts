@@ -1,10 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { take } from 'rxjs/operators/take';
-import { switchMap } from 'rxjs/operators/switchMap';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
-import { FileUtilityProvider } from '@providers/file-utility/file-utility';
 import { LanguageProvider } from '@providers/language/language';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { Episode } from '@models/episode';
@@ -34,13 +33,6 @@ export class MediaDetailPage {
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   /**
-   * Can the user download the media file?  Specifically for HTML archives,
-   * we need to verify it is on the device.  All other media should be there,
-   * or play will also fail.
-   */
-  canDownloadMedia = true;
-
-  /**
    * The current media
    */
   media: Media = null;
@@ -56,6 +48,11 @@ export class MediaDetailPage {
   private availableViewers = ['epub-viewer', 'h5p-viewer', 'image-viewer', 'pdf-viewer', 'text-viewer'];
 
   /**
+   * Which media players currently have a viewer
+   */
+  private mediaTypesWithViewers = ['pdf', 'epub', 'video', 'audio', 'text', 'image', 'h5p', 'html'];
+
+  /**
    * The current language
    */
   private currentLanguage: Language = null;
@@ -67,7 +64,6 @@ export class MediaDetailPage {
 
   constructor(
     private downloadFileProvider: DownloadFileProvider,
-    private fileUtilityProvider: FileUtilityProvider,
     private languageProvider: LanguageProvider,
     private mediaDetailProvider: MediaDetailProvider,
     private navController: NavController,
@@ -102,12 +98,12 @@ export class MediaDetailPage {
    * Download a file
    *
    * @param  fileToDownload   The path to the file to download
-   * @param  fileName         The name of the file when downloaded
    *
    * @return         void
    * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
    */
-  downloadFile(fileToDownload: string, fileName: string) {
+  downloadFile(fileToDownload: string) {
+    const fileName = fileToDownload.split('\\').pop().split('/').pop();
     this.downloadFileProvider.download(fileToDownload).pipe(take(1)).subscribe((blob: any) => {
       const url = window.URL.createObjectURL(blob);
       const link = this.downloadLink.nativeElement;
@@ -134,12 +130,8 @@ export class MediaDetailPage {
    * @param  mediaType The type of media
    * @return           yes|no
    */
-  hasPlayer(mediaType: string, isEpisode: boolean = false): boolean {
-    const mediaTypesWithPlayers = ['pdf', 'epub', 'video', 'audio', 'text', 'image', 'h5p'];
-    if (!isEpisode) {
-      mediaTypesWithPlayers.push('html');
-    }
-    return (mediaTypesWithPlayers.indexOf(mediaType) !== -1);
+  hasViewer(mediaType: string, isEpisode: boolean = false): boolean {
+    return (this.mediaTypesWithViewers.indexOf(mediaType) !== -1);
   }
 
 
@@ -180,6 +172,8 @@ export class MediaDetailPage {
         };
       });
       this.navController.push('av-player', { items: items, slug: this.slug });
+    }  else if (current.mediaType === 'html') {
+      window.open(current.filePath);
     } else if (viewer !== '') {
       const items: Array<ViewerItem> = this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
@@ -262,15 +256,8 @@ export class MediaDetailPage {
     this.mediaDetailProvider.setLanguage(language.twoLetterCode);
     this.mediaDetailProvider
       .get(this.slug)
-      .pipe(switchMap((media: Media)  =>  {
-        this.media = media;
-        if (media.mediaType === 'html') {
-          return this.fileUtilityProvider.exists(media.filePath);
-        }
-        return of(true);
-      }))
       .pipe(take(1))
-      .subscribe((exists: boolean) => this.canDownloadMedia = exists);
+      .subscribe((media: Media) => this.media = media);
   }
 
 }
