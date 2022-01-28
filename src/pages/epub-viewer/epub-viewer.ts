@@ -180,7 +180,7 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
    */
   loadFile() {
     this.item = this.firstItem;
-    this.book = new Book(this.item.path);
+    this.book = new Book(this.item.filePath);
     this.rendition = this.book.renderTo('book', { width: '100%', height: '100%' });
     this.rendition.themes.fontSize(`${this.fontSize}%`);
     this.rendition.display();

@@ -14,6 +14,7 @@ export class Episode {
    * @param image         The image file name
    * @param mediaType     The type of media
    * @param mimeType      The mime type of the file
+   * @param slug          The episode slug
    * @param title         The title
    * @param language='en' The language
    */
@@ -23,10 +24,31 @@ export class Episode {
     public image: string,
     public mediaType: string,
     public mimeType: string,
-    public order: number,
+    public slug: string,
     public title: string,
     public language = 'en'
   ) {}
+
+  /**
+   * Get the path to download the episode
+   *
+   * @return The file path
+   */
+  get downloadPath(): string {
+    const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
+    let file = '';
+    if (['html'].indexOf(this.mediaType) !== -1) {
+      file = `${this.slug}.zip`;
+    } else if (this.mediaType === 'h5p') {
+      file = `${this.slug}.h5p`;
+    } else {
+      file = this.fileName;
+    }
+    if (file === '') {
+      return '';
+    }
+    return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${file}`;
+  }
 
   /**
    * Get the path for the file
@@ -34,7 +56,12 @@ export class Episode {
    * @return The file path
    */
   get filePath(): string {
-    return `${environment.assetPath.replace('{LANG}', this.language)}media/${this.fileName}`;
+    const dir = (['html'].indexOf(this.mediaType) !== -1) ? 'html' : 'media';
+    const file = (['html', 'h5p'].indexOf(this.mediaType) !== -1) ? `${this.slug}` : this.fileName;
+    if (file === '') {
+      return '';
+    }
+    return `${environment.assetPath.replace('{LANG}', this.language)}${dir}/${file}`;
   }
 
   /**

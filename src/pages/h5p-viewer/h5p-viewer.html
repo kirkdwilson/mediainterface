@@ -14,8 +14,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding>
-  <h2 text-center>{{ item?.title }}</h2>
-  <div id="text-content" [innerHTML]="content"></div>
+  <div #viewer></div>
   <!-- A special link for downloading files -->
   <a #downloadLink class="hidden"></a>
 </ion-content>

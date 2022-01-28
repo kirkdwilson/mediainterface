@@ -7,9 +7,13 @@ export interface ViewerItem {
    */
   isFirst: boolean;
   /**
+   * The path to download the item
+   */
+  downloadPath: string;
+  /**
    * The path to the item
    */
-  path: string;
+  filePath: string;
   /**
    * The title of the item
    */
