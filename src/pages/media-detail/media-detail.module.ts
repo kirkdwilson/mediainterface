@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { MediaDetailPage } from './media-detail';
 import { IonicPageModule } from 'ionic-angular';
+import { AppFooterModule } from '@components/app-footer/app-footer.module';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 
@@ -12,6 +13,7 @@ import { MediaDetailProvider } from '@providers/media-detail/media-detail';
  */
 @NgModule({
     imports: [
+      AppFooterModule,
       IonicPageModule.forChild(MediaDetailPage),
       TranslateModule,
     ],
