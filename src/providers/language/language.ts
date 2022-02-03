@@ -73,13 +73,20 @@ export class LanguageProvider {
     if (this.currentLanguage) {
       return of(this.currentLanguage);
     }
-    return from(this.storage.get(this.storageKey)).pipe(
-      switchMap((data: any) => {
+    return zip(
+      this.storage.get(this.storageKey),
+      this.supported()
+    ).pipe(
+      switchMap(([data, supported]) => {
         if (data) {
+          // Is it in the supported list
           const parsed = JSON.parse(data);
-          const lang = new Language(parsed.codes, parsed.text, parsed.isDefault, parsed.isRtl);
-          this.languageSubject.next(lang);
-          return of(lang);
+          const found = supported.find((lang: Language) => lang.text.toLowerCase() === parsed.text.toLowerCase());
+          if (found) {
+            const lang = new Language(parsed.codes, parsed.text, parsed.isDefault, parsed.isRtl);
+            this.languageSubject.next(lang);
+            return of(lang);
+          }
         }
         return this.getPreferredLanguage().pipe(
           switchMap((preferred: Language) => this.saveLanguage(preferred).pipe(map(() => preferred)))
