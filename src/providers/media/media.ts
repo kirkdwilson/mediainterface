@@ -7,7 +7,6 @@ import { GroupedMedia } from '@interfaces/grouped-media.interface';
 import { Category } from '@models/category';
 import { Media } from '@models/media';
 import { environment } from '@env';
-import { Storage } from '@ionic/storage'; // Added by Derek Maxson 20220203
 
 /**
  * A provider for retrieving the media for the specified language.
@@ -123,7 +122,7 @@ export class MediaProvider {
           (!response.hasOwnProperty('content')) ||
           (response.content.length === 0)
         ) {
-          this.storage.removeItem(this.storageKey); // Added by Derek Maxson 20220203 so that if no language clear local storage setting
+          this.storage.removeItem(this.storageKey); // Added by Derek Maxson so that if no language clear local storage setting
           console.log('No Content In Language: ' + this.language);
           return [];
         }
