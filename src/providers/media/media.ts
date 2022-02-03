@@ -117,8 +117,6 @@ export class MediaProvider {
           (!response.hasOwnProperty('content')) ||
           (response.content.length === 0)
         ) {
-          this.storage.removeItem(this.storageKey); // Added by Derek Maxson so that if no language clear local storage setting
-          console.log('No Content In Language: ' + this.language);
           return [];
         }
         this.media = response.content.map((media) => {
