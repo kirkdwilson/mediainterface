@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators/map';
 import { switchMap } from 'rxjs/operators/switchMap';
 import { Language } from '@models/language';
 import { environment } from '@env';
+import { zip } from 'rxjs/observable/zip';
 
 /**
  * A provider for setting and tracking available languages
