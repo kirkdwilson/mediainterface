@@ -123,7 +123,7 @@ export class MediaProvider {
           (!response.hasOwnProperty('content')) ||
           (response.content.length === 0)
         ) {
-          Storage.remove(this.storageKey); // Added by Derek Maxson 20220203 so that if no language clear local storage setting
+          Storage.removeItem(this.storageKey); // Added by Derek Maxson 20220203 so that if no language clear local storage setting
           console.log('No Content In Language: ' + this.language);
           return [];
         }
