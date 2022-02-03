@@ -75,14 +75,12 @@ export class LanguageProvider {
     }
     return from(this.storage.get(this.storageKey)).pipe(
       switchMap((data: any) => {
-/*    COMMENTED OUT by Derek Maxson 20220203 in order to ensure that we get correct language all the time
         if (data) {
           const parsed = JSON.parse(data);
           const lang = new Language(parsed.codes, parsed.text, parsed.isDefault, parsed.isRtl);
           this.languageSubject.next(lang);
           return of(lang);
         }
-*/
         return this.getPreferredLanguage().pipe(
           switchMap((preferred: Language) => this.saveLanguage(preferred).pipe(map(() => preferred)))
         );
