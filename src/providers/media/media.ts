@@ -36,11 +36,6 @@ export class MediaProvider {
   }
 
   /**
-   * The storage key that stores the file.
-   */
-  storageKey = 'language';
-
-  /**
    * Get all the media grouped by it's category.
    *
    * @param sorted  Do you want to sort the keys?
