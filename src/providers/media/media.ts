@@ -25,11 +25,7 @@ export class MediaProvider {
    */
   private language = 'en';
 
-  //constructor(private http: HttpClient) {}
-  constructor(
-    private http: HttpClient,
-    private storage: Storage,
-  ) {}
+  constructor(private http: HttpClient) {}
 
   /**
    * Retrieve all the media from the main json file.
@@ -127,7 +123,7 @@ export class MediaProvider {
           (!response.hasOwnProperty('content')) ||
           (response.content.length === 0)
         ) {
-          this.storage.remove(this.storageKey); // Added by Derek Maxson 20220203 so that if no language clear local storage setting
+          Storage.remove(this.storageKey); // Added by Derek Maxson 20220203 so that if no language clear local storage setting
           console.log('No Content In Language: ' + this.language);
           return [];
         }
