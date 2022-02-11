@@ -4,6 +4,18 @@
 
 A multimedia interface designed for offline media boxes like the Connect Box.
 
+## Usage
+
+Download the [latest code](https://github.com/RT-coding-team/mediainterface/releases/download/latest/latest.zip) and install the www directory as the root of the web server.  Browse to the web server and the default installed content (just a readme) should be viewable.  
+
+MMI is meant to be used with the [MediaBuilder customized](https://github.com/RT-coding-team/mediabuilder) from Bolt CMS specifically for MMI.  Create content packages via MediaBuilder and create exporter zip files.  More information in MediaBuilder repo.  A package created from MediaBuilder should be unzipped and replaces the /src/assets/content directory (generally, you may want to remove the content directory then mv the zip file to /src/assets and execute `unzip <file.zip>`
+
+In addition, the lazyLoader.py script in this repo can pull content provided as argument (example: `python lazyLoader.py https://yourmediabuilder/file.zip`) and the lazyLoader will unpack the zip, install it to the correct location (customize the location in the script) and load any needed media elements (typically from "slim" package created from MediaBuilder).
+
+MMI can also be loaded using a script in the repo called mmiloader.py that will convert from a source directory (you can set the source and destination directories in the first few lines of the script).  The script can executed be as `python mmiloader.py` and it will create a schema directory in the content directory of the MMI.
+
+Default content is at src/assets/content and templates used by mmiloader.py are located at src/assets/templates.  The footer.html file can be customized.
+
 ## Development
 
 This repository is following the branching technique described in [this blog post](http://nvie.com/posts/a-successful-git-branching-model/), and the semantic version set out on the [Semantic Versioning Website](http://semver.org/).  We use the [AppVersion](https://www.npmjs.com/package/appversion) library for managing the versioning of the app.
