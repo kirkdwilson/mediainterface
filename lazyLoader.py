@@ -28,7 +28,7 @@ for language in next(os.walk(contentDirectory))[1]:
 		# Load main.json to process
 		f = open (contentDirectory + language + "/data/main.json")
 		thisMain = json.load(f)
-		for directory in directories:		
+		for directory in directories:
 			if os.path.isdir(contentDirectory + language + "/" + directory):
 				print ("	Directory Exists: " + contentDirectory + language + "/" + directory)
 			else:
@@ -45,10 +45,11 @@ for language in next(os.walk(contentDirectory))[1]:
 			details = json.load(f)
 			#print (json.dumps(details))
 			items = []
-			try:	
+			try:
 				items = details["episodes"]
+				os.system("wget '" + details["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + details["image"])
 				print ("	Loading Multi-Episodic Content: " + details["title"] )
-			except: 
+			except:
 				items = [details]
 				print ("	Single Episodic Content: " + details["title"])
 			#print (json.dumps(items))
