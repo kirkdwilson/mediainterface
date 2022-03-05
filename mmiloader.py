@@ -46,10 +46,14 @@ brand = json.load(f)
 # Sanity Checks
 error = 0
 try:
+	if (len(brand['Brand']) < 5):
+		throw();
 	print ("Custom Branding: " + brand['Brand'])
 except:
-	brand['Brand'] = "The Open Well"
+	brand['Brand'] = os.popen('cat /etc/hostname').read()
 try:
+	if (len(brand['Logo']) < 5):
+		throw();
 	print ("Custom Logo: " + brand['Logo'])
 except:
 	brand['Logo'] = "imgs/logo.png"
@@ -290,7 +294,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 				collection['slug'] = 'collection-' + collection['title']
 				collection['mediaType'] = content['mediaType']
 				collection['mimeType'] = content['mimeType']
-				if (ontent["image"] = types[extension]["image"]):
+				if (content["image"] == types[extension]["image"]):
 				  collection['image'] = 'files.png'
 				elif (content['image']):
 					collection['image'] = content['image']
