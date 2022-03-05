@@ -6,7 +6,7 @@ print ("loader: Starting...")
 import json
 import os
 import pathlib
-import shutil 
+import shutil
 import mimetypes
 
 mimetypes.init()
@@ -16,7 +16,7 @@ mediaDirectory = "/media/usb0"
 templatesDirectory = "/var/www/enhanced/content/www/assets/templates"
 contentDirectory = "/var/www/enhanced/content/www/assets/content"
 
-# Init 
+# Init
 mains = {}        # This object contains all the data to construct each main.json at the end.  We add as we go along
 
 
@@ -76,7 +76,7 @@ if len(os.listdir(mediaDirectory) ) == 0:
 	f.write("<h2>Media Directory Is Empty</h2>Please refer to documentation (placeholder).")
 	f.close()
 
-        
+
 language = "en"  # By default but it will be overwritten if there are other language directories on the USB
 
 for path,dirs,files in os.walk(mediaDirectory):
@@ -98,7 +98,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 	##########################################################################
 	#  See if this directory is language folder or content
 	##########################################################################
-	 
+
 	print ('	Checking For Language Folder: '+ thisDirectory)
 	try:
 		if (os.path.isdir(mediaDirectory + '/' + thisDirectory) and mediaDirectory + '/' + thisDirectory == path):
@@ -117,7 +117,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 
 	# See if the language already exists in the directory, if not make and populate a directory from the template
 	if (not os.path.exists(contentDirectory + "/" + language)):
-		print ("	Creating Directory: " + contentDirectory + "/" + language)			
+		print ("	Creating Directory: " + contentDirectory + "/" + language)
 		shutil.copytree(templatesDirectory + '/en', contentDirectory + "/" + language)
 		os.system ("chown -R www-data.www-data " + contentDirectory + "/" + language)
 		# Load the main.json template and populate the mains for that language.
@@ -138,7 +138,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 	##########################################################################
 	#  If this directory contains index.html then treat as web content
 	##########################################################################
-		
+
 	if (os.path.exists(path + "/index.html") or os.path.exists(path + "/index.htm")):
 		print ("	" + path + " is HTML web content")
 		# See if the language already exists in the directory, if not make and populate a directory from the template
@@ -151,7 +151,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 		print ("	WebPath: Set webpaths to true for this directory: " +thisDirectory)
 		webpaths.append(path)
 		directoryType = "html"
-		
+
 	##########################################################################
 	#  Finish detecting directoryType (root, language, html, collection)
 	##########################################################################
@@ -172,7 +172,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 		##########################################################################
 		#  Understand the  file being processed
 		##########################################################################
-		
+
 		# Skip all files in a web path not named index.html because we just build an item for the index
 		if (path in webpaths and filename != 'index.html'):
 			print ("	Webpath file " + filename + " is not index so skip")
@@ -216,14 +216,14 @@ for path,dirs,files in os.walk(mediaDirectory):
 		content["mediaType"] = types[extension]["mediaType"]
 		content["slug"] = slug
 		content["title"] = shortName
-		
+
 		##########################################################################
 		#  Handle Web Content Index Page
 		##########################################################################
 		# For html, the slug is just the directory name
 		#			the mimeType is always zip for the zip file to download
 		#			the filename is always to the zip file
-		 
+
 		if (extension == '.html'):
 			print ("	Handling index.html for webpath")
 			slug = os.path.basename(os.path.normpath(path))
@@ -240,7 +240,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 		if (content["mimeType"]):
 			print ("	mimeType already determined to be " + content["mimeType"])
 		elif (hasattr(types[extension],"mimeType")):
-			content["mimeType"] = types[extension]["mimeType"]		
+			content["mimeType"] = types[extension]["mimeType"]
 			print ("	mimetypes types.json says: " + content["mimeType"])
 		elif (mimetypes.guess_type(fullFilename)[0] is not None):
 			content["mimeType"] = mimetypes.guess_type(fullFilename)[0]
@@ -252,7 +252,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 		##########################################################################
 		#  Thumbnail Management
 		##########################################################################
-		
+
 		# If this is a video, we can probably make a thumbnail
 		if (content["mediaType"] == 'video' and not content["image"]):
 			print ("	Attempting to make a thumbnail for the video")
@@ -276,7 +276,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 			print ("	Writing Placeholder For Thumbnail to " + mediaDirectory + "/.thumbnail-" + slug + ".png")
 			os.system ('touch "' + mediaDirectory + '/.thumbnail-' + slug + '.png"')
 
-		if (not content["image"]) :	
+		if (not content["image"]) :
 			print ("	Writing Default Icon As Content Image")
 			content["image"] = types[extension]["image"]
 
@@ -290,19 +290,21 @@ for path,dirs,files in os.walk(mediaDirectory):
 				collection['slug'] = 'collection-' + collection['title']
 				collection['mediaType'] = content['mediaType']
 				collection['mimeType'] = content['mimeType']
-				if (content['image']):
+				if (ontent["image"] = types[extension]["image"]):
+				  collection['image'] = 'files.png'
+				elif (content['image']):
 					collection['image'] = content['image']
 			collection["episodes"].append(content)
 			with open(contentDirectory + "/" + language + "/data/" + collection['slug'] + ".json", 'w', encoding='utf-8') as f:
 				json.dump(collection, f, ensure_ascii=False, indent=4)
 		else:
 			print ("	Item completed.  Writing item.json")
-			# Since there's no episodes, just copy content into item 
+			# Since there's no episodes, just copy content into item
 			# Write the item.json
 			with open(contentDirectory + "/" + language + "/data/" + slug + ".json", 'w', encoding='utf-8') as f:
 				json.dump(content, f, ensure_ascii=False, indent=4)
 			mains[language]["content"].append(content)
-			
+
 		# Make a symlink to the file on USB to display the content
 		print ("	Creating symlink for the content")
 		os.system ('ln -s "' + fullFilename + '" "' + contentDirectory + '/' + language + '/media/"')
@@ -310,8 +312,8 @@ for path,dirs,files in os.walk(mediaDirectory):
 
 		print ("	COMPLETE: Based on file type " + fullFilename + " added to enhanced interface for language " + language)
 		# END FILE LOOP
-		
-	# Wait to write collection to main.json until directory has been fully processed	
+
+	# Wait to write collection to main.json until directory has been fully processed
 	if (('collection' in locals() or 'collection' in globals()) and directoryType == "collection"):
 		print ("	No More Episodes / Wrap up Collection for " + thisDirectory)
 		# slug.json has already been saved so we don't need to do that.  Just write the collection to the main.json
@@ -325,7 +327,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 print ("*************************************************")
 print ("Completing Final Compilation of languages and items")
 
-# Now go through each language that we found and processed and write the interface.json and main.json for each 
+# Now go through each language that we found and processed and write the interface.json and main.json for each
 languageJson = []
 for language in mains:
 	if (len(mains[language]["content"]) == 0):
