@@ -58,8 +58,8 @@ for language in next(os.walk(contentDirectory))[1]:
 				if (os.path.exists(contentDirectory + language + "/media/" + item["filename"])):
 					print ("	Content Exists: " + item["filename"])
 				else:
-					print ("	LOAD CONTENT: " + item["filename"] + " from " + item["resourceUrl"])
 					try:
+					  print ("	LOAD CONTENT: " + item["filename"] + " from " + item["resourceUrl"])
 						os.system("wget '" + item["resourceUrl"] + "' -O " + contentDirectory + language + "/media/" + item["filename"])
 						print ("		Content Downloaded to: " + item["filename"])
 					except:
@@ -70,8 +70,8 @@ for language in next(os.walk(contentDirectory))[1]:
 				if (os.path.exists(contentDirectory + language + "/images/" + item["image"])):
 					print ("	Content Exists: " + item["image"])
 				else:
-					print ("	LOAD CONTENT: " + item["image"] + " from " + item["imageUrl"])
 					try:
+					  print ("	LOAD CONTENT: " + item["image"] + " from " + item["imageUrl"])
 						os.system("wget '" + item["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + item["image"])
 						print ("		Content Downloaded to: " + item["image"])
 					except:
