@@ -61,7 +61,7 @@ for language in next(os.walk(contentDirectory))[1]:
 					try:
 					  print ("	LOAD CONTENT: " + item["filename"] + " from " + item["resourceUrl"])
 					  os.system("wget '" + item["resourceUrl"] + "' -O " + contentDirectory + language + "/media/" + item["filename"])
-						print ("		Content Downloaded to: " + item["filename"])
+					  print ("		Content Downloaded to: " + item["filename"])
 					except:
 						print ("		FAILED To Download: " + item["title"])
 				print ("----------------------------------------")
@@ -73,7 +73,7 @@ for language in next(os.walk(contentDirectory))[1]:
 					try:
 					  print ("	LOAD CONTENT: " + item["image"] + " from " + item["imageUrl"])
 					  os.system("wget '" + item["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + item["image"])
-						print ("		Content Downloaded to: " + item["image"])
+					  print ("		Content Downloaded to: " + item["image"])
 					except:
 						print ("		FAILED To Download: " + item["title"])
 				print ("----------------------------------------")
