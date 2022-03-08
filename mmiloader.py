@@ -27,6 +27,19 @@ try:
 except:
 	temp = 1 # There is a directory already
 
+##########################################################################
+#  See if this directory is language folder or content
+##########################################################################
+print ("	Check for saved.zip");
+if (os.path.exists(mediaDirectory + "/saved.zip")):
+	print ("	Found saved.zip.  Unzipping and restoring to " + contentDirectory);
+	print (" ")
+	print ("****If you want to reload the USB, delete the file saved.zip from the USB drive.");
+	os.system ("mkdir " + contentDirectory)
+	shutil.unpack_archive(mediaDirectory + '/saved.zip',contentDirectory);
+	print ("DONE");
+	exit(0);
+
 os.system ("mkdir " + contentDirectory)
 shutil.copytree(templatesDirectory + '/en', contentDirectory + '/en')
 shutil.copy(templatesDirectory + '/footer.html', contentDirectory)
@@ -363,3 +376,8 @@ if (hasDefault == 0):
 print ("Writing languages.json")
 with open(contentDirectory + "/languages.json", 'w', encoding='utf-8') as f:
 	json.dump(languageJson, f, ensure_ascii=False, indent=4)
+
+
+print ("Copying Metadata to Zip File On USB");
+shutil.make_archive(mediaDirectory + '/saved', 'zip', contentDirectory);
+print ("DONE");
