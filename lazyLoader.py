@@ -15,7 +15,7 @@ contentDirectory = "/var/www/enhanced/content/www/assets/content/"
 # First Download the URL and unzip it
 url = sys.argv[1]
 print ("Handling File: " + url)
-os.system("wget '" + url + "' -O /tmp/openwell.zip")
+os.system("wget -nv '" + url + "' -O /tmp/openwell.zip")
 os.system("unzip -o /tmp/openwell.zip -d /var/www/enhanced/content/www/assets/")
 
 directories =  ["data", "images", "media", "html"]
@@ -47,7 +47,7 @@ for language in next(os.walk(contentDirectory))[1]:
 			items = []
 			try:
 				items = details["episodes"]
-				os.system("wget '" + details["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + details["image"])
+				os.system("wget -nv '" + details["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + details["image"])
 				print ("	Loading Multi-Episodic Content: " + details["title"] )
 			except:
 				items = [details]
@@ -60,7 +60,7 @@ for language in next(os.walk(contentDirectory))[1]:
 				else:
 					try:
 					  print ("	LOAD CONTENT: " + item["filename"] + " from " + item["resourceUrl"])
-					  os.system("wget '" + item["resourceUrl"] + "' -O " + contentDirectory + language + "/media/" + item["filename"])
+					  os.system("wget -nv '" + item["resourceUrl"] + "' -O " + contentDirectory + language + "/media/" + item["filename"])
 					  print ("		Content Downloaded to: " + item["filename"])
 					except:
 						print ("		FAILED To Download: " + item["title"])
@@ -72,7 +72,7 @@ for language in next(os.walk(contentDirectory))[1]:
 				else:
 					try:
 					  print ("	LOAD CONTENT: " + item["image"] + " from " + item["imageUrl"])
-					  os.system("wget '" + item["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + item["image"])
+					  os.system("wget -nv '" + item["imageUrl"] + "' -O " + contentDirectory + language + "/images/" + item["image"])
 					  print ("		Content Downloaded to: " + item["image"])
 					except:
 						print ("		FAILED To Download: " + item["title"])
