@@ -12,11 +12,14 @@ import sys
 # Defaults for Connectbox / TheWell
 contentDirectory = "/var/www/enhanced/content/www/assets/content/"
 
-# First Download the URL and unzip it
-url = sys.argv[1]
-print ("Handling File: " + url)
-os.system("wget -nv '" + url + "' -O /tmp/openwell.zip")
-os.system("unzip -o /tmp/openwell.zip -d /var/www/enhanced/content/www/assets/")
+# First Download the URL and unzip it or find missing content
+if (len(sys.argv) > 1):
+  url = sys.argv[1]
+  print ("Handling File: " + url)
+  os.system("wget -nv '" + url + "' -O /tmp/openwell.zip")
+  os.system("unzip -o /tmp/openwell.zip -d /var/www/enhanced/content/www/assets/")
+else:
+  print ("Looking for missing content and trying to download")
 
 directories =  ["data", "images", "media", "html"]
 
