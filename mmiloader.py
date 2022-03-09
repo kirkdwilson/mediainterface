@@ -311,6 +311,9 @@ for path,dirs,files in os.walk(mediaDirectory):
 				  collection['image'] = 'files.png'
 				elif (content['image']):
 					collection['image'] = content['image']
+			elif (collection['mediaType'] == "application" and content['mediaType'] != "application"):
+				print ("  Replacing collection content type with new value: " + content['mediaType']);
+				collection['mediaType'] = content['mediaType'];
 			collection["episodes"].append(content)
 			with open(contentDirectory + "/" + language + "/data/" + collection['slug'] + ".json", 'w', encoding='utf-8') as f:
 				json.dump(collection, f, ensure_ascii=False, indent=4)
