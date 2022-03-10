@@ -273,12 +273,12 @@ for path,dirs,files in os.walk(mediaDirectory):
 		# If this is a video, we can probably make a thumbnail
 		if (content["mediaType"] == 'video' and not content["image"]):
 			print ("	Attempting to make a thumbnail for the video")
-			os.system("ffmpeg -y -i '" + fullFilename + "' -ss 00:00:05 -vframes 1 " + mediaDirectory + "/.thumbnail-" + slug + ".png >/dev/null 2>&1")
+			os.system("ffmpeg -y -i '" + fullFilename + "' -ss 00:00:05 -vframes 1 '" + mediaDirectory + "/.thumbnail-" + slug + ".png' >/dev/null 2>&1")
 			content["image"] = slug + ".png"
 			print ("	Thumbnail is created at: " + content["image"])
 
 		# Look for thumbnail.  If there is one, use it.  If not
-		print ("	Looking For Thumbnail in " + mediaDirectory)
+		print ("	Looking For Thumbnail (.thumbnail-" + content["image"] + ") in " + mediaDirectory)
 		if (types[extension]["mediaType"] == "image"):
 			print ("	Since item is image, thumbnail is the same image")
 			content["image"] = filename
@@ -311,6 +311,9 @@ for path,dirs,files in os.walk(mediaDirectory):
 				  collection['image'] = 'files.png'
 				elif (content['image']):
 					collection['image'] = content['image']
+			elif (collection['mediaType'] == "application" and content['mediaType'] != "application"):
+				print ("  Replacing collection content type with new value: " + content['mediaType']);
+				collection['mediaType'] = content['mediaType'];
 			collection["episodes"].append(content)
 			with open(contentDirectory + "/" + language + "/data/" + collection['slug'] + ".json", 'w', encoding='utf-8') as f:
 				json.dump(collection, f, ensure_ascii=False, indent=4)
