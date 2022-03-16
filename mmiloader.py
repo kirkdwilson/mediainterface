@@ -65,11 +65,11 @@ try:
 except:
 	brand['Brand'] = os.popen('cat /etc/hostname').read()
 try:
-	if (len(brand['Logo']) < 5):
+	if (len(brand['enhancedInterfaceLogo']) < 5):
 		throw();
-	print ("Custom Logo: " + brand['Logo'])
+	print ("Custom Logo: " + brand['enhancedInterfaceLogo'])
 except:
-	brand['Logo'] = "imgs/logo.png"
+	brand['enhancedInterfaceLogo'] = "imgs/logo.png"
 
 print ("Building Content For " + brand['Brand'])
 
@@ -77,7 +77,7 @@ print ("Building Content For " + brand['Brand'])
 f = open (templatesDirectory + "/en/data/interface.json");   # We will always place USB content in EN language which is default
 interface = json.load(f);
 interface["APP_NAME"] = brand["Brand"]
-interface["APP_LOGO"] = brand["Logo"]
+interface["APP_LOGO"] = brand["enhancedInterfaceLogo"]
 
 # Load dictionary of file types
 f = open (templatesDirectory + "/en/data/types.json");
@@ -162,8 +162,10 @@ for path,dirs,files in os.walk(mediaDirectory):
 		# Make a symlink to the file on USB to display the content
 		print ("	WebPath: Writing symlink to /html folder")
 		os.system ("ln -s '" + path + "' " + contentDirectory + "/" + language + "/html/")
-		print ("	WebPath: Creating zip file")
-		shutil.make_archive(contentDirectory + "/" + language + "/html/" + thisDirectory, 'zip', path)
+		print ("	WebPath: Creating web archive zip file on USB")
+		shutil.make_archive(mediaDirectory + "/.webarchive-" + thisDirectory, 'zip', path)
+		print ("	WebPath: Linking web archive zip")
+		os.system ('ln -s "'+ mediaDirectory + '/.webarchive-' + thisDirectory + '.zip" "' + contentDirectory + "/" + language + "/html/" + thisDirectory + '.zip"')
 		dirs = []
 		print ("	WebPath: Set webpaths to true for this directory: " +thisDirectory)
 		webpaths.append(path)
@@ -382,5 +384,6 @@ with open(contentDirectory + "/languages.json", 'w', encoding='utf-8') as f:
 
 
 print ("Copying Metadata to Zip File On USB");
-shutil.make_archive(mediaDirectory + '/saved', 'zip', contentDirectory);
+zipFileName = mediaDirectory + '/saved.zip';
+os.system ("(cd " + contentDirectory + " && zip --symlinks -r " + zipFileName + " *)");
 print ("DONE");
