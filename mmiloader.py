@@ -382,5 +382,6 @@ with open(contentDirectory + "/languages.json", 'w', encoding='utf-8') as f:
 
 
 print ("Copying Metadata to Zip File On USB");
-shutil.make_archive(mediaDirectory + '/saved', 'zip', contentDirectory);
+zipFileName = mediaDirectory + '/saved.zip';
+os.system ("(cd " + contentDirectory + " && zip --symlinks -r " + zipFileName + " *)");
 print ("DONE");
