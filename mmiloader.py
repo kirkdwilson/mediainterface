@@ -15,6 +15,7 @@ mimetypes.init()
 mediaDirectory = "/media/usb0"
 templatesDirectory = "/var/www/enhanced/content/www/assets/templates"
 contentDirectory = "/var/www/enhanced/content/www/assets/content"
+zipFileName = mediaDirectory + '/saved.zip';
 
 # Init
 mains = {}        # This object contains all the data to construct each main.json at the end.  We add as we go along
@@ -36,7 +37,7 @@ if (os.path.exists(mediaDirectory + "/saved.zip")):
 	print (" ")
 	print ("****If you want to reload the USB, delete the file saved.zip from the USB drive.");
 	os.system ("mkdir " + contentDirectory)
-	shutil.unpack_archive(mediaDirectory + '/saved.zip',contentDirectory);
+	os.system ("(cd " + contentDirectory + " && unzip " + zipFileName + ")");
 	print ("DONE");
 	exit(0);
 
@@ -65,11 +66,11 @@ try:
 except:
 	brand['Brand'] = os.popen('cat /etc/hostname').read()
 try:
-	if (len(brand['enhancedInterfaceLogo']) < 5):
+	if (len(brand['Logo']) < 5):
 		throw();
-	print ("Custom Logo: " + brand['enhancedInterfaceLogo'])
+	print ("Custom Logo: " + brand['Logo'])
 except:
-	brand['enhancedInterfaceLogo'] = "imgs/logo.png"
+	brand['Logo'] = "imgs/logo.png"
 
 print ("Building Content For " + brand['Brand'])
 
@@ -77,7 +78,7 @@ print ("Building Content For " + brand['Brand'])
 f = open (templatesDirectory + "/en/data/interface.json");   # We will always place USB content in EN language which is default
 interface = json.load(f);
 interface["APP_NAME"] = brand["Brand"]
-interface["APP_LOGO"] = brand["enhancedInterfaceLogo"]
+interface["APP_LOGO"] = brand["Logo"]
 
 # Load dictionary of file types
 f = open (templatesDirectory + "/en/data/types.json");
@@ -162,10 +163,14 @@ for path,dirs,files in os.walk(mediaDirectory):
 		# Make a symlink to the file on USB to display the content
 		print ("	WebPath: Writing symlink to /html folder")
 		os.system ("ln -s '" + path + "' " + contentDirectory + "/" + language + "/html/")
-		print ("	WebPath: Creating web archive zip file on USB")
-		shutil.make_archive(mediaDirectory + "/.webarchive-" + thisDirectory, 'zip', path)
-		print ("	WebPath: Linking web archive zip")
-		os.system ('ln -s "'+ mediaDirectory + '/.webarchive-' + thisDirectory + '.zip" "' + contentDirectory + "/" + language + "/html/" + thisDirectory + '.zip"')
+		try:
+			if (brand['makeArchive'] == True):
+			  print ("	WebPath: Creating web archive zip file on USB")
+			  shutil.make_archive(mediaDirectory + "/.webarchive-" + thisDirectory, 'zip', path)
+			  print ("	WebPath: Linking web archive zip")
+			  os.system ('ln -s "'+ mediaDirectory + '/.webarchive-' + thisDirectory + '.zip" "' + contentDirectory + "/" + language + "/html/" + thisDirectory + '.zip"')
+		except:
+			print ("	NOT making web archive according to brand.txt, makeArchive is not true");
 		dirs = []
 		print ("	WebPath: Set webpaths to true for this directory: " +thisDirectory)
 		webpaths.append(path)
@@ -369,6 +374,10 @@ for language in mains:
 	languageJsonObject["text"] = languageCodes[language]["native"][0]
 	languageJson.append(languageJsonObject)
 
+if (len(languageJson) == 0):
+	print ("No valid content found on the USB.  Exiting");
+	exit(1);
+
 # Determine which language should be default.  It is english or first one found
 hasDefault = 0
 for record in languageJson:
@@ -384,6 +393,5 @@ with open(contentDirectory + "/languages.json", 'w', encoding='utf-8') as f:
 
 
 print ("Copying Metadata to Zip File On USB");
-zipFileName = mediaDirectory + '/saved.zip';
 os.system ("(cd " + contentDirectory + " && zip --symlinks -r " + zipFileName + " *)");
 print ("DONE");
