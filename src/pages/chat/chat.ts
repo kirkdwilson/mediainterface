@@ -50,29 +50,23 @@ export class ChatPage {
       .subscribe(data => {
         let nextTimeStamp = this.timeStamp;  // Determine the latest message received so we can just ask for latest
         if (data && data.length > 0) {
-          console.log(`Retrieved ${data.length} messages`);
-          // Loop through new chats and don't display my own chats IF timeStamp>0 because this is a refresh and we will get duplicates on the screen
-          let i = data.length
-          while (i--) {
-            // If this message is after most recent received message, set the new timestamp for requesting messages
-            if (nextTimeStamp < data[i].timestamp) {
-              nextTimeStamp = data[i].timestamp + 1;
+            console.log(`Retrieved ${data.length} messages`);
+
+            // Set the new timestamp for requesting messages
+            nextTimeStamp = data[data.length-1].timestamp + 1;
+
+            // Filter out my own chats from API since page reloaded
+            if (this.timeStamp > 0) {
+              data = data.filter(chat => chat.nick !== this.nickname);
             }
-              if (this.timeStamp > 0 && data[i].nick === this.nickname) {
-              if (this.timeStamp < data[i].timestamp) {
-                nextTimeStamp = data[i].timestamp + 1;
-              }
-              console.log(`Remove Self Chat: ${JSON.stringify(data[i])}`);
-              data.splice(i, 1);
-            }
-          }
-          // If there are chats, add them to the page AND Get the last chat timeStamp so we know what to ask for next time
+
+          // If there are chats, add them to the page
           if (data && data.length > 0) {
             console.log(`Got Chats Ending at ${this.timeStamp}`);
             this.chats = this.chats.concat(data);
             this.content.scrollToBottom(500);
           }
-          this.timeStamp = nextTimeStamp;
+          this.timeStamp = nextTimeStamp;  // Now set the global variable for the next timestamp to request
           console.log(`Setting timestamp for messages retrieval to: ${this.timeStamp}`);
         }
         else {
