@@ -135,4 +135,8 @@ export class HomePage {
     this.translateService.get('APP_LOGO').pipe(take(1)).subscribe((logo: string) => this.logo = logo);
   }
 
+  goChat() {
+    this.navController.push('ChatPage');
+  }
+
 }

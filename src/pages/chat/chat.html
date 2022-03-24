@@ -1,0 +1,62 @@
+<!--
+  Generated template for the ChatPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-buttons left>
+        <button ion-button icon-only (click)="goHome()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-title right><ion-icon name="chatbubbles"></ion-icon>&nbsp;Chat</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content >
+  <ion-list content>
+    <ion-item *ngFor="let chat of chats" no-lines>
+      <div class="chat-status" text-center *ngIf="chat.type==='join'||chat.type==='exit';else message">
+        <span class="chat-date">{{chat.timestamp * 1000 | date:'short'}}</span>
+        <span class="chat-content-center">{{chat.body}}</span>
+      </div>
+      <ng-template #message>
+        <div class="chat-message" text-right *ngIf="chat.nick === nickname">
+          <div class="right-bubble">
+            <span class="msg-name">{{chat.nick}}</span>
+            <span class="msg-date">{{chat.timestamp * 1000 | date:'short'}}</span>
+            <p text-wrap>{{chat.body}}</p>
+          </div>
+        </div>
+        <div class="chat-message" text-left *ngIf="chat.nick !== nickname">
+          <div class="left-bubble">
+            <span class="msg-name">{{chat.nick}}</span>
+            <span class="msg-date">{{chat.timestamp * 1000 | date:'short'}}</span>
+            <p text-wrap>{{chat.body}}</p>
+          </div>
+        </div>
+      </ng-template>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-2>
+        <ion-input type="text" placeholder="{{ nickname }}" [(ngModel)]="data.nick" name="nick"></ion-input>
+      </ion-col>
+      <ion-col col-9>
+        <ion-input type="text" placeholder="Type a message" [(ngModel)]="data.body" name="body"></ion-input>
+      </ion-col>
+      <ion-col col-1 (click)="sendMessage()">
+        <ion-icon name="paper-plane"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
+
