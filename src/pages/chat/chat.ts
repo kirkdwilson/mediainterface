@@ -28,6 +28,7 @@ export class ChatPage {
   roomkey:string;
   nickname:string;
   offStatus:boolean = false;
+  url = '';
 
   constructor(private storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
     this.storage = storage;
@@ -46,10 +47,10 @@ export class ChatPage {
     console.log('Hello RestServiceProvider Provider');
 
     Observable.interval(3000)
-      .mergeMap(()    =>  http.get('/chat/' + this.timeStamp))
+      .mergeMap(()    =>  http.get(this.url + '/chat/' + this.timeStamp))
       .subscribe(chats => {
         let nextTimeStamp = this.timeStamp;  // Determine the latest message received so we can just ask for latest
-        if (chats && chats.length > 0) {
+        if (chats && chats !== null) {
             console.log(`Retrieved ${chats.length} messages`);
 
             // Set the new timestamp for requesting messages
@@ -61,7 +62,7 @@ export class ChatPage {
             }
 
           // If there are chats, add them to the page
-          if (chats && chats.length > 0) {
+          if (chats && chats !== null) {
             console.log(`Got Chats Ending at ${this.timeStamp}`);
             this.chats = this.chats.concat(chats);
             this.content.scrollToBottom(500);
@@ -90,11 +91,11 @@ export class ChatPage {
     this.nickname = this.data.nick || this.nickname;
     this.data.nick = this.nickname;
     this.storage.set('nickname', this.nickname);
-    let headers = new Headers();
-    headers.append("Accept", 'application/json');
-    headers.append('Content-Type', 'application/json' );
+    let requestHeaders = [];
+    requestHeaders.push("Accept", 'application/json');
+    requestHeaders.push('Content-Type', 'application/json' );
 
-    this.http.put('/chat/', this.data, { headers: headers }).subscribe(response => {
+    this.http.put(this.url + '/chat/', this.data, { headers: requestHeaders }).subscribe(response => {
     }, err => {
       console.log(err);
     });
