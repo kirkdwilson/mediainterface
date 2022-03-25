@@ -11,6 +11,11 @@ import mimetypes
 
 mimetypes.init()
 
+#######################################################
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
+
 # Defaults for Connectbox / TheWell
 mediaDirectory = "/media/usb0"
 templatesDirectory = "/var/www/enhanced/content/www/assets/templates"
@@ -97,6 +102,16 @@ if len(os.listdir(mediaDirectory) ) == 0:
 
 language = "en"  # By default but it will be overwritten if there are other language directories on the USB
 
+##########################################################################
+#  Check mediaDirectory for at least one language directory.  If one exists, then only process language folders
+##########################################################################
+doesRootContainLanguage = intersection(next(os.walk(mediaDirectory))[1],languageCodes)
+if (doesRootContainLanguage):
+  print ("Root Directory Contains Languages so we skip all root level folders that aren't languages: " + json.dumps(doesRootContainLanguage))
+
+##########################################################################
+#  Main Loop
+##########################################################################
 for path,dirs,files in os.walk(mediaDirectory):
 	thisDirectory = os.path.basename(os.path.normpath(path))
 	print ("====================================================")
@@ -128,6 +143,13 @@ for path,dirs,files in os.walk(mediaDirectory):
 		directoryType = "language"
 	except:
 		print ('	NOT a Language: ' + thisDirectory)
+
+	##########################################################################
+	#  IF directory is not a language but we are ignoring non language root folders
+	##########################################################################
+	if (directoryType != "language" and doesRootContainLanguage):
+		print ('	Skipping because directory is not a lanugage: ' + thisDirectory)
+		continue;
 
 	##########################################################################
 	#  New language set up
