@@ -5,6 +5,7 @@ import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map';
 
 /**
  * Generated class for the ChatPage page.
@@ -24,10 +25,10 @@ export class ChatPage {
 
   timeStamp = 0;
   data = { nick:'', message:'', timestamp:0 ,body: ''};
-  chats: any[] = [];
+  chats = [];
   roomkey:string;
   nickname:string;
-  offStatus:boolean = false;
+  nextTimeStamp:number = 0;
   url = '';
 
   constructor(private storage: Storage, public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
@@ -46,15 +47,16 @@ export class ChatPage {
 
     console.log('Hello RestServiceProvider Provider');
 
+
     Observable.interval(3000)
       .mergeMap(()    =>  http.get(this.url + '/chat/' + this.timeStamp))
-      .subscribe(chats => {
-        let nextTimeStamp = this.timeStamp;  // Determine the latest message received so we can just ask for latest
-        if (chats && chats !== null) {
+      .subscribe((chats: any[]) => {
+        this.nextTimeStamp = this.timeStamp;  // Determine the latest message received so we can just ask for latest
+        if (chats !== null) {
             console.log(`Retrieved ${chats.length} messages`);
 
             // Set the new timestamp for requesting messages
-            nextTimeStamp = chats[chats.length-1].timestamp + 1;
+            this.nextTimeStamp = chats[chats.length-1].timestamp + 1;
 
             // Filter out my own chats from API since page reloaded
             if (this.timeStamp > 0) {
@@ -62,12 +64,13 @@ export class ChatPage {
             }
 
           // If there are chats, add them to the page
-          if (chats && chats !== null) {
+          if (chats !== null) {
             console.log(`Got Chats Ending at ${this.timeStamp}`);
+            console.log(chats);
             this.chats = this.chats.concat(chats);
             this.content.scrollToBottom(500);
           }
-          this.timeStamp = nextTimeStamp;  // Now set the global variable for the next timestamp to request
+          this.timeStamp = this.nextTimeStamp;  // Now set the global variable for the next timestamp to request
           console.log(`Setting timestamp for messages retrieval to: ${this.timeStamp}`);
         }
         else {
@@ -91,11 +94,9 @@ export class ChatPage {
     this.nickname = this.data.nick || this.nickname;
     this.data.nick = this.nickname;
     this.storage.set('nickname', this.nickname);
-    let requestHeaders = [];
-    requestHeaders.push("Accept", 'application/json');
-    requestHeaders.push('Content-Type', 'application/json' );
+    const headers = { 'content-type': 'application/json'}
 
-    this.http.put(this.url + '/chat/', this.data, { headers: requestHeaders }).subscribe(response => {
+    this.http.put(this.url + '/chat/', this.data, {'headers': headers}).subscribe(response => {
     }, err => {
       console.log(err);
     });
