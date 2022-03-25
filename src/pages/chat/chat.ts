@@ -23,7 +23,7 @@ export class ChatPage {
   @ViewChild(Content) content: Content;
 
   timeStamp = 0;
-  data = { nick:'', message:'', timestamp:0 };
+  data = { nick:'', message:'', timestamp:0 ,body: ''};
   chats = [];
   roomkey:string;
   nickname:string;
@@ -47,23 +47,23 @@ export class ChatPage {
 
     Observable.interval(3000)
       .mergeMap(()    =>  http.get('/chat/' + this.timeStamp))
-      .subscribe(data => {
+      .subscribe(chats => {
         let nextTimeStamp = this.timeStamp;  // Determine the latest message received so we can just ask for latest
-        if (data && data.length > 0) {
-            console.log(`Retrieved ${data.length} messages`);
+        if (chats && chats.length > 0) {
+            console.log(`Retrieved ${chats.length} messages`);
 
             // Set the new timestamp for requesting messages
-            nextTimeStamp = data[data.length-1].timestamp + 1;
+            nextTimeStamp = chats[chats.length-1].timestamp + 1;
 
             // Filter out my own chats from API since page reloaded
             if (this.timeStamp > 0) {
-              data = data.filter(chat => chat.nick !== this.nickname);
+              chats = chats.filter(chat => chat.nick !== this.nickname);
             }
 
           // If there are chats, add them to the page
-          if (data && data.length > 0) {
+          if (chats && chats.length > 0) {
             console.log(`Got Chats Ending at ${this.timeStamp}`);
-            this.chats = this.chats.concat(data);
+            this.chats = this.chats.concat(chats);
             this.content.scrollToBottom(500);
           }
           this.timeStamp = nextTimeStamp;  // Now set the global variable for the next timestamp to request
@@ -94,7 +94,7 @@ export class ChatPage {
     headers.append("Accept", 'application/json');
     headers.append('Content-Type', 'application/json' );
 
-    this.http.put('/chat/', this.data, { headers: headers }).subscribe(data => {
+    this.http.put('/chat/', this.data, { headers: headers }).subscribe(response => {
     }, err => {
       console.log(err);
     });
