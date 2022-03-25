@@ -24,7 +24,7 @@ export class ChatPage {
 
   timeStamp = 0;
   data = { nick:'', message:'', timestamp:0 ,body: ''};
-  chats = [];
+  chats: any[] = [];
   roomkey:string;
   nickname:string;
   offStatus:boolean = false;
