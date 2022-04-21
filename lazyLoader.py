@@ -7,6 +7,7 @@ import json
 import os
 import pathlib
 import sys
+import time
 from urllib.parse import unquote
 
 # Defaults for Connectbox / TheWell
@@ -24,12 +25,13 @@ except:
 # See if we have a package subscription
 isSubscribed = False;
 try:
+  print ("Check For Subscription");
   f = open('/usr/local/connectbox/brand.txt');
   brand = json.load(f)
   f = open(contentDirectory + 'subscription.json');
   subscription = json.load(f)
   # IF we don't have argument of new URL AND we have subscription data, this is a subscribed box
-  if (len(sys.argv) < 2 and subscription['packagesAPIFeed']):
+  if (len(url) == 0 and subscription['packagesAPIFeed']):
     isSubscribed = True;
     subscription['packageName'] = unquote(subscription['packagesAPIFeed']).split("packageName=")[1];
     print('Box is subscribed to: ' + subscription['packageName'])
@@ -43,9 +45,17 @@ if (isSubscribed):
   f = open('/tmp/packages.json');
   packages = json.load(f);
   for record in packages:
+    #print ("Subscripton: Is this a match? " + record['package']);
     if (record['is_slim'] is True and record['package'] == subscription['packageName']):
       print ("Subscription: " + record["package"]);
-      url = record['filepath']
+      if (subscription['lastUpdated'] < record['timestamp']):
+        print ("Subscription: Updates Found");
+        url = record['filepath']
+        subscription['lastUpdated'] = time.time();
+        with open(contentDirectory + 'subscription.json', 'w', encoding='utf-8') as f:
+          json.dump(subscription, f, ensure_ascii=False, indent=4)
+      else:
+        print ("Subscription: No Updates Found");
 
 # First Download the URL and unzip it or find missing content
 if (len(url) > 1):
@@ -54,7 +64,9 @@ if (len(url) > 1):
   os.system("unzip -o /tmp/openwell.zip -d /var/www/enhanced/content/www/assets/")
   print ("Loaded Package File")
 else:
-  print ("No Package File To Donwload");
+  print ("No Package File To Download");
+
+print ("==================================================")
 print ("Looking for missing content and trying to download")
 
 directories =  ["data", "images", "media", "html"]
