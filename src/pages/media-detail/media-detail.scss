@@ -54,18 +54,29 @@ page-media-detail {
         height: 550px;
     }
 }
+.item ion-thumbnail {
+    min-width: 120px;
+}
 .item-ios ion-thumbnail ion-img, .item-ios ion-thumbnail img,
 .item-md ion-thumbnail ion-img, .item-md ion-thumbnail img {
     height: auto !important;
     width: auto !important;
+    margin-left: auto;
+    margin-right: auto;
     max-width: 120px;
     max-height: 120px;
 }
 @media only screen and (min-width: 960px) {
+    .item ion-thumbnail {
+        min-width: 250px;
+    }
+
     .item-ios ion-thumbnail ion-img, .item-ios ion-thumbnail img,
     .item-md ion-thumbnail ion-img, .item-md ion-thumbnail img {
         height: auto !important;
         width: auto !important;
+        margin-left: auto;
+        margin-right: auto;
         max-width: 250px;
         max-height: 250px;
     }
