@@ -70,8 +70,8 @@
                   <button ion-button clear icon-only (click)="downloadFile(episode.downloadPath)">
                     <ion-icon name="download" color="primary"></ion-icon>
                   </button>
-                  <button ion-button clear icon-only (click)="playEpisode(episode)" [hidden]="!hasViewer(media?.mediaType, true)">
-                    <ion-icon [name]="playIcon(media?.mediaType)" color="primary"></ion-icon>
+                  <button ion-button clear icon-only (click)="playEpisode(episode)" [hidden]="!hasViewer(episode?.mediaType, true)">
+                    <ion-icon [name]="playIcon(episode?.mediaType)" color="primary"></ion-icon>
                   </button>
                 </ion-buttons>
               </ion-col>
