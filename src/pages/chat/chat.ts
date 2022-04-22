@@ -71,10 +71,6 @@ export class ChatPage {
       });
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ChatPage');
-  }
-
   goHome() {
     this.navCtrl.push('HomePage');
   }
@@ -95,6 +91,7 @@ export class ChatPage {
     this.chats.push(JSON.parse(JSON.stringify(this.data)));  // stringify and parse to copy the data
     this.data.body = '';  // Erase the current message field on the screen
     this.content.scrollToBottom(500);
+    return false;
   }
 
 }
