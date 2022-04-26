@@ -14,7 +14,8 @@
     "HTML": "Web Document",
 	  "PDF": "PDF",
     "TEXT": "Text File",
-    "VIDEO": "Video"
+    "VIDEO": "Video",
+    "ZIP": "Archive"
   },
   "MISSING_MEDIA_TITLE": "Media is missing!",
   "MISSING_MEDIA_TEXT": "Something went wrong! The media is missing!",
