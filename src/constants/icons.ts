@@ -11,4 +11,5 @@ export const MEDIA_TYPE_ICONS = {
   html: 'globe',
   text: 'document',
   video: 'film',
+  zip: 'ios-archive-outline',
 };
