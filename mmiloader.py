@@ -17,7 +17,7 @@ def intersection(lst1, lst2):
     return lst3
 
 # Defaults for Connectbox / TheWell
-mediaDirectory = "/media/usb0"
+mediaDirectory = "/media/usb0/content"
 templatesDirectory = "/var/www/enhanced/content/www/assets/templates"
 contentDirectory = "/var/www/enhanced/content/www/assets/content"
 zipFileName = mediaDirectory + '/saved.zip';
@@ -225,7 +225,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 			continue
 
 		# Get certain data about the file and path
-		fullFilename = path + "/" + filename							# Example /media/usb0/video.mp4
+		fullFilename = path + "/" + filename							# Example /media/usb0/content/video.mp4
 		shortName = pathlib.Path(path + "/" + filename).stem			# Example  video      (ALSO, slug is a term used in the BoltCMS mediabuilder that I'm adapting here)
 		relativePath = path.replace(mediaDirectory +'/','')
 		slug = relativePath.replace('/','-') + '-' + os.path.basename(fullFilename).replace('.','-')			# Example  video.mp4
