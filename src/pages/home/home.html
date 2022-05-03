@@ -65,7 +65,7 @@
 </ion-content>
 
 <ion-fab right bottom>
-  <button ion-button icon-only (click)="goChat()">
+  <button [hidden]="disable_openwell_chat" ion-button icon-only (click)="goChat()">
       <ion-icon name="chatbubbles"></ion-icon>
   </button>
 </ion-fab>
