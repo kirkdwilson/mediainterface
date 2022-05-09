@@ -134,5 +134,5 @@ for language in next(os.walk(contentDirectory))[1]:
 				print ("----------------------------------------")
 				print (" ")
 
-print ("Failed Item Count: " + str(failedItemCount));
+print ("Failed Item Count:" + str(failedItemCount));
 print ("Done.")
