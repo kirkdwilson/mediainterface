@@ -13,6 +13,8 @@ from urllib.parse import unquote
 # Defaults for Connectbox / TheWell
 contentDirectory = "/var/www/enhanced/content/www/assets/content/"
 
+failedItemCount = 0;
+
 # URL:
 url = ''
 try:
@@ -115,6 +117,7 @@ for language in next(os.walk(contentDirectory))[1]:
 					  print ("		Content Downloaded to: " + item["filename"])
 					except:
 						print ("		FAILED To Download: " + item["title"])
+						failedItemCount+=1;
 				print ("----------------------------------------")
 				print (" ")
 				print ("	Checking Image Content: " + item["image"])
@@ -127,7 +130,9 @@ for language in next(os.walk(contentDirectory))[1]:
 					  print ("		Content Downloaded to: " + item["image"])
 					except:
 						print ("		FAILED To Download: " + item["title"])
+						failedItemCount+=1;
 				print ("----------------------------------------")
 				print (" ")
 
+print ("Failed Item Count: " + str(failedItemCount));
 print ("Done.")
