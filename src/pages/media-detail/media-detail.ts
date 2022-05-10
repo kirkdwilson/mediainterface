@@ -1,9 +1,12 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { map } from 'rxjs/operators/map';
+import { merge } from 'rxjs/observable/merge';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { LanguageProvider } from '@providers/language/language';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
+import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
 import { Episode } from '@models/episode';
 import { Language } from '@models/language';
 import { Media } from '@models/media';
@@ -67,6 +70,7 @@ export class MediaDetailPage {
     private navController: NavController,
     private navParams: NavParams,
     private popoverController: PopoverController,
+    private statReporterProvider: StatReporterProvider,
   ) {}
 
   /**
@@ -100,16 +104,28 @@ export class MediaDetailPage {
    * @return         void
    * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
    */
-  downloadFile(fileToDownload: string) {
+  downloadFile(
+    fileToDownload: string,
+    mediaType: string,
+    slug: string,
+  ) {
     const fileName = fileToDownload.split('\\').pop().split('/').pop();
-    this.downloadFileProvider.download(fileToDownload).pipe(take(1)).subscribe((blob: any) => {
-      const url = window.URL.createObjectURL(blob);
-      const link = this.downloadLink.nativeElement;
-      link.href = url;
-      link.download = fileName;
-      link.click();
-      window.URL.revokeObjectURL(url);
-    });
+    merge(
+      this.downloadFileProvider.download(fileToDownload).pipe(
+        map((blob: any)  =>  {
+          const url = window.URL.createObjectURL(blob);
+          const link = this.downloadLink.nativeElement;
+          link.href = url;
+          link.download = fileName;
+          link.click();
+          window.URL.revokeObjectURL(url);
+        }),
+        take(1),
+      ),
+      this.statReporterProvider.report(slug, 'download', this.currentLanguage.twoLetterCode, mediaType).pipe(
+        take(1)
+      ),
+    ).subscribe();
   }
 
   /**
