@@ -22,4 +22,8 @@ export interface ViewerItem {
    * The title of the item
    */
   title: string;
+  /**
+   * The media type of the item
+   */
+  type: string;
 }

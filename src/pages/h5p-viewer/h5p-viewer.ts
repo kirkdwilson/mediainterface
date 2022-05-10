@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage } from 'ionic-angular';
+import { take } from 'rxjs/operators/take';
 import { H5P } from 'h5p-standalone';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
 import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
@@ -35,6 +36,7 @@ export class H5pViewerPage extends BaseViewerPage implements BaseViewerPageInter
    */
   loadFile() {
     this.item = this.firstItem;
+    this.reportView(this.item).pipe(take(1)).subscribe();
     const options = {
       h5pJsonPath: this.item.filePath,
       frameJs: 'assets/h5p/frame.bundle.js',

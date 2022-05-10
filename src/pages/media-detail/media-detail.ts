@@ -195,6 +195,7 @@ export class MediaDetailPage {
           isFirst: playFirst,
           slug: episode.slug,
           title: episode.title,
+          type: episode.mediaType,
         };
       });
     }
@@ -226,6 +227,7 @@ export class MediaDetailPage {
         isFirst: true,
         slug: this.media.slug,
         title: this.media.title,
+        type: this.media.mediaType,
       };
     }
     this.openViewer(this.media, [item]);

@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, Slides } from 'ionic-angular';
+import { take } from 'rxjs/operators/take';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
 import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
@@ -39,6 +40,7 @@ export class ImageViewerPage extends BaseViewerPage implements BaseViewerPageInt
    */
   loadFile() {
     this.item = this.firstItem;
+    this.reportView(this.item).pipe(take(1)).subscribe();
     // Put photos in correct order starting with isFirst going to the last.
     const firstIndex = this.items.findIndex((item: ViewerItem)  =>  item.isFirst);
     const firstItems: Array<ViewerItem> = this.items.slice(0, firstIndex);
@@ -54,6 +56,7 @@ export class ImageViewerPage extends BaseViewerPage implements BaseViewerPageInt
   slideChanged() {
     let currentIndex = this.slides.getActiveIndex();
     this.item = this.images[currentIndex];
+    this.reportView(this.item).pipe(take(1)).subscribe();
   }
 
 }

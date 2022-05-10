@@ -1,9 +1,16 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { map } from 'rxjs/operators/map';
+import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
+import { LanguageProvider } from '@providers/language/language';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
+import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
+import { Language } from '@models/language';
 
 /**
  * A base viewer for the viewers to inherit from.  Stores common code.
@@ -42,8 +49,10 @@ export class BaseViewerPage {
   constructor(
     protected dataStore: NavParamsDataStoreProvider,
     protected downloadFileProvider: DownloadFileProvider,
+    protected languageProvider: LanguageProvider,
     protected navController: NavController,
     protected navParams: NavParams,
+    protected statReporterProvider: StatReporterProvider,
     protected viewController: ViewController,
   ) {
   }
@@ -125,6 +134,21 @@ export class BaseViewerPage {
         animate: true,
       });
     }
+  }
+
+  /**
+   * Report the viewing of an item
+   *
+   * @param  item The item being viewed
+   * @return      The item received
+   */
+  reportView(item: ViewerItem): Observable<ViewerItem> {
+    if (!item) {
+      return of(null);
+    }
+    return this.languageProvider.getLanguage().pipe(
+      mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, 'view', lang.twoLetterCode, item.type).pipe(map(() =>  item)))
+    );
   }
 
 }
