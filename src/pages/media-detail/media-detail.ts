@@ -182,6 +182,7 @@ export class MediaDetailPage {
           url: episode.filePath,
           playFirst: playFirst,
           posterUrl: episode.imagePath,
+          slug: episode.slug,
           type: episode.mediaType,
         };
       });
@@ -192,6 +193,7 @@ export class MediaDetailPage {
           downloadPath: episode.downloadPath,
           filePath: episode.filePath,
           isFirst: playFirst,
+          slug: episode.slug,
           title: episode.title,
         };
       });
@@ -214,6 +216,7 @@ export class MediaDetailPage {
         url: this.media.filePath,
         playFirst: true,
         posterUrl: this.media.imagePath,
+        slug: this.media.slug,
         type: this.media.mediaType,
       };
     } else {
@@ -221,6 +224,7 @@ export class MediaDetailPage {
         downloadPath: this.media.downloadPath,
         filePath: this.media.filePath,
         isFirst: true,
+        slug: this.media.slug,
         title: this.media.title,
       };
     }

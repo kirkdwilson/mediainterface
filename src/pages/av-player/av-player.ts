@@ -1,8 +1,15 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators/map';
+import { mergeMap } from 'rxjs/operators/mergeMap';
+import { of } from 'rxjs/observable/of';
 import { take } from 'rxjs/operators/take';
 import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-player-data-store';
 import { AvPlayerItem } from '@interfaces/av-player-item.interface';
+import { LanguageProvider } from '@providers/language/language';
+import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
+import { Language } from '@models/language';
 
 /**
  * An audio and video player.
@@ -74,8 +81,10 @@ export class AvPlayerPage {
 
     constructor(
       private dataStore: AvPlayerDataStoreProvider,
+      private languageProvider: LanguageProvider,
       private navController: NavController,
       private navParams: NavParams,
+      private statReporterProvider: StatReporterProvider,
       private viewController: ViewController,
     ) {
     }
@@ -88,7 +97,10 @@ export class AvPlayerPage {
     ionViewWillEnter() {
       const items = this.navParams.get('items');
       this.slug = this.navParams.get('slug');
-      this.dataStore.init(items).pipe(take(1)).subscribe((current: AvPlayerItem) => {
+      this.dataStore.init(items).pipe(
+        take(1),
+        mergeMap((current: AvPlayerItem)  =>  this.reportView(current)),
+      ).subscribe((current: AvPlayerItem) => {
         if (!current) {
           this.goBack();
         } else {
@@ -207,7 +219,10 @@ export class AvPlayerPage {
      * @return void
      */
     nextEpisode() {
-      this.dataStore.next().pipe(take(1)).subscribe((next: AvPlayerItem) => {
+      this.dataStore.next().pipe(
+        take(1),
+        mergeMap((next: AvPlayerItem)  =>  this.reportView(next)),
+      ).subscribe((next: AvPlayerItem) => {
         if (next == null) {
           this.goBack();
         } else {
@@ -250,7 +265,10 @@ export class AvPlayerPage {
      * @return void
      */
     previousEpisode() {
-      this.dataStore.previous().pipe(take(1)).subscribe((prev: AvPlayerItem) => {
+      this.dataStore.previous().pipe(
+        take(1),
+        mergeMap((prev: AvPlayerItem)  =>  this.reportView(prev)),
+      ).subscribe((prev: AvPlayerItem) => {
         if (prev == null) {
           this.goBack();
         } else {
@@ -286,6 +304,21 @@ export class AvPlayerPage {
             this.nextEpisode();
           }, 2000);
       }
+    }
+
+    /**
+     * Report the viewing of an item
+     *
+     * @param  item The item being viewed
+     * @return      The item received
+     */
+    private reportView(item: AvPlayerItem): Observable<AvPlayerItem> {
+      if (!item) {
+        return of(null);
+      }
+      return this.languageProvider.getLanguage().pipe(
+        mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, 'view', lang.twoLetterCode, item.type).pipe(map(() =>  item)))
+      );
     }
 
 }
