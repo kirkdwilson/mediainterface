@@ -12,6 +12,11 @@ import { environment } from '@env';
 @Injectable()
 export class StatReporterProvider {
 
+  /**
+   * Build the class
+   *
+   * @param http  Angular's http client
+   */
   constructor(
     private http: HttpClient
   ) {}
