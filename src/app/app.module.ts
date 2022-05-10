@@ -10,6 +10,7 @@ import { MyApp } from '@app/app.component';
 import { LanguagePopoverComponent } from '@components/language-popover/language-popover';
 import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
 import { LanguageProvider } from '@providers/language/language';
+import { StatReporterProvider } from '../providers/stat-reporter/stat-reporter';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { LanguageProvider } from '@providers/language/language';
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LanguageProvider,
+    StatReporterProvider,
   ]
 })
 export class AppModule {}

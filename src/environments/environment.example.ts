@@ -10,6 +10,8 @@ export const environment = {
   assetPath: 'assets/content/{LANG}/',
   // Path to the languages file
   languagePath: 'assets/content/languages.json',
+  // The API endpoint to push viewership stats
+  reportingEndpoint: '',
   // Are we using a production version?
   isProduction: false,
 };
