@@ -174,9 +174,9 @@ export class MediaDetailPage {
    * @return         void
    */
   playEpisode(current: Episode) {
-    const viewer = this.getViewer(current.mediaType);
+    let items: Array<AvPlayerItem|ViewerItem> = null;
     if ((current.mediaType === 'video') || (current.mediaType === 'audio')) {
-      const items = this.media.episodes.map((episode: Episode) => {
+      items = <Array<AvPlayerItem>> this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
         return {
           url: episode.filePath,
@@ -185,11 +185,8 @@ export class MediaDetailPage {
           type: episode.mediaType,
         };
       });
-      this.navController.push('av-player', { items: items, slug: this.slug });
-    }  else if (current.mediaType === 'html') {
-      window.open(current.filePath);
-    } else if (viewer !== '') {
-      const items: Array<ViewerItem> = this.media.episodes.map((episode: Episode) => {
+    } else {
+      items = <Array<ViewerItem>> this.media.episodes.map((episode: Episode) => {
         const playFirst = (episode.title === current.title);
         return {
           downloadPath: episode.downloadPath,
@@ -198,8 +195,8 @@ export class MediaDetailPage {
           title: episode.title,
         };
       });
-      this.navController.push(viewer, { items: items, slug: this.slug });
     }
+    this.openViewer(current, items);
   }
 
   /**
@@ -211,26 +208,23 @@ export class MediaDetailPage {
     if (!this.media) {
       return;
     }
-    const viewer = this.getViewer(this.media.mediaType);
+    let item: AvPlayerItem|ViewerItem = null;
     if ((this.media.mediaType === 'video') || (this.media.mediaType === 'audio')) {
-      const item: AvPlayerItem = {
+      item = <AvPlayerItem> {
         url: this.media.filePath,
         playFirst: true,
         posterUrl: this.media.imagePath,
         type: this.media.mediaType,
       };
-      this.navController.push('av-player', { items: [item], slug: this.slug });
-    } else if (this.media.mediaType === 'html') {
-      window.open(this.media.filePath);
-    } else if (viewer !== '') {
-      const item: ViewerItem = {
+    } else {
+      item = <ViewerItem> {
         downloadPath: this.media.downloadPath,
         filePath: this.media.filePath,
         isFirst: true,
         title: this.media.title,
       };
-      this.navController.push(viewer, { items: [item], slug: this.slug });
     }
+    this.openViewer(this.media, [item]);
   }
 
   /**
@@ -272,6 +266,24 @@ export class MediaDetailPage {
       .get(this.slug)
       .pipe(take(1))
       .subscribe((media: Media) => this.media = media);
+  }
+
+  /**
+   * Open the appropriate viewer for the media
+   *
+   * @param  resource   The resource that we are retrieving
+   * @param  items      An array of items in order of play
+   * @return void
+   */
+  private openViewer(resource: Media|Episode, items: Array<AvPlayerItem|ViewerItem>) {
+    const viewer = this.getViewer(resource.mediaType);
+    if ((resource.mediaType === 'video') || (resource.mediaType === 'audio')) {
+      this.navController.push('av-player', { items: items, slug: resource.slug });
+    } else if (resource.mediaType === 'html') {
+      window.open(resource.filePath);
+    } else if (viewer !== '') {
+      this.navController.push(viewer, { items: items, slug: resource.slug });
+    }
   }
 
 }
