@@ -269,7 +269,9 @@ export class MediaDetailPage {
   }
 
   /**
-   * Open the appropriate viewer for the media
+   * Open the appropriate viewer for the media.
+   * NOTE: We only report on HTML because it opens a new window.  All view reporting
+   * should be added to viewer.  This allows recording multiple views.
    *
    * @param  resource   The resource that we are retrieving
    * @param  items      An array of items in order of play
@@ -280,7 +282,9 @@ export class MediaDetailPage {
     if ((resource.mediaType === 'video') || (resource.mediaType === 'audio')) {
       this.navController.push('av-player', { items: items, slug: resource.slug });
     } else if (resource.mediaType === 'html') {
-      window.open(resource.filePath);
+      this.statReporterProvider.report(resource.slug, 'view', this.currentLanguage.twoLetterCode, resource.mediaType).pipe(
+        take(1)
+      ).subscribe(() => window.open(resource.filePath));
     } else if (viewer !== '') {
       this.navController.push(viewer, { items: items, slug: resource.slug });
     }
