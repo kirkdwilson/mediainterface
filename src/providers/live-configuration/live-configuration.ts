@@ -18,6 +18,11 @@ import { environment } from '@env';
 export class LiveConfigurationProvider {
 
   /**
+   * Have we finished loading the file?
+   */
+  private isInitialized = false;
+
+  /**
    * Do we allow chatting?
    */
   private chatEnabled = true;
@@ -65,6 +70,7 @@ export class LiveConfigurationProvider {
         if (response && response.hasOwnProperty('disable_stats')) {
           this.statsEnabled = (!response.disable_stats);
         }
+        this.isInitialized = true;
         return null;
     }));
   }
@@ -76,6 +82,9 @@ export class LiveConfigurationProvider {
    */
   private load(): Observable<any> {
     if (environment.liveConfigFile === '') {
+      return of(null);
+    }
+    if (this.isInitialized) {
       return of(null);
     }
     return this.http.get(environment.liveConfigFile).pipe(catchError(() =>  of(null)));
