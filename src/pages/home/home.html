@@ -64,8 +64,8 @@
   <app-footer></app-footer>
 </ion-content>
 
-<ion-fab right bottom>
-  <button ion-button icon-only (click)="goChat()">
+<ion-fab right bottom [hidden]="!allowsChat">
+  <button ion-fab icon-only mini (click)="goChat()">
       <ion-icon name="chatbubbles"></ion-icon>
   </button>
 </ion-fab>
