@@ -180,6 +180,17 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
   flatten(arr: Array<any>) {
     return [].concat(...arr.map(v => [v, ...this.flatten(v.subitems)]));
   }
+
+  /**
+   * The user wants to download the file
+   * @param  filePath The file path
+   * @return  void
+   */
+  downloadFile(filePath: string) {
+    super.downloadFile(filePath);
+    this.reportView(this.item, 'download').pipe(take(1)).subscribe();
+  }
+
   /**
    * Load the file
    *

@@ -138,6 +138,16 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
   }
 
   /**
+   * The user wants to download the file
+   * @param  filePath The file path
+   * @return  void
+   */
+  downloadFile(filePath: string) {
+    super.downloadFile(filePath);
+    this.reportView(this.item, 'download').pipe(take(1)).subscribe();
+  }
+
+  /**
    * Load the requested file
    *
    * @return void

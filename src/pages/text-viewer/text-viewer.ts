@@ -55,6 +55,16 @@ export class TextViewerPage extends BaseViewerPage implements BaseViewerPageInte
   }
 
   /**
+   * The user wants to download the file
+   * @param  filePath The file path
+   * @return  void
+   */
+  downloadFile(filePath: string) {
+    super.downloadFile(filePath);
+    this.reportView(this.item, 'download').pipe(take(1)).subscribe();
+  }
+
+  /**
    * load the requested file
    *
    * @return void

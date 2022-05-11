@@ -139,15 +139,16 @@ export class BaseViewerPage {
   /**
    * Report the viewing of an item
    *
-   * @param  item The item being viewed
-   * @return      The item received
+   * @param  item         The item being viewed
+   * @param  interaction  How are they interacting
+   * @return              The item received
    */
-  reportView(item: ViewerItem): Observable<ViewerItem> {
+  reportView(item: ViewerItem, interaction = 'view'): Observable<ViewerItem> {
     if (!item) {
       return of(null);
     }
     return this.languageProvider.getLanguage().pipe(
-      mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, 'view', lang.twoLetterCode, item.type).pipe(map(() =>  item)))
+      mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, interaction, lang.twoLetterCode, item.type).pipe(map(() =>  item)))
     );
   }
 
