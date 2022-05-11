@@ -22,28 +22,34 @@ describe('LiveConfigurationProvider', ()  =>  {
         disable_openwell_chat: true,
         disable_stats: true,
       };
+      liveConfigurationProvider.init().pipe(take(1)).subscribe(() =>  {
+        expect(liveConfigurationProvider.allowsChat).toBeFalsy();
+        expect(liveConfigurationProvider.collectingStats).toBeFalsy();
+      });
       const request = app.httpMock.expectOne(environment.liveConfigFile);
       request.flush(response);
-      expect(liveConfigurationProvider.allowsChat).toBeFalsy();
-      expect(liveConfigurationProvider.collectingStats).toBeFalsy();
     })));
 
     it('should keep defaults if file is missing', async(inject([LiveConfigurationProvider], (liveConfigurationProvider)  =>  {
       const response = { status: 400, statusText: 'Bad Request' };
+      liveConfigurationProvider.init().pipe(take(1)).subscribe(() =>  {
+        expect(liveConfigurationProvider.allowsChat).toBeTruthy();
+        expect(liveConfigurationProvider.collectingStats).toBeTruthy();
+      });
       const request = app.httpMock.expectOne(environment.liveConfigFile);
       request.flush('', response);
-      expect(liveConfigurationProvider.allowsChat).toBeTruthy();
-      expect(liveConfigurationProvider.collectingStats).toBeTruthy();
     })));
 
     it('should handle different key for chat', async(inject([LiveConfigurationProvider], (liveConfigurationProvider)  =>  {
       const response: any = {
         disable_chat: true,
       };
+      liveConfigurationProvider.init().pipe(take(1)).subscribe(() =>  {
+        expect(liveConfigurationProvider.allowsChat).toBeFalsy();
+        expect(liveConfigurationProvider.collectingStats).toBeTruthy();
+      });
       const request = app.httpMock.expectOne(environment.liveConfigFile);
       request.flush(response);
-      expect(liveConfigurationProvider.allowsChat).toBeFalsy();
-      expect(liveConfigurationProvider.collectingStats).toBeTruthy();
     })));
 
   });

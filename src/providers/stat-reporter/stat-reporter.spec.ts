@@ -20,6 +20,7 @@ describe('StatReporterProvider', () =>  {
       });
 
       it('should report the interaction', async(inject([StatReporterProvider], (statReporterProvider) =>  {
+        statReporterProvider.collectStats = true;
         statReporterProvider.report('best-cat-videos', 'download', 'en', 'video').pipe(take(1)).subscribe((success: boolean)  =>  {
           expect(success).toBeTruthy();
         });
@@ -35,7 +36,17 @@ describe('StatReporterProvider', () =>  {
       })));
 
       it('should report nothing if wrong interaction provided', async(inject([StatReporterProvider], (statReporterProvider) =>  {
+        statReporterProvider.collectStats = true;
         statReporterProvider.report('best-dog-videos', 'played', 'en', 'video').pipe(take(1)).subscribe((success: boolean)  =>  {
+          expect(success).toBeFalsy();
+        });
+
+        app.httpMock.expectNone({method: 'PUT', url: environment.reportingEndpoint});
+      })));
+
+      it('should report nothing if we are not collecting stats', async(inject([StatReporterProvider], (statReporterProvider)  =>  {
+        statReporterProvider.collectStats = false;
+        statReporterProvider.report('best-koala-videos', 'download', 'en', 'video').pipe(take(1)).subscribe((success: boolean)  =>  {
           expect(success).toBeFalsy();
         });
 

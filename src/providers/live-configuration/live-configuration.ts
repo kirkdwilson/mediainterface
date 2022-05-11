@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators/catchError';
 import { of } from 'rxjs/observable/of';
-import { take } from 'rxjs/operators/take';
+import { map } from 'rxjs/operators/map';
 import { environment } from '@env';
 
 /**
@@ -28,9 +29,7 @@ export class LiveConfigurationProvider {
 
   constructor(
     private http: HttpClient
-  ) {
-    this.load();
-  }
+  ) {}
 
   /**
    * Do we allow chatting?
@@ -51,28 +50,35 @@ export class LiveConfigurationProvider {
   }
 
   /**
+   * load the configurations
+   *
+   * @return void
+   */
+  init(): Observable<void> {
+    return this.load().pipe(map((response: any) =>  {
+        if (response && response.hasOwnProperty('disable_openwell_chat')) {
+          this.chatEnabled = (!response.disable_openwell_chat);
+        }
+        if (response && response.hasOwnProperty('disable_chat')) {
+          this.chatEnabled = (!response.disable_chat);
+        }
+        if (response && response.hasOwnProperty('disable_stats')) {
+          this.statsEnabled = (!response.disable_stats);
+        }
+        return null;
+    }));
+  }
+
+  /**
    * Load the configuration file
    *
    * @return void
    */
-  private load() {
+  private load(): Observable<any> {
     if (environment.liveConfigFile === '') {
-      return;
+      return of(null);
     }
-    this.http.get(environment.liveConfigFile).pipe(
-      take(1),
-      catchError(() =>  of(null)),
-    ).subscribe((response: any) =>  {
-      if (response && response.hasOwnProperty('disable_openwell_chat')) {
-        this.chatEnabled = (!response.disable_openwell_chat);
-      }
-      if (response && response.hasOwnProperty('disable_chat')) {
-        this.chatEnabled = (!response.disable_chat);
-      }
-      if (response && response.hasOwnProperty('disable_stats')) {
-        this.statsEnabled = (!response.disable_stats);
-      }
-    });
+    return this.http.get(environment.liveConfigFile).pipe(catchError(() =>  of(null)));
   }
 
 }

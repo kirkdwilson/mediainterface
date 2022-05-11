@@ -11,6 +11,10 @@ import { environment } from '@env';
  */
 @Injectable()
 export class StatReporterProvider {
+  /**
+   * Do you want to collect stats?
+   */
+  collectStats = true;
 
   /**
    * Build the class
@@ -36,6 +40,9 @@ export class StatReporterProvider {
     language: string,
     mediaType: string,
   ): Observable<boolean> {
+    if (!this.collectStats) {
+      return of(false);
+    }
     if (environment.reportingEndpoint === '') {
       return of(false);
     }
