@@ -1,7 +1,10 @@
 <ng-template let-resource="resource" #cardTemplate>
   <ion-card>
     <div class="feature-photo">
-      <a (click)="goToDetails(resource)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
+      <a (click)="goToDetails(resource)">
+        <img *ngIf="resource.imagePath !== ''" src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+        <span class="icon-wrapper" *ngIf="!resource.imagePath"><ion-icon name="{{ resource.icon }}"></ion-icon></span>
+      </a>
     </div>
     <ion-card-header><a (click)="goToDetails(resource)">{{ resource.title }}</a></ion-card-header>
     <ion-card-content>

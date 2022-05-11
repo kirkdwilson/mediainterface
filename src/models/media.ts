@@ -113,6 +113,9 @@ export class Media {
    * @return The image path
    */
   get imagePath(): string {
+    if (!this.image) {
+      return '';
+    }
     return `${environment.assetPath.replace('{LANG}', this.language)}images/${this.image}`;
   }
 
