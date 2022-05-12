@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { Events, IonicPage, NavController, NavParams, Platform, PopoverController, ViewController } from 'ionic-angular';
+import { take } from 'rxjs/operators/take';
 import { Book } from 'epubjs';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
 import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
+import { LanguageProvider } from '@providers/language/language';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
+import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
 import { TocItem } from '@interfaces/toc-item.interface';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
 import { TocPopoverComponent } from '@components/toc-popover/toc-popover';
@@ -86,13 +89,17 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
     protected platform: Platform,
     protected popoverController: PopoverController,
     protected viewController: ViewController,
+    languageProvider: LanguageProvider,
+    statReporterProvider: StatReporterProvider,
   ) {
     super(
       dataStore,
       downloadFileProvider,
+      languageProvider,
       navController,
       navParams,
-      viewController
+      statReporterProvider,
+      viewController,
     );
   }
 
@@ -173,6 +180,17 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
   flatten(arr: Array<any>) {
     return [].concat(...arr.map(v => [v, ...this.flatten(v.subitems)]));
   }
+
+  /**
+   * The user wants to download the file
+   * @param  filePath The file path
+   * @return  void
+   */
+  downloadFile(filePath: string) {
+    super.downloadFile(filePath);
+    this.reportView(this.item, 'download').pipe(take(1)).subscribe();
+  }
+
   /**
    * Load the file
    *
@@ -180,6 +198,7 @@ export class EpubViewerPage extends BaseViewerPage implements BaseViewerPageInte
    */
   loadFile() {
     this.item = this.firstItem;
+    this.reportView(this.item).pipe(take(1)).subscribe();
     this.book = new Book(this.item.filePath);
     this.rendition = this.book.renderTo('book', { width: '100%', height: '100%' });
     this.rendition.themes.fontSize(`${this.fontSize}%`);

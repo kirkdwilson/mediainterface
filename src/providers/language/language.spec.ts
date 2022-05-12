@@ -207,7 +207,8 @@ describe('LanguageProvider', () => {
           expect(storage.get).toHaveBeenCalledWith(languageProvider.storageKey);
           expect(translate.getBrowserCultureLang).not.toHaveBeenCalled();
         });
-        app.httpMock.expectNone(environment.languagePath);
+        const request = app.httpMock.expectOne(environment.languagePath);
+        request.flush(mockedResponse);
       })));
 
       it('should get the preferred language if not in database', async(inject([LanguageProvider], (languageProvider) => {

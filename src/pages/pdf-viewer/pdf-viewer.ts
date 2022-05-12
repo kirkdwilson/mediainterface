@@ -1,5 +1,6 @@
 import { Component, ElementRef, NgZone, TemplateRef, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { Content, IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { take } from 'rxjs/operators/take';
 import * as PDFJS from 'pdfjs-dist/webpack.js';
 import { PDFPageProxy, PDFPageViewport, PDFRenderTask } from 'pdfjs-dist';
 import { BaseViewerPage } from '@pages/base-viewer/base-viewer';
@@ -7,7 +8,9 @@ import { BaseViewerPageInterface } from '@interfaces/base-viewer.interface';
 import { PagePosition } from '@interfaces/page-position.interface';
 import { PageState } from '@interfaces/page-state.interface';
 import { DownloadFileProvider } from '@providers/download-file/download-file';
+import { LanguageProvider } from '@providers/language/language';
 import { NavParamsDataStoreProvider } from '@providers/nav-params-data-store/nav-params-data-store';
+import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
 import { ViewerItem } from '@interfaces/viewer-item.interface';
 
 /**
@@ -109,15 +112,19 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
     protected downloadFileProvider: DownloadFileProvider,
     protected navController: NavController,
     protected navParams: NavParams,
-    protected zone: NgZone,
     protected viewController: ViewController,
+    protected zone: NgZone,
+    languageProvider: LanguageProvider,
+    statReporterProvider: StatReporterProvider,
   ) {
     super(
       dataStore,
       downloadFileProvider,
+      languageProvider,
       navController,
       navParams,
-      viewController
+      statReporterProvider,
+      viewController,
     );
   }
 
@@ -131,12 +138,23 @@ export class PdfViewerPage extends BaseViewerPage implements BaseViewerPageInter
   }
 
   /**
+   * The user wants to download the file
+   * @param  filePath The file path
+   * @return  void
+   */
+  downloadFile(filePath: string) {
+    super.downloadFile(filePath);
+    this.reportView(this.item, 'download').pipe(take(1)).subscribe();
+  }
+
+  /**
    * Load the requested file
    *
    * @return void
    */
   loadFile() {
     this.item = this.firstItem;
+    this.reportView(this.item).pipe(take(1)).subscribe();
     /**
      * Check if the view is larger than the new PDF page.  If so, load additional pages
      */

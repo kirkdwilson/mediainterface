@@ -15,6 +15,10 @@ export interface AvPlayerItem {
    */
   posterUrl: string;
   /**
+   * The slug identifier for the item
+   */
+  slug: string;
+  /**
    * The type of item
    */
   type: 'audio' | 'video';
