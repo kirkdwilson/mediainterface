@@ -13,7 +13,7 @@ export const environment = {
   // Path to the live configuration file
   liveConfigFile: 'assets/content/config.json',
   // The API endpoint to push viewership stats
-  reportingEndpoint: '',
+  reportingEndpoint: '/admin/api/weblog',
   // Are we using a production version?
   isProduction: false,
 };
