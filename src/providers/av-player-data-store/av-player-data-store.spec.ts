@@ -16,24 +16,28 @@ describe('AvPlayerDataStoreProvider', () => {
       playFirst: false,
       url: 'first/item.mp4',
       posterUrl: 'first/item.jpg',
+      slug: 'first',
       type: 'video',
     },
     {
       playFirst: true,
       url: 'second/item.mp4',
       posterUrl: 'second/item.jpg',
+      slug: 'second',
       type: 'video',
     },
     {
       playFirst: false,
       url: 'third/item.mp4',
       posterUrl: 'third/item.jpg',
+      slug: 'third',
       type: 'video',
     },
     {
       playFirst: false,
       url: 'fourth/item.mp4',
       posterUrl: 'fourth/item.jpg',
+      slug: 'fourth',
       type: 'video',
     },
   ];

@@ -10,6 +10,10 @@ export const environment = {
   assetPath: 'assets/content/{LANG}/',
   // Path to the languages file
   languagePath: 'assets/content/languages.json',
+  // Path to the live configuration file
+  liveConfigFile: 'assets/content/config.json',
+  // The API endpoint to push viewership stats
+  reportingEndpoint: '/admin/api/weblog',
   // Are we using a production version?
   isProduction: false,
 };

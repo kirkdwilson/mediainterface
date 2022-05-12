@@ -4,6 +4,19 @@ page-media-detail {
         background-repeat: no-repeat;
         background-position: center;
         width: 100%;
+
+        &.display-icon {
+            font-size: 120px;
+            text-align: center;
+            display: inline-block;
+            vertical-align: middle;
+
+            ion-icon {
+                color: map-get($colors, secondary) !important;
+                position:relative;
+                top: calc(50% - 60px); /* 50% - 3/4 of icon height */
+            }
+        }
     }
 
     #media-details {

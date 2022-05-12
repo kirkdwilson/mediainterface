@@ -1,3 +1,19 @@
+<ng-template let-resource="resource" #cardTemplate>
+  <ion-card>
+    <div class="feature-photo">
+      <a (click)="goToDetails(resource)">
+        <img *ngIf="resource.imagePath !== ''" src="{{ resource.imagePath }}" alt="{{ resource.title }}">
+        <span class="icon-wrapper" *ngIf="!resource.imagePath"><ion-icon name="{{ resource.icon }}"></ion-icon></span>
+      </a>
+    </div>
+    <ion-card-header><a (click)="goToDetails(resource)">{{ resource.title }}</a></ion-card-header>
+    <ion-card-content>
+      <p class="media-type" text-capitalize>
+        <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ng-template>
 <ion-header>
   <ion-navbar class="with-logo" hideBackButton="true">
     <div class="logo-wrapper" [hidden]="logo === ''">
@@ -16,56 +32,32 @@
   <div class="category-list-wrapper" [hidden]="recommended.length === 0">
     <h2>{{ 'RECOMMENDED_TITLE' | translate }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
-      <ion-card *ngFor="let resource of recommended">
-        <div class="feature-photo">
-          <a (click)="goToDetails(resource)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
-        </div>
-        <ion-card-header><a (click)="goToDetails(resource)">{{ resource.title }}</a></ion-card-header>
-        <ion-card-content>
-          <p class="media-type" text-capitalize>
-            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
-          </p>
-        </ion-card-content>
-      </ion-card>
+      <ng-container *ngFor="let resource of recommended">
+        <ng-template *ngTemplateOutlet="cardTemplate; context: {resource : resource}"></ng-template>
+      </ng-container>
     </ion-scroll>
   </div>
   <div *ngFor="let slug of groupKeys" class="category-list-wrapper">
     <h2>{{ groups[slug].label }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
-      <ion-card *ngFor="let resource of groups[slug].media">
-        <div class="feature-photo">
-          <a (click)="goToDetails(resource)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
-        </div>
-        <ion-card-header><a (click)="goToDetails(resource)">{{ resource.title }}</a></ion-card-header>
-        <ion-card-content>
-          <p class="media-type" text-capitalize>
-            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
-          </p>
-        </ion-card-content>
-      </ion-card>
+      <ng-container *ngFor="let resource of groups[slug].media">
+        <ng-template *ngTemplateOutlet="cardTemplate; context: {resource : resource}"></ng-template>
+      </ng-container>
     </ion-scroll>
   </div>
   <div class="category-list-wrapper" [hidden]="others.length === 0">
     <h2>{{'OTHER_MEDIA_TITLE' | translate }}</h2>
     <ion-scroll scrollX="true" direction="x" class="category-list">
-      <ion-card *ngFor="let resource of others">
-        <div class="feature-photo">
-          <a (click)="goToDetails(resource)"><img src="{{ resource.imagePath }}" alt="{{ resource.title }}"></a>
-        </div>
-        <ion-card-header><a (click)="goToDetails(resource)">{{ resource.title }}</a></ion-card-header>
-        <ion-card-content>
-          <p class="media-type" text-capitalize>
-            <ion-icon name="{{ resource.icon }}"></ion-icon> {{ resource.mediaTypeTranslationKey | translate }}
-          </p>
-        </ion-card-content>
-      </ion-card>
+      <ng-container *ngFor="let resource of others">
+        <ng-template *ngTemplateOutlet="cardTemplate; context: {resource : resource}"></ng-template>
+      </ng-container>
     </ion-scroll>
   </div>
   <app-footer></app-footer>
 </ion-content>
 
-<ion-fab right bottom>
-  <button ion-button icon-only (click)="goChat()">
+<ion-fab right bottom [hidden]="!allowsChat">
+  <button ion-fab icon-only mini (click)="goChat()">
       <ion-icon name="chatbubbles"></ion-icon>
   </button>
 </ion-fab>

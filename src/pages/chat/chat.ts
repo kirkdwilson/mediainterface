@@ -1,8 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators/map';
+import { take } from 'rxjs/operators/take';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
+import { LiveConfigurationProvider } from '@providers/live-configuration/live-configuration';
 import { generateNickname } from '@helpers/utilities';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/mergeMap';
@@ -28,6 +31,7 @@ export class ChatPage {
   url = '';
 
   constructor(
+    private liveConfigurationProvider: LiveConfigurationProvider,
     private storage: Storage,
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -69,6 +73,18 @@ export class ChatPage {
       (err) => {
         console.log(err);
       });
+  }
+
+  /**
+   * Ionic view lifecycle to check if the user can enter this view.
+   *
+   * @return Promise<boolean> is allowed to access
+   */
+  ionViewCanEnter() {
+    return this.liveConfigurationProvider.init().pipe(
+      take(1),
+      map(()  =>  this.liveConfigurationProvider.allowsChat)
+    ).toPromise();
   }
 
   goHome() {

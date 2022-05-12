@@ -3,6 +3,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { Platform } from 'ionic-angular';
 import { take } from 'rxjs/operators/take';
 import { LanguageProvider } from '@providers/language/language';
+import { LiveConfigurationProvider } from '@providers/live-configuration/live-configuration';
+import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
 import { Language } from '@models/language';
 
 @Component({
@@ -26,7 +28,9 @@ export class MyApp implements OnInit, OnDestroy {
 
   constructor(
     private languageProvider: LanguageProvider,
+    private liveConfigurationProvider: LiveConfigurationProvider,
     private platform: Platform,
+    private statReporterProvider: StatReporterProvider,
     private translate: TranslateService,
   ) {}
 
@@ -36,6 +40,9 @@ export class MyApp implements OnInit, OnDestroy {
    * @return void
    */
   ngOnInit() {
+    this.liveConfigurationProvider.init().pipe(
+      take(1)
+    ).subscribe(()  =>  this.statReporterProvider.collectStats = this.liveConfigurationProvider.collectingStats);
     this.translate.setDefaultLang('en');
     this.languageProvider.getLanguage().pipe(take(1)).subscribe((language: Language) => {
       this.currentLanguage = language;

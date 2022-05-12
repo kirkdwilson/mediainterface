@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
 import { LanguageProvider } from '@providers/language/language';
+import { LiveConfigurationProvider } from '@providers/live-configuration/live-configuration';
 import { MediaProvider } from '@providers/media/media';
 import { GroupedMedia } from '@interfaces/grouped-media.interface';
 import { Language } from '@models/language';
@@ -16,6 +17,11 @@ import { LanguagePopoverComponent } from '@components/language-popover/language-
   templateUrl: 'home.html'
 })
 export class HomePage {
+  /**
+   * Is chat enabled?
+   */
+  allowsChat = true;
+
   /**
    * Our media to display
    */
@@ -56,6 +62,7 @@ export class HomePage {
     private mediaProvider: MediaProvider,
     private navController: NavController,
     private languageProvider: LanguageProvider,
+    private liveConfigurationProvider: LiveConfigurationProvider,
     private popoverController: PopoverController,
     private translateService: TranslateService,
   ) {}
@@ -68,6 +75,7 @@ export class HomePage {
   ionViewWillEnter() {
     this.languageProvider.getLanguage().pipe(take(1)).subscribe((lang: Language) => this.loadData(lang));
     this.languageOnChangeStream$ = this.languageProvider.onLanguageChange.subscribe((lang: Language) => this.loadData(lang));
+    this.liveConfigurationProvider.init().pipe(take(1)).subscribe(()  =>  this.allowsChat = this.liveConfigurationProvider.allowsChat);
   }
 
   /**
