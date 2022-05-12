@@ -12,7 +12,10 @@
 <ion-content padding>
   <p *ngIf="media === null">{{ 'MISSING_MEDIA_TEXT' | translate }}</p>
   <div *ngIf="media">
-    <div id="media-photo" [ngStyle]="{ 'background-image': 'url(' + media?.imagePath + ')'}"></div>
+    <div id="media-photo" *ngIf="media?.imagePath !== ''" [ngStyle]="{ 'background-image': 'url(' + media?.imagePath + ')'}"></div>
+    <div id="media-photo" class="display-icon" *ngIf="!media?.imagePath">
+      <ion-icon name="{{ media?.icon }}"></ion-icon>
+    </div>
     <div id="media-details">
       <ion-grid id="media-detail-info">
         <ion-row>
