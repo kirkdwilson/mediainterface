@@ -322,9 +322,10 @@ for path,dirs,files in os.walk(mediaDirectory):
 			print ("	Writing Placeholder For Thumbnail to " + mediaDirectory + "/.thumbnail-" + slug + ".png")
 			os.system ('touch "' + mediaDirectory + '/.thumbnail-' + slug + '.png"')
 
-		if (not content["image"]) :
-			print ("	Writing Default Icon As Content Image")
-			content["image"] = types[extension]["image"]
+    # COMMENTED OUT 20220512 because now MMI uses icons instead of images.
+		#if (not content["image"]) :
+		#	print ("	Writing Default Icon As Content Image")
+		#	content["image"] = types[extension]["image"]
 
 		##########################################################################
 		#  Compiling Collection or Single
