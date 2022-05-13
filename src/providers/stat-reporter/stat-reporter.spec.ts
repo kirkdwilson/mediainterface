@@ -27,11 +27,12 @@ describe('StatReporterProvider', () =>  {
 
         const request = app.httpMock.expectOne({method: 'PUT', url: environment.reportingEndpoint});
         const body = request.request.body;
-        expect(body.interactionType).toEqual('download');
-        expect(body.mediaIdentifier).toEqual('best-cat-videos');
-        expect(body.mediaLanguage).toEqual('en');
-        expect(body.mediaProvider).toEqual('');
-        expect(body.mediaType).toEqual('video');
+        body.value = {};
+        expect(body.value.interactionType).toEqual('download');
+        expect(body.value.mediaIdentifier).toEqual('best-cat-videos');
+        expect(body.value.mediaLanguage).toEqual('en');
+        expect(body.value.mediaProvider).toEqual('');
+        expect(body.value.mediaType).toEqual('video');
         request.flush({});
       })));
 
