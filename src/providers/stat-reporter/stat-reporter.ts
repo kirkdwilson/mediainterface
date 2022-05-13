@@ -50,14 +50,14 @@ export class StatReporterProvider {
       return of(false);
     }
     const timestamp = Math.round((new Date()).getTime() / 1000);
-    const body = {
+    const body = {value: {
       interactionType: interaction,
       mediaIdentifier: identifier,
       mediaLanguage: language,
       mediaProvider: '',
       mediaType: mediaType,
       timestamp: timestamp,
-    };
+    }};
     return this.http.put(environment.reportingEndpoint, body).pipe(
       map(()  =>  true),
       catchError(() =>  of(false))
