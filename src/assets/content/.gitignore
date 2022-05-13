@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# But not these files...
+!languages.json
+!.gitignore
+!en/
+!footer.html
