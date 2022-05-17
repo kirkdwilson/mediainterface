@@ -26,6 +26,7 @@ export class Media {
    * @param mimeType=''       The mime type of the file
    * @param recommended=false Is it recommended?
    * @param tags =[]          An array of tags
+   * @param mediaProvider=''  The media provider for the resource
    */
   constructor(
     public categories: Array<Category>,
@@ -38,7 +39,8 @@ export class Media {
     public language = 'en',
     public mimeType = '',
     public recommended = false,
-    public tags: Array<string> = []
+    public tags: Array<string> = [],
+    public mediaProvider = '',
   ) {
     this.mediaType = this.mediaType.toLowerCase();
   }

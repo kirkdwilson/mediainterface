@@ -15,6 +15,10 @@ export interface AvPlayerItem {
    */
   posterUrl: string;
   /**
+   * The media provider
+   */
+  provider: string;
+  /**
    * The slug identifier for the item
    */
   slug: string;

@@ -123,6 +123,7 @@ export class MediaProvider {
           const recommended = (media.hasOwnProperty('recommended')) ? media.recommended : false;
           const fileName = (media.hasOwnProperty('filename')) ? media.filename : '';
           const mimeType = (media.hasOwnProperty('mimeType')) ? media.mimeType : '';
+          const mediaProvider = (media.hasOwnProperty('mediaProvider')) ? media.mediaProvider : '';
           let categories = [];
           if (media.categories.length > 0) {
             categories = media.categories.map((category) => new Category(category));;
@@ -138,7 +139,8 @@ export class MediaProvider {
             this.language,
             mimeType,
             recommended,
-            media.tags
+            media.tags,
+            mediaProvider,
           );
         });
         return this.media;
