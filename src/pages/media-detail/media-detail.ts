@@ -122,7 +122,7 @@ export class MediaDetailPage {
         }),
         take(1),
       ),
-      this.statReporterProvider.report(slug, 'download', this.currentLanguage.twoLetterCode, mediaType).pipe(
+      this.statReporterProvider.report(slug, 'download', this.currentLanguage.twoLetterCode, '', mediaType).pipe(
         take(1)
       ),
     ).subscribe();
@@ -288,7 +288,7 @@ export class MediaDetailPage {
     if ((resource.mediaType === 'video') || (resource.mediaType === 'audio')) {
       this.navController.push('av-player', { items: items, slug: resource.slug });
     } else if (resource.mediaType === 'html') {
-      this.statReporterProvider.report(resource.slug, 'view', this.currentLanguage.twoLetterCode, resource.mediaType).pipe(
+      this.statReporterProvider.report(resource.slug, 'view', this.currentLanguage.twoLetterCode, '', resource.mediaType).pipe(
         take(1)
       ).subscribe(() => window.open(resource.filePath));
     } else if (viewer !== '') {

@@ -317,7 +317,7 @@ export class AvPlayerPage {
         return of(null);
       }
       return this.languageProvider.getLanguage().pipe(
-        mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, 'view', lang.twoLetterCode, item.type).pipe(map(() =>  item)))
+        mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, 'view', lang.twoLetterCode, '', item.type).pipe(map(() =>  item)))
       );
     }
 
