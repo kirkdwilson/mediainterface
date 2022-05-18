@@ -9,14 +9,15 @@ export class Episode {
   /**
    * Build the class
    *
-   * @param desc          The description
-   * @param fileName      The file name
-   * @param image         The image file name
-   * @param mediaType     The type of media
-   * @param mimeType      The mime type of the file
-   * @param slug          The episode slug
-   * @param title         The title
-   * @param language='en' The language
+   * @param desc              The description
+   * @param fileName          The file name
+   * @param image             The image file name
+   * @param mediaType         The type of media
+   * @param mimeType          The mime type of the file
+   * @param slug              The episode slug
+   * @param title             The title
+   * @param language='en'     The language
+   * @param mediaProvider=''  The media provider
    */
   constructor(
     public desc: string,
@@ -26,7 +27,8 @@ export class Episode {
     public mimeType: string,
     public slug: string,
     public title: string,
-    public language = 'en'
+    public language = 'en',
+    public mediaProvider = '',
   ) {}
 
   /**

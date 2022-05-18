@@ -28,16 +28,18 @@ export class StatReporterProvider {
   /**
    * Report interaction with the frontend
    *
-   * @param  identifier   The media's identifier
-   * @param  interaction  The type of interaction (download or view)
-   * @param  language     The current language
-   * @param  mediaType    The type of media
-   * @return              Was it successful?
+   * @param  identifier     The media's identifier
+   * @param  interaction    The type of interaction (download or view)
+   * @param  language       The current language
+   * @param  mediaProvider  The media provider
+   * @param  mediaType      The type of media
+   * @return                Was it successful?
    */
   report(
     identifier: string,
     interaction: string,
     language: string,
+    mediaProvider: string,
     mediaType: string,
   ): Observable<boolean> {
     if (!this.collectStats) {
@@ -54,7 +56,7 @@ export class StatReporterProvider {
       interactionType: interaction,
       mediaIdentifier: identifier,
       mediaLanguage: language,
-      mediaProvider: '',
+      mediaProvider: mediaProvider,
       mediaType: mediaType,
       timestamp: timestamp,
     }};
