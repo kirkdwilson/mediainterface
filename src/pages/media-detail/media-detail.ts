@@ -106,6 +106,7 @@ export class MediaDetailPage {
    */
   downloadFile(
     fileToDownload: string,
+    mediaProvider: string,
     mediaType: string,
     slug: string,
   ) {
@@ -122,7 +123,7 @@ export class MediaDetailPage {
         }),
         take(1),
       ),
-      this.statReporterProvider.report(slug, 'download', this.currentLanguage.twoLetterCode, mediaType).pipe(
+      this.statReporterProvider.report(slug, 'download', this.currentLanguage.twoLetterCode, mediaProvider, mediaType).pipe(
         take(1)
       ),
     ).subscribe();
@@ -182,6 +183,7 @@ export class MediaDetailPage {
           url: episode.filePath,
           playFirst: playFirst,
           posterUrl: episode.imagePath,
+          provider: episode.mediaProvider,
           slug: episode.slug,
           type: episode.mediaType,
         };
@@ -193,6 +195,7 @@ export class MediaDetailPage {
           downloadPath: episode.downloadPath,
           filePath: episode.filePath,
           isFirst: playFirst,
+          provider: episode.mediaProvider,
           slug: episode.slug,
           title: episode.title,
           type: episode.mediaType,
@@ -217,6 +220,7 @@ export class MediaDetailPage {
         url: this.media.filePath,
         playFirst: true,
         posterUrl: this.media.imagePath,
+        provider: this.media.mediaProvider,
         slug: this.media.slug,
         type: this.media.mediaType,
       };
@@ -225,6 +229,7 @@ export class MediaDetailPage {
         downloadPath: this.media.downloadPath,
         filePath: this.media.filePath,
         isFirst: true,
+        provider: this.media.mediaProvider,
         slug: this.media.slug,
         title: this.media.title,
         type: this.media.mediaType,
@@ -288,7 +293,7 @@ export class MediaDetailPage {
     if ((resource.mediaType === 'video') || (resource.mediaType === 'audio')) {
       this.navController.push('av-player', { items: items, slug: resource.slug });
     } else if (resource.mediaType === 'html') {
-      this.statReporterProvider.report(resource.slug, 'view', this.currentLanguage.twoLetterCode, resource.mediaType).pipe(
+      this.statReporterProvider.report(resource.slug, 'view', this.currentLanguage.twoLetterCode, '', resource.mediaType).pipe(
         take(1)
       ).subscribe(() => window.open(resource.filePath));
     } else if (viewer !== '') {

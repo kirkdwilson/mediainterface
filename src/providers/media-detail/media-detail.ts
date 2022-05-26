@@ -40,6 +40,7 @@ export class MediaDetailProvider {
         const recommended = (response.hasOwnProperty('recommended')) ? response.recommended : false;
         const fileName = (response.hasOwnProperty('filename')) ? response.filename : '';
         const mimeType = (response.hasOwnProperty('mimeType')) ? response.mimeType : '';
+        const mediaProvider = (response.hasOwnProperty('mediaProvider')) ? response.mediaProvider : '';
         let categories = [];
         if (response.categories.length > 0) {
           categories = response.categories.map((category) => new Category(category));;
@@ -55,11 +56,13 @@ export class MediaDetailProvider {
           this.language,
           mimeType,
           recommended,
-          response.tags
+          response.tags,
+          mediaProvider,
         );
 
         if (response.hasOwnProperty('episodes')) {
           response.episodes.forEach((data) => {
+            const mediaProvider = (data.hasOwnProperty('mediaProvider')) ? data.mediaProvider : '';
             const episode = new Episode(
               data.desc,
               data.filename,
@@ -68,7 +71,8 @@ export class MediaDetailProvider {
               data.mimeType,
               data.slug,
               data.title,
-              this.language
+              this.language,
+              mediaProvider,
             );
             media.addEpisode(episode);
           });

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #  Loads content from USB and creates the JSON / file structure for enhanced media interface
 
 
@@ -33,7 +34,7 @@ try:
   f = open(contentDirectory + 'subscription.json');
   subscription = json.load(f)
   # IF we don't have argument of new URL AND we have subscription data, this is a subscribed box
-  if (len(url) == 0 and subscription['packagesAPIFeed']):
+  if (len(url) == 0 and 'packagesAPIFeed' in subscription):
     isSubscribed = True;
     subscription['packageName'] = unquote(subscription['packagesAPIFeed']).split("packageName=")[1];
     print('Box is subscribed to: ' + subscription['packageName'])
