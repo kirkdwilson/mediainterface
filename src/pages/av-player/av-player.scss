@@ -1,10 +1,9 @@
 page-av-player {
-    #secondary-controls {
-        height: 7%;
-        max-height: 7%;
+    .scroll-content {
+        overflow-y: hidden !important;
     }
-    #audio-player-wrapper {
-        height: 93%;
+    #audio-player-container {
+        height: 100%;
         position: relative;
 
         audio {
@@ -22,27 +21,138 @@ page-av-player {
         }
     }
 
+}
+// New css for video player
+#media-container {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+
     .overlay {
         background-color: rgba(0, 0, 0, 0.5);
+        height: 100%;
         width: 100%;
         position: absolute;
         right: 0;
-        text-align: right;
         top: 0;
         z-index: 100;
-
-        .close-btn {
-            color: #ffffff;
-        }
     }
 
-    #video-player-wrapper {
-        height: 93%;
-        position: relative;
+    video {
+        height: 100%;
+        width: 100%;
+    }
 
-        video {
-            height: 100%;
+    .top-controls-container {
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        z-index: 300;
+    }
+
+    .bottom-controls-container {
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        z-index: 300;
+
+        .progress-controls {
             width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+
+            .time-remaining {
+                margin: 1vw;
+                text-align: center;
+                width: 8vw;
+            }
+
+            .progress-bar {
+                width: 86vw;
+                height: 0.5vw;
+                max-height: 7px;
+                background: #5B5B5B;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                .watched-bar, .playhead {
+                    background: map-get($colors, primary) !important;
+                    display: inline-block;
+                    transition: all 0.2s;
+                }
+
+                .watched-bar {
+                    height: 100%;
+                    width: 20%;
+                }
+
+                .playhead {
+                    height: 3vw;
+                    width: 3vw;
+                    max-height: 25px;
+                    max-width: 25px;
+                    border-radius: 50%;
+                    transform: translateX(-50%);
+                }
+            }
+
+        }
+
+    }
+
+    .controls {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+            background: none;
+            color: #FFFFFF;
+            outline: none;
+            box-shadow: none;
+            border: none;
+            width: 5vw;
+            height: 5vw;
+            min-width: 50px;
+            min-height: 50px;
+            margin: 0px 1vw;
+            opacity: 0.6;
+            transform: scale(1.0);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .title {
+            color: #FFFFFF;
+            font-size: 2vw;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .title {
+                display: none;
+            }
         }
     }
 }
