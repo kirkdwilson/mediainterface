@@ -1,13 +1,13 @@
 <ion-content>
   <div id="media-container" *ngIf="current">
-    <div class="overlay"></div>
-    <div class="top-controls-container">
+    <div class="overlay" *ngIf="showOverlay"></div>
+    <div class="top-controls-container" *ngIf="showOverlay">
       <div class="controls">
         <button icon-only ion-button clear><ion-icon name="expand"></ion-icon></button>
         <p class="title">
           <span class="episode-title">Title of Video</span>
         </p>
-        <button icon-only ion-button clear><ion-icon name="close"></ion-icon></button>
+        <button icon-only ion-button clear (click)="goBack()"><ion-icon name="close"></ion-icon></button>
       </div>
     </div>
 
@@ -18,16 +18,13 @@
     </div>
 
     <div id="audio-player-container" [hidden]="current?.type !== 'audio'">
-      <div class="overlay" [hidden]="!showOverlay">
-        <button icon-only ion-button clear color="primary" (click)="goBack()" class="close-btn"><ion-icon name="close"></ion-icon></button>
-      </div>
       <div id="audio-poster" [ngStyle]="{ 'background-image': 'url(' + current?.posterUrl + ')'}" #audioPoster></div>
       <audio [src]="current?.url" controls [autoplay]="current?.type === 'audio'" #audioPlayer>
         {{ 'UNSUPPORTED_TEXT' | translate }}
       </audio>
     </div>
 
-    <div class="bottom-controls-container">
+    <div class="bottom-controls-container" *ngIf="showOverlay">
       <div class="progress-controls">
         <div class="progress-bar">
           <div class="watched-bar"></div>
