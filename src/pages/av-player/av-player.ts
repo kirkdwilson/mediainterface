@@ -36,6 +36,11 @@ export class AvPlayerPage {
     @ViewChild('audioPoster') audioPoster: ElementRef;
 
     /**
+     * The progress bar element
+     */
+    @ViewChild('progressBar') progressBar: ElementRef;
+
+    /**
      * The video player element
      */
     @ViewChild('videoPlayer') videoPlayer: ElementRef;
@@ -343,6 +348,22 @@ export class AvPlayerPage {
       const seconds = pad(time.getSeconds().toString(), 2, '0');
 
       this.timeRemaining = `${hours ? hours : '00'}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * Update the player when the progress bar is moved
+     *
+     * @param  $event The triggered event
+     * @return        void
+     */
+    updateProgress($event) {
+      let element = this.videoPlayer.nativeElement;
+      if (this.current.type === 'audio') {
+        element = this.audioPlayer.nativeElement;
+      }
+      const progress = this.progressBar.nativeElement;
+      const pos = ($event.pageX  - (progress.offsetLeft + progress.offsetParent.offsetLeft)) / progress.offsetWidth;
+      element.currentTime = pos * element.duration;
     }
 
     /**

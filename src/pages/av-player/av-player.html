@@ -26,7 +26,7 @@
 
     <div class="bottom-controls-container" *ngIf="showOverlay">
       <div class="progress-controls">
-        <div class="progress-bar">
+        <div class="progress-bar" (click)="updateProgress($event)" #progressBar>
           <div class="watched-bar" [ngStyle]="{'width.%': mediaProgress}"></div>
           <div class="playhead"></div>
         </div>
