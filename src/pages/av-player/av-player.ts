@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators/map';
@@ -49,6 +50,11 @@ export class AvPlayerPage {
      * The current playing item
      */
     current: AvPlayerItem = null;
+
+    /**
+     * Are we in fullscreen?
+     */
+    isFullscreen = false;
 
     /**
      * Is the item playing?
@@ -102,6 +108,7 @@ export class AvPlayerPage {
 
     constructor(
       private dataStore: AvPlayerDataStoreProvider,
+      @Inject(DOCUMENT) private document: any,
       private languageProvider: LanguageProvider,
       private navController: NavController,
       private navParams: NavParams,
@@ -313,6 +320,46 @@ export class AvPlayerPage {
       }
       this.showOverlay = true;
       setTimeout(() => this.showOverlay = true, 3000);
+    }
+
+    /**
+     * Toggle full screen
+     *
+     * @return void
+     */
+    toggleFullscreen() {
+      const element = this.document.documentElement;
+      if (!this.isFullscreen) {
+        if (element.requestFullscreen) {
+          element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+          /* Firefox */
+          element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+          /* Chrome, Safari and Opera */
+          element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) {
+          /* IE/Edge */
+          element.msRequestFullscreen();
+        }
+        this.isFullscreen = true;
+
+        return;
+      }
+
+      if (this.document.exitFullscreen) {
+        this.document.exitFullscreen();
+      } else if (this.document.mozCancelFullScreen) {
+        /* Firefox */
+        this.document.mozCancelFullScreen();
+      } else if (this.document.webkitExitFullscreen) {
+        /* Chrome, Safari and Opera */
+        this.document.webkitExitFullscreen();
+      } else if (this.document.msExitFullscreen) {
+        /* IE/Edge */
+        this.document.msExitFullscreen();
+      }
+      this.isFullscreen = false;
     }
 
     /**

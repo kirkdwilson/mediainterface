@@ -3,7 +3,10 @@
     <div class="overlay" *ngIf="showOverlay"></div>
     <div class="top-controls-container" *ngIf="showOverlay">
       <div class="controls">
-        <button icon-only ion-button clear><ion-icon name="expand"></ion-icon></button>
+        <button icon-only ion-button clear (click)="toggleFullscreen()">
+          <ion-icon name="expand" *ngIf="!isFullscreen"></ion-icon>
+          <ion-icon name="contract" *ngIf="isFullscreen"></ion-icon>
+        </button>
         <p class="title">
           <span class="episode-title">Title of Video</span>
         </p>
