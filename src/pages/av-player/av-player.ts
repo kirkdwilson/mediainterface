@@ -267,11 +267,8 @@ export class AvPlayerPage {
      */
     pause() {
       this.isPlaying = false;
-      if (this.current.type === 'video') {
-        this.videoPlayer.nativeElement.pause();
-      } else {
-        this.audioPlayer.nativeElement.pause();
-      }
+      const element = this.currentPlayerElement();
+      element.nativeElement.pause();
     }
 
     /**
@@ -281,11 +278,8 @@ export class AvPlayerPage {
      */
     play() {
       this.isPlaying = true;
-      if (this.current.type === 'video') {
-        this.videoPlayer.nativeElement.play();
-      } else {
-        this.audioPlayer.nativeElement.play();
-      }
+      const element = this.currentPlayerElement();
+      element.nativeElement.play();
     }
 
     /**
@@ -322,20 +316,40 @@ export class AvPlayerPage {
     }
 
     /**
+     * Skip back 10 seconds
+     *
+     * @return void
+     */
+    skipBackTen() {
+      const element = this.currentPlayerElement();
+      const native = element.nativeElement;
+      native.currentTime -= 10;
+    }
+
+    /**
+     * Skip forward 10 seconds
+     *
+     * @return void
+     */
+    skipForwardTen() {
+      const element = this.currentPlayerElement();
+      const native = element.nativeElement;
+      native.currentTime += 10;
+    }
+
+    /**
      * Callback fired when the time is updated.
      *
      * @return void
      */
     timeUpdated() {
-      let element = this.videoPlayer.nativeElement;
-      if (this.current.type === 'audio') {
-        element = this.audioPlayer.nativeElement;
-      }
-      this.mediaProgress = ((element.currentTime / element.duration) * 100);
+      const element = this.currentPlayerElement();
+      const native = element.nativeElement;
+      this.mediaProgress = ((native.currentTime / native.duration) * 100);
       if (isNaN(this.mediaProgress)) {
         return;
       }
-      const totalSecondsRemaining = element.duration - element.currentTime;
+      const totalSecondsRemaining = native.duration - native.currentTime;
       const time = new Date(null);
       time.setSeconds(totalSecondsRemaining);
       let hours = null;
@@ -357,13 +371,11 @@ export class AvPlayerPage {
      * @return        void
      */
     updateProgress($event) {
-      let element = this.videoPlayer.nativeElement;
-      if (this.current.type === 'audio') {
-        element = this.audioPlayer.nativeElement;
-      }
+      const element = this.currentPlayerElement();
+      const native = element.nativeElement;
       const progress = this.progressBar.nativeElement;
       const pos = ($event.pageX  - (progress.offsetLeft + progress.offsetParent.offsetLeft)) / progress.offsetWidth;
-      element.currentTime = pos * element.duration;
+      native.currentTime = pos * native.duration;
     }
 
     /**
@@ -378,6 +390,19 @@ export class AvPlayerPage {
             this.nextEpisode();
           }, 2000);
       }
+    }
+
+    /**
+     * Get the current player element
+     *
+     * @return The current element
+     */
+    private currentPlayerElement(): ElementRef {
+      if (this.current.type === 'audio') {
+        return this.audioPlayer;
+      }
+
+      return this.videoPlayer;
     }
 
     /**
