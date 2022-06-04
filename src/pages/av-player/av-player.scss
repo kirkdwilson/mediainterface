@@ -89,12 +89,12 @@ page-av-player {
                 .watched-bar, .playhead {
                     background: map-get($colors, primary) !important;
                     display: inline-block;
-                    transition: all 0.2s;
+                    transition: all 0.5s;
                 }
 
                 .watched-bar {
                     height: 100%;
-                    width: 20%;
+                    width: 0%;
                 }
 
                 .playhead {

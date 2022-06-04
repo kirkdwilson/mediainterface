@@ -9,6 +9,7 @@ import { AvPlayerDataStoreProvider } from '@providers/av-player-data-store/av-pl
 import { AvPlayerItem } from '@interfaces/av-player-item.interface';
 import { LanguageProvider } from '@providers/language/language';
 import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
+import { pad } from '@helpers/utilities';
 import { Language } from '@models/language';
 
 /**
@@ -50,9 +51,19 @@ export class AvPlayerPage {
     isPlaying = true;
 
     /**
+     * The current progress
+     */
+    mediaProgress = 0;
+
+    /**
      * Should we show the overlay?
      */
-    showOverlay = false;
+    showOverlay = true;
+
+    /**
+     * The total time remaining
+     */
+    timeRemaining = '00:00:00';
 
     /**
      * The callback triggered when the audio/video ended.
@@ -73,6 +84,11 @@ export class AvPlayerPage {
      * The callback triggered when the audio/video is hovered/tapped.
      */
     private mediaEngagedCallback: any = null;
+
+    /**
+     * The callback triggered when the audio/video time is updated.
+     */
+    private mediaTimeUpdateCallback: any = null;
 
     /**
      * The slug for the previous page
@@ -118,6 +134,7 @@ export class AvPlayerPage {
       this.mediaEndedCallback = () => this.videoDidEnd();
       this.mediaPauseCallback = () => this.isPlaying = false;
       this.mediaPlayCallback = () => this.isPlaying = true;
+      this.mediaTimeUpdateCallback = () => this.timeUpdated();
       this.mediaEngagedCallback = (event) => this.displayOverlay(event);
       this.videoPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
       this.audioPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
@@ -125,6 +142,8 @@ export class AvPlayerPage {
       this.audioPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
       this.videoPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
       this.audioPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
+      this.videoPlayer.nativeElement.addEventListener('timeupdate', this.mediaTimeUpdateCallback, false);
+      this.audioPlayer.nativeElement.addEventListener('timeupdate', this.mediaTimeUpdateCallback, false);
 
       this.videoPlayer.nativeElement.addEventListener('touchstart', this.mediaEngagedCallback, false);
       this.videoPlayer.nativeElement.addEventListener('mouseenter', this.mediaEngagedCallback, false);
@@ -154,6 +173,11 @@ export class AvPlayerPage {
         this.videoPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
         this.audioPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
         this.mediaPlayCallback = null;
+      }
+      if (this.mediaTimeUpdateCallback) {
+        this.videoPlayer.nativeElement.removeEventListener('timeupdate', this.mediaTimeUpdateCallback);
+        this.audioPlayer.nativeElement.removeEventListener('timeupdate', this.mediaTimeUpdateCallback);
+        this.mediaTimeUpdateCallback = null;
       }
       if (this.mediaEngagedCallback) {
         this.videoPlayer.nativeElement.removeEventListener('touchstart', this.mediaEngagedCallback);
@@ -289,7 +313,36 @@ export class AvPlayerPage {
         return;
       }
       this.showOverlay = true;
-      setTimeout(() => this.showOverlay = false, 3000);
+      setTimeout(() => this.showOverlay = true, 3000);
+    }
+
+    /**
+     * Callback fired when the time is updated.
+     *
+     * @return void
+     */
+    timeUpdated() {
+      let element = this.videoPlayer.nativeElement;
+      if (this.current.type === 'audio') {
+        element = this.audioPlayer.nativeElement;
+      }
+      this.mediaProgress = ((element.currentTime / element.duration) * 100);
+      if (isNaN(this.mediaProgress)) {
+        return;
+      }
+      const totalSecondsRemaining = element.duration - element.currentTime;
+      const time = new Date(null);
+      time.setSeconds(totalSecondsRemaining);
+      let hours = null;
+
+      if(totalSecondsRemaining >= 3600) {
+        hours = pad(time.getHours().toString(), 2, '0');
+      }
+
+      const minutes = pad(time.getMinutes().toString(), 2, '0');
+      const seconds = pad(time.getSeconds().toString(), 2, '0');
+
+      this.timeRemaining = `${hours ? hours : '00'}:${minutes}:${seconds}`;
     }
 
     /**

@@ -27,11 +27,11 @@
     <div class="bottom-controls-container" *ngIf="showOverlay">
       <div class="progress-controls">
         <div class="progress-bar">
-          <div class="watched-bar"></div>
+          <div class="watched-bar" [ngStyle]="{'width.%': mediaProgress}"></div>
           <div class="playhead"></div>
         </div>
         <div class="time-remaining">
-          00:00
+          {{ timeRemaining }}
         </div>
       </div>
       <div class="controls">
