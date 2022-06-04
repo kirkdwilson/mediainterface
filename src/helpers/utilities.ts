@@ -29,3 +29,18 @@ export function generateNickname(): string {
   const suffix = Math.floor(Math.random() * 98 + 10)
   return `${first.charAt(0).toUpperCase()}${first.slice(1)}${second.charAt(0).toUpperCase()}${second.slice(1)}${suffix}`;
 }
+
+/**
+ * Pad a number with a string/number
+ *
+ * @param  subject  The subject to be padded
+ * @param  width    The width of the resulting string
+ * @param  padWith  What do you want to pad with (default: 0)
+ *
+ * @return          The padded string
+ */
+export function pad(subject, width, padWith) {
+  padWith = padWith || '0';
+  subject = subject + '';
+  return subject.length >= width ? subject : new Array(width - subject.length + 1).join(padWith) + subject;
+}
