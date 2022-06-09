@@ -43,10 +43,20 @@ export class AppFooterComponent {
             .pipe(take(1))
             .subscribe(
               (response: string) => {
-                // There is a Moodle here!!!
-                // Modify the content to show content
-                this.content = this.content.replace(/ hidden/g,'');
-                this.content = this.content.replace(/DOMAIN/g,hostname);
+                var isMoodle = 0;
+                try{
+                  isMoodle = parseInt(JSON.parse(response).result[0]);
+                }
+                catch {
+                  isMoodle = 0;
+                }
+                console.log(`isMoodle = ${isMoodle}`);
+                if (isMoodle) {
+                  // There is a Moodle here!!!
+                  // Modify the content to show content
+                  this.content = this.content.replace(/ hidden/g,'');
+                  this.content = this.content.replace(/DOMAIN/g,hostname);
+                }
               }
             );
         },
