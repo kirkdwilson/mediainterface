@@ -37,7 +37,7 @@ export class AppFooterComponent {
 
           // Look in the usual place for Moodle, if found, show links in the footer
           const hostname = window.location.hostname;
-          const moodlePath = 'http://localhost:5002/admin/api/ismoodle';
+          const moodlePath = '/admin/api/ismoodle';
           console.log(moodlePath);
           http.get(moodlePath, { responseType: 'text' })
             .pipe(take(1))
