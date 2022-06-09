@@ -37,16 +37,26 @@ export class AppFooterComponent {
 
           // Look in the usual place for Moodle, if found, show links in the footer
           const hostname = window.location.hostname;
-          const moodlePath = '/admin/api/ismoodle';
+          const moodlePath = 'http://localhost:5002/admin/api/ismoodle';
           console.log(moodlePath);
           http.get(moodlePath, { responseType: 'text' })
             .pipe(take(1))
             .subscribe(
               (response: string) => {
-                // There is a Moodle here!!!
-                // Modify the content to show content
-                this.content = this.content.replace(/ hidden/g,'');
-                this.content = this.content.replace(/DOMAIN/g,hostname);
+                var isMoodle = false;
+                try{
+                  isMoodle = parseInt(JSON.parse(response).result[0]);
+                }
+                catch {
+                  isMoodle = false;
+                }
+                console.log(`isMoodle = ${isMoodle}`);
+                if (isMoodle) {
+                  // There is a Moodle here!!!
+                  // Modify the content to show content
+                  this.content = this.content.replace(/ hidden/g,'');
+                  this.content = this.content.replace(/DOMAIN/g,hostname);
+                }
               }
             );
         },
