@@ -34,6 +34,21 @@ export class AppFooterComponent {
             this.divClass = 'custom-footer';
           }
           this.content = response;
+
+          // Look in the usual place for Moodle, if found, show links in the footer
+          const hostname = window.location.hostname;
+          const moodlePath = `http://learn.${hostname}/`;
+          console.log(moodlePath);
+          http.get(moodlePath, { responseType: 'text' })
+            .pipe(take(1))
+            .subscribe(
+              (response: string) => {
+                // There is a Moodle here!!!
+                // Modify the content to show content
+                this.content = this.content.replace(/ hidden/g,'');
+                this.content = this.content.replace(/DOMAIN/g,hostname);
+              }
+            );
         },
         (err) => this.content = ''
       );
