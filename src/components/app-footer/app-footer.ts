@@ -43,12 +43,12 @@ export class AppFooterComponent {
             .pipe(take(1))
             .subscribe(
               (response: string) => {
-                var isMoodle = false;
+                var isMoodle = 0;
                 try{
                   isMoodle = parseInt(JSON.parse(response).result[0]);
                 }
                 catch {
-                  isMoodle = false;
+                  isMoodle = 0;
                 }
                 console.log(`isMoodle = ${isMoodle}`);
                 if (isMoodle) {
