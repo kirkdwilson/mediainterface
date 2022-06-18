@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #  Loads content from USB and creates the JSON / file structure for enhanced media interface
 
 
