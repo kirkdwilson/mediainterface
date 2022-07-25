@@ -148,7 +148,7 @@ for path,dirs,files in os.walk(mediaDirectory):
 	##########################################################################
 	#  IF directory is not a language but we are ignoring non language root folders
 	##########################################################################
-	if (directoryType != "language" and doesRootContainLanguage):
+	if (path == mediaDirectory and directoryType != "language" and doesRootContainLanguage):
 		print ('	Skipping because directory is not a lanugage: ' + thisDirectory)
 		continue;
 
