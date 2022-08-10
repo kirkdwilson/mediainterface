@@ -1,12 +1,10 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { map } from 'rxjs/operators/map';
-import { merge } from 'rxjs/observable/merge';
 import { mergeMap } from 'rxjs/operators/mergeMap';
 import { take } from 'rxjs/operators/take';
+import { saveAs } from 'file-saver';
 import { Language } from '@models/language';
-import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { LanguageProvider } from '@providers/language/language';
 import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
 
@@ -52,13 +50,7 @@ export class DownloadButtonComponent {
    */
   isDownloading = false;
 
-  /**
-   * A reference to the download link
-   */
-  @ViewChild('downloadLink') downloadLink: ElementRef;
-
   constructor(
-    private downloadFileProvider: DownloadFileProvider,
     private languageProvider: LanguageProvider,
     private statReporterProvider: StatReporterProvider,
   ) {
@@ -71,10 +63,9 @@ export class DownloadButtonComponent {
    */
   downloadFile() {
     this.isDownloading = true;
-    merge(
-      this.download().pipe(take(1)),
-      this.reportDownload().pipe(take(1)),
-    ).subscribe(() => this.isDownloading = false);
+    this.download();
+    setTimeout(() => this.isDownloading = false, 2000);
+    this.reportDownload().pipe(take(1)).subscribe();
   }
 
   /**
@@ -82,18 +73,9 @@ export class DownloadButtonComponent {
    *
    * @return The blob of the file
    */
-  private download(): Observable<void> {
+  private download() {
     const fileName = this.filePath.split('\\').pop().split('/').pop();
-    return this.downloadFileProvider
-      .download(this.filePath).pipe(map((blob: any) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = this.downloadLink.nativeElement;
-        link.href = url;
-        link.download = fileName;
-        link.click();
-        window.URL.revokeObjectURL(url);
-        this.onDownloaded.emit();
-      }));
+    saveAs(this.filePath, fileName);
   }
 
   /**
