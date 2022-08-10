@@ -43,7 +43,7 @@
       <p>{{ media?.desc }}</p>
       <div id="single-media-actions" *ngIf="media?.episodes.length === 0">
         <ion-buttons end>
-          <download-button [filePath]="media?.downloadPath" [mediaProvider]="media?.mediaProvider" mediaType="media?.mediaType" [slug]="media?.slug"></download-button>
+          <download-button [filePath]="media?.downloadPath" [mediaProvider]="media?.mediaProvider" [mediaType]="media?.mediaType" [slug]="media?.slug"></download-button>
           <button ion-button clear icon-only (click)="playMedia()" [hidden]="!hasViewer(media?.mediaType)">
             <ion-icon [name]="playIcon(media?.mediaType)" color="primary"></ion-icon>
           </button>

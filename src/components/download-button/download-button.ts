@@ -26,6 +26,11 @@ export class DownloadButtonComponent {
   @Input() filePath = '';
 
   /**
+   * Is the button located in the nav bar
+   */
+  @Input() inNavBar = false;
+
+  /**
    * Fired once the file is downloaded.
    */
   @Output() onDownloaded = new EventEmitter<void>();

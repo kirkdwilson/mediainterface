@@ -72,3 +72,9 @@ ion-spinner * {
       fill: map-get($colors, primary) !important;
   }
 }
+ion-spinner.spinner-light * {
+  stroke: map-get($colors, light) !important;
+  &.spinner-dots circle {
+      fill: map-get($colors, light) !important;
+  }
+}

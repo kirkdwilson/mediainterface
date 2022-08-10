@@ -1,4 +1,4 @@
-<ion-spinner [hidden]="!isDownloading"></ion-spinner>
-<button ion-button clear icon-only (click)="downloadFile()" [hidden]="isDownloading">
+<ion-spinner [hidden]="!isDownloading" [ngClass]="inNavBar ? 'spinner-light' : ''"></ion-spinner>
+<button ion-button clear icon-only [ngClass]="inNavBar ? 'bar-button' : ''" [color]="inNavBar ? 'light' : 'primary'" (click)="downloadFile()" [hidden]="isDownloading">
   <ion-icon name="download"></ion-icon>
 </button>
