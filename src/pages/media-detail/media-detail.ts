@@ -1,9 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
-import { map } from 'rxjs/operators/map';
-import { merge } from 'rxjs/observable/merge';
 import { take } from 'rxjs/operators/take';
-import { DownloadFileProvider } from '@providers/download-file/download-file';
 import { LanguageProvider } from '@providers/language/language';
 import { MediaDetailProvider } from '@providers/media-detail/media-detail';
 import { StatReporterProvider } from '@providers/stat-reporter/stat-reporter';
@@ -29,9 +26,9 @@ import { ViewerItem } from '@interfaces/viewer-item.interface';
 export class MediaDetailPage {
 
   /**
-   * A reference to the download link
+   * The slug of the media that is currently being downloaded
    */
-  @ViewChild('downloadLink') downloadLink: ElementRef;
+  downloadingSlug = '';
 
   /**
    * The current media
@@ -64,7 +61,6 @@ export class MediaDetailPage {
   private languageOnChangeStream$: any = null;
 
   constructor(
-    private downloadFileProvider: DownloadFileProvider,
     private languageProvider: LanguageProvider,
     private mediaDetailProvider: MediaDetailProvider,
     private navController: NavController,
@@ -94,39 +90,6 @@ export class MediaDetailPage {
       this.languageOnChangeStream$.unsubscribe();
       this.languageOnChangeStream$ = null;
     }
-  }
-
-  /**
-   * Download a file
-   *
-   * @param  fileToDownload   The path to the file to download
-   *
-   * @return         void
-   * @link https://www.illucit.com/en/angular/angular-5-httpclient-file-download-with-authentication/
-   */
-  downloadFile(
-    fileToDownload: string,
-    mediaProvider: string,
-    mediaType: string,
-    slug: string,
-  ) {
-    const fileName = fileToDownload.split('\\').pop().split('/').pop();
-    merge(
-      this.downloadFileProvider.download(fileToDownload).pipe(
-        map((blob: any)  =>  {
-          const url = window.URL.createObjectURL(blob);
-          const link = this.downloadLink.nativeElement;
-          link.href = url;
-          link.download = fileName;
-          link.click();
-          window.URL.revokeObjectURL(url);
-        }),
-        take(1),
-      ),
-      this.statReporterProvider.report(slug, 'download', this.currentLanguage.twoLetterCode, mediaProvider, mediaType).pipe(
-        take(1)
-      ),
-    ).subscribe();
   }
 
   /**
