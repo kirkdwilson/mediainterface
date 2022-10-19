@@ -278,7 +278,6 @@ export class AvPlayerPage {
      * @return void
      */
     private setUpListeners() {
-      console.log('setUpListeners');
       if ((!this.videoPlayer) && (!this.audioPlayer)) {
         // We need to wait until the elements are visible
         setTimeout(() => this.setUpListeners(), 300);
