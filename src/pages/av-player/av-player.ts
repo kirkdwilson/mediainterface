@@ -95,6 +95,7 @@ export class AvPlayerPage {
           this.goBack();
         } else {
           this.current = current;
+          this.setUpListeners();
         }
       });
     }
@@ -104,37 +105,29 @@ export class AvPlayerPage {
      *
      * @return void
      */
-    ionViewDidEnter() {
-      this.mediaEndedCallback = () => this.videoDidEnd();
-      this.mediaPauseCallback = () => this.isPlaying = false;
-      this.mediaPlayCallback = () => this.isPlaying = true;
-      this.videoPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
-      this.audioPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
-      this.videoPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
-      this.audioPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
-      this.videoPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
-      this.audioPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
-    }
-
-    /**
-     * Ionic view lifecycle
-     *
-     * @return void
-     */
     ionViewWillLeave() {
       if (this.mediaEndedCallback) {
-        this.videoPlayer.nativeElement.removeEventListener('ended', this.mediaEndedCallback);
-        this.audioPlayer.nativeElement.removeEventListener('ended', this.mediaEndedCallback);
+        if (this.current.type === 'audio') {
+          this.audioPlayer.nativeElement.removeEventListener('ended', this.mediaEndedCallback);
+        } else {
+          this.videoPlayer.nativeElement.removeEventListener('ended', this.mediaEndedCallback);
+        }
         this.mediaEndedCallback = null;
       }
       if (this.mediaPauseCallback) {
-        this.videoPlayer.nativeElement.removeEventListener('pause', this.mediaPauseCallback);
-        this.audioPlayer.nativeElement.removeEventListener('pause', this.mediaPauseCallback);
+        if (this.current.type === 'audio') {
+          this.audioPlayer.nativeElement.removeEventListener('pause', this.mediaPauseCallback);
+        } else {
+          this.videoPlayer.nativeElement.removeEventListener('pause', this.mediaPauseCallback); 
+        }
         this.mediaPauseCallback = null;
       }
       if (this.mediaPlayCallback) {
-        this.videoPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
-        this.audioPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
+        if (this.current.type === 'audio') {
+          this.audioPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
+        } else {
+          this.videoPlayer.nativeElement.removeEventListener('play', this.mediaPlayCallback);
+        }
         this.mediaPlayCallback = null;
       }
     }
@@ -277,6 +270,34 @@ export class AvPlayerPage {
       return this.languageProvider.getLanguage().pipe(
         mergeMap((lang: Language) =>  this.statReporterProvider.report(item.slug, 'view', lang.twoLetterCode, item.provider, item.type).pipe(map(() =>  item)))
       );
+    }
+
+    /**
+     * Set up all the listeners
+     *
+     * @return void
+     */
+    private setUpListeners() {
+      console.log('setUpListeners');
+      if ((!this.videoPlayer) && (!this.audioPlayer)) {
+        // We need to wait until the elements are visible
+        setTimeout(() => this.setUpListeners(), 300);
+        return;
+      }
+      this.mediaEndedCallback = () => this.videoDidEnd();
+      this.mediaPauseCallback = () => this.isPlaying = false;
+      this.mediaPlayCallback = () => this.isPlaying = true;
+      if (this.current.type === 'audio') {
+        this.isPlaying = (!this.audioPlayer.nativeElement.paused);
+        this.audioPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
+        this.audioPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
+        this.audioPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
+      } else {
+        this.isPlaying = (!this.videoPlayer.nativeElement.paused);
+        this.videoPlayer.nativeElement.addEventListener('play', this.mediaPlayCallback, false);
+        this.videoPlayer.nativeElement.addEventListener('pause', this.mediaPauseCallback, false);
+        this.videoPlayer.nativeElement.addEventListener('ended', this.mediaEndedCallback, false);
+      }
     }
 
 }
